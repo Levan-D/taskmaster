@@ -3,9 +3,16 @@
 
 import { useState } from "react"
 import Icon from "@mdi/react"
-import { mdiChevronRight } from "@mdi/js"
+import {
+  mdiChevronRight,
+  mdiOrderBoolAscendingVariant,
+  mdiSync,
+  mdiTrashCanOutline,
+  mdiViewWeekOutline,
+} from "@mdi/js"
 import Tooltip from "@/app/components/Tooltip"
 import DropdownMenu from "@/app/components/DropdownMenu"
+import Link from "next/link"
 
 type Props = {
   UserInfo: JSX.Element
@@ -32,44 +39,74 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
     },
   ]
 
+  const taskPages = [
+    {
+      icon: mdiSync,
+      title: "mdiSync",
+      path: "",
+    },
+    {
+      icon: mdiOrderBoolAscendingVariant,
+      title: "mdiOrderBoolAscendingVariant",
+      path: "",
+    },
+    {
+      icon: mdiViewWeekOutline,
+      title: "mdiViewWeekOutline",
+      path: "",
+    },
+    {
+      icon: mdiTrashCanOutline,
+      title: "mdiTrashCanOutline",
+      path: "",
+    },
+  ]
+
   return (
     <nav
       className={` ${
-        isOpen ? "w-[280px] " : "w-[48px]"
+        isOpen ? "w-[280px] " : "w-[60px]"
       }  bg-neutral-950 duration-300  flex flex-col  justify-between select-none `}
     >
-      <div className="flex ">
+      <div className={`${isOpen && "flex gap-1"}`}>
         <div className="grow">
           {isOpen && (
             <DropdownMenu
               items={items}
-              customCSS={"w-full block btnIcon rounded-md w-full"}
+              customCSS={"w-full block btnIcon  m-2 w-full"}
               button={UserInfo}
             />
           )}
         </div>
-        <button onClick={toggleNav} className="  w-8 h-8 m-2 btnIcon ">
+        <button onClick={toggleNav} className="  w-10 h-10 m-2 btnIcon ">
           <Icon
             path={mdiChevronRight}
-            className={`  ${!isOpen && "rotate-180 "} duration-300 mx-auto`}
+            className={`  ${isOpen && "rotate-180 "} duration-300 mx-auto`}
             size={1}
           />
         </button>
       </div>
 
       <div>
-        <div>eqwewqe</div>
-        <div>eqwewqe</div>
-        <div>eqwewqe</div>
-        <div>eqwewqe</div>
+        {taskPages.map((page, i) => (
+          <Link
+            key={i}
+            href={page.path}
+            className={`${
+              !isOpen && "justify-center w-10"
+            } px-2 mx-2 flex gap-2 btnIcon h-10 items-center`}
+          >
+            <div>
+              <Icon path={page.icon} size={1} />
+            </div>
+            {isOpen && <p>{page.title}</p>}
+          </Link>
+        ))}
       </div>
 
-      <div>
-        <div>eqwewqe</div>
-        <div>eqwewqe</div>
-        <div>eqwewqe</div>
-        <div>eqwewqe</div>
+      <div></div>
 
+      <div>
         <footer className={`text-xs p-2 `}>
           {isOpen ? (
             "© 2023 Levan Dolidze. All Rights Reserved."
@@ -83,5 +120,3 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
     </nav>
   )
 }
-
-//          <LogoutLink className="text-[#3377ff]">Log out</LogoutLink>

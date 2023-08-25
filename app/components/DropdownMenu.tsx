@@ -50,11 +50,11 @@ export default function DropdownMenu({
       >
         {button}
       </button>
-      <div
-        ref={dropdownRef}
-        className="absolute   shadow-md shad bg-neutral-800 border-[1px] border-neutral-700 mt-1 z-40 rounded-md text-left"
-      >
-        {isDropdownMenuOpen && (
+      {isDropdownMenuOpen && (
+        <div
+          ref={dropdownRef}
+          className={`  absolute   shadow-md shad bg-neutral-800 border-[1px] border-neutral-700 mt-1 z-40 rounded-md text-left`}
+        >
           <ul className="dropdown-menu">
             {items.map((item, i) => {
               if ("break" in item) {
@@ -96,8 +96,8 @@ export default function DropdownMenu({
               }
             })}
           </ul>
-        )}
-      </div>
+        </div>
+      )}
     </>
   )
 }

@@ -6,8 +6,6 @@
 
 @layer components {
   .btnIcon {
-    @apply block sm:hover:bg-neutral-500 active:bg-neutral-600 rounded-full duration-300;
+    @apply block sm:hover:bg-neutral-500 active:bg-neutral-600 rounded-md duration-300;
   }
-
-  
 }

@@ -8,7 +8,7 @@ export default function UserInfo() {
   const user = getUser()
 
   return (
-    <div className="flex items-center gap-2 w-full  p-2">
+    <div className="flex items-center gap-2 w-full  p-1 ">
       {user?.picture ? (
         <Image
           className="rounded-md"
