@@ -9,6 +9,8 @@ import {
   mdiSync,
   mdiTrashCanOutline,
   mdiViewWeekOutline,
+  mdiCheckCircleOutline,
+  mdiClockAlertOutline,
 } from "@mdi/js"
 import Tooltip from "@/app/components/Tooltip"
 import DropdownMenu from "@/app/components/DropdownMenu"
@@ -18,6 +20,16 @@ type Props = {
   UserInfo: JSX.Element
   LogoutBtn: JSX.Element
 }
+
+type TaskPageType =
+  | {
+      icon: string
+      title: string
+      path: string
+    }
+  | {
+      break: boolean
+    }
 
 export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
   const [isOpen, setIsOpen] = useState(true)
@@ -39,25 +51,42 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
     },
   ]
 
-  const taskPages = [
+  const taskPages: TaskPageType[] = [
     {
       icon: mdiSync,
-      title: "mdiSync",
+      title: "Habits",
       path: "",
     },
     {
       icon: mdiOrderBoolAscendingVariant,
-      title: "mdiOrderBoolAscendingVariant",
+      title: "Today",
       path: "",
     },
     {
       icon: mdiViewWeekOutline,
-      title: "mdiViewWeekOutline",
+      title: "Week",
       path: "",
     },
     {
+      break: true,
+    },
+    {
+      icon: mdiCheckCircleOutline,
+      title: "Finished",
+      path: "",
+    },
+    {
+      icon: mdiClockAlertOutline,
+      title: "Missed",
+      path: "",
+    },
+
+    {
+      break: true,
+    },
+    {
       icon: mdiTrashCanOutline,
-      title: "mdiTrashCanOutline",
+      title: "Bin",
       path: "",
     },
   ]
@@ -65,7 +94,7 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
   return (
     <nav
       className={` ${
-        isOpen ? "w-[280px] " : "w-[60px]"
+        isOpen ? "w-[200px] " : "w-[60px]"
       }  bg-neutral-950 duration-300  flex flex-col  justify-between select-none `}
     >
       <div className={`${isOpen && "flex gap-1"}`}>
@@ -88,26 +117,52 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
       </div>
 
       <div>
-        {taskPages.map((page, i) => (
-          <Link
-            key={i}
-            href={page.path}
-            className={`${
-              !isOpen && "justify-center w-10"
-            } px-2 mx-2 flex gap-2 btnIcon h-10 items-center`}
-          >
-            <div>
-              <Icon path={page.icon} size={1} />
-            </div>
-            {isOpen && <p>{page.title}</p>}
-          </Link>
-        ))}
+        {taskPages.map((page, i) => {
+          if ("icon" in page) {
+            return isOpen ? (
+              <Link
+                key={i}
+                href={page.path}
+                className={`${
+                  !isOpen && "justify-center w-10"
+                } px-2 mx-2 flex gap-2 btnIcon h-10 items-center text-sm`}
+              >
+                <div>
+                  <Icon path={page.icon} size={0.8} />
+                </div>
+                <p>{page.title}</p>
+              </Link>
+            ) : (
+              <Tooltip
+                key={i}
+                text={page.title}
+                customCSS={"translate-x-6 "}
+                position="right"
+              >
+                <Link
+                  href={page.path}
+                  className={`${
+                    !isOpen && "justify-center w-10"
+                  } px-2 mx-2 flex gap-2 btnIcon h-10 items-center text-sm`}
+                >
+                  <div>
+                    <Icon path={page.icon} size={0.8} />
+                  </div>
+                </Link>
+              </Tooltip>
+            )
+          }
+
+          if ("break" in page) {
+            return <hr key={i} className="mx-4 my-1 border-t-[1px] border-neutral-700" />
+          }
+        })}
       </div>
 
       <div></div>
 
       <div>
-        <footer className={`text-xs p-2 `}>
+        <footer className={`text-xs p-2 text-center `}>
           {isOpen ? (
             "© 2023 Levan Dolidze. All Rights Reserved."
           ) : (

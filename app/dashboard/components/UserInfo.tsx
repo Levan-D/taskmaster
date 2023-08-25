@@ -23,9 +23,7 @@ export default function UserInfo() {
           {user?.family_name?.[0]}
         </div>
       )}
-      <p className="">
-        {user?.given_name} {user?.family_name}
-      </p>
+      <p className="">{user?.given_name}</p>
     </div>
   )
 }

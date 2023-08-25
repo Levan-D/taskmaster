@@ -9,9 +9,10 @@ type Props = {
   onClick?: boolean
   dArrow?: boolean
   children: React.ReactNode
+  customCSS?: string
 }
 
-const Tooltip = memo(({ text, children, position, onClick }: Props) => {
+const Tooltip = memo(({ text, children, position, onClick, customCSS }: Props) => {
   const [style, setStyle] = useState(onClick ? false : true)
 
   let positionStyle = " -top-10 left-1/2 -translate-x-1/2 "
@@ -36,7 +37,7 @@ const Tooltip = memo(({ text, children, position, onClick }: Props) => {
     >
       {style && (
         <span
-          className={`${positionStyle} pointer-events-none  absolute z-50  whitespace-nowrap rounded-xl border-[1px] border-neutral-200 bg-neutral-900 px-3 py-1 text-sm text-neutral-200 opacity-0   duration-200   sm:group-hover:opacity-100`}
+          className={`${positionStyle} ${customCSS} pointer-events-none  absolute z-50  whitespace-nowrap rounded-xl border-[1px] border-neutral-200 bg-neutral-900 px-3 py-1 text-sm text-neutral-200 opacity-0   duration-200   sm:group-hover:opacity-100`}
         >
           {text}
         </span>
