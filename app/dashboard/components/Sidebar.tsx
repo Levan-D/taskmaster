@@ -15,6 +15,7 @@ import {
 import Tooltip from "@/app/components/Tooltip"
 import DropdownMenu from "@/app/components/DropdownMenu"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 type Props = {
   UserInfo: JSX.Element
@@ -33,7 +34,8 @@ type TaskPageType =
 
 export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
   const [isOpen, setIsOpen] = useState(true)
-
+  const pathname = usePathname()
+  console.log(pathname)
   const toggleNav = () => {
     setIsOpen(x => !x)
   }
@@ -55,17 +57,17 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
     {
       icon: mdiSync,
       title: "Habits",
-      path: "",
+      path: "/dashboard/habits",
     },
     {
       icon: mdiOrderBoolAscendingVariant,
       title: "Today",
-      path: "",
+      path: "/dashboard/today",
     },
     {
       icon: mdiViewWeekOutline,
       title: "Week",
-      path: "",
+      path: "/dashboard/week",
     },
     {
       break: true,
@@ -73,21 +75,20 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
     {
       icon: mdiCheckCircleOutline,
       title: "Finished",
-      path: "",
+      path: "/dashboard/finished",
     },
     {
       icon: mdiClockAlertOutline,
       title: "Missed",
-      path: "",
+      path: "/dashboard/missed",
     },
-
     {
       break: true,
     },
     {
       icon: mdiTrashCanOutline,
       title: "Bin",
-      path: "",
+      path: "/dashboard/bin",
     },
   ]
 
@@ -123,8 +124,8 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
               <Link
                 key={i}
                 href={page.path}
-                className={`${
-                  !isOpen && "justify-center w-10"
+                className={`${!isOpen && "justify-center w-10"} ${
+                  pathname.includes(page.path) && "!bg-neutral-700"
                 } px-2 mx-2 flex gap-2 btnIcon h-10 items-center text-sm`}
               >
                 <div>
@@ -136,13 +137,13 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
               <Tooltip
                 key={i}
                 text={page.title}
-                customCSS={"translate-x-6 "}
+                customCSS={"translate-x-8 "}
                 position="right"
               >
                 <Link
                   href={page.path}
-                  className={`${
-                    !isOpen && "justify-center w-10"
+                  className={`${!isOpen && "justify-center w-10"}  ${
+                    pathname.includes(page.path) && "!bg-neutral-700"
                   } px-2 mx-2 flex gap-2 btnIcon h-10 items-center text-sm`}
                 >
                   <div>

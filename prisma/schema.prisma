@@ -21,8 +21,6 @@ enum TaskPriority {
 enum Recurrence {
   DAILY
   WEEKLY
-  MONTHLY
-  YEARLY
 }
 
 model User {
