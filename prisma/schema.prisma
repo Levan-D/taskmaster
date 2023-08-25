@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum Recurrence {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+model User {
+  id      String  @id @default(uuid())
+  loginId String  @unique
+  email   String  @unique
+  todos   Task[]
+  habits  Habit[]
+
+  @@index([loginId])
+}
+
+model Habit {
+  id           String      @id @default(uuid())
+  title        String
+  description  String?
+  state        Boolean     @default(false)
+  creationDate DateTime    @default(now())
+  recurrence   Recurrence
+  user         User        @relation(fields: [userId], references: [id])
+  userId       String
+  habitSteps   HabitStep[]
+
+  @@index([userId])
+}
+
+model HabitStep {
+  id      String  @id @default(uuid())
+  title   String
+  state   Boolean @default(false)
+  habit   Habit   @relation(fields: [habitId], references: [id])
+  habitId String
+
+  @@index([habitId])
+}
+
+model Task {
+  id           String       @id @default(uuid())
+  title        String
+  description  String?
+  state        Boolean      @default(false)
+  creationDate DateTime     @default(now())
+  dueDate      DateTime?
+  priority     TaskPriority
+  user         User         @relation(fields: [userId], references: [id])
+  userId       String
+  steps        Step[]
+
+  @@index([userId])
+}
+
+model Step {
+  id     String  @id @default(uuid())
+  title  String
+  state  Boolean @default(false)
+  task   Task    @relation(fields: [taskId], references: [id])
+  taskId String
+
+  @@index([taskId])
+}
