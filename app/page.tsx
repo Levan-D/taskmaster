@@ -12,7 +12,7 @@ export default function Home() {
   console.log(user, isAuthenticated())
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <section className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="flex gap-4 items-center w-fit mx-auto">
         <>
           <LoginLink className="bg-[#3377ff] text-white px-4 py-2 rounded">
@@ -23,6 +23,6 @@ export default function Home() {
           </RegisterLink>
         </>
       </div>
-    </main>
+    </section>
   )
 }

@@ -1,7 +1,11 @@
 /** @format */
 
-import React from "react"
+import CreateTask from "@/app/components/CreateTask"
 
 export default function Today() {
-  return <div>today today</div>
+  return (
+    <section className="m-4">
+      <CreateTask />
+    </section>
+  )
 }

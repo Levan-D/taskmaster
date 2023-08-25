@@ -1,7 +1,7 @@
 /** @format */
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Icon from "@mdi/react"
 import {
   mdiChevronRight,
@@ -16,10 +16,13 @@ import Tooltip from "@/app/components/Tooltip"
 import DropdownMenu from "@/app/components/DropdownMenu"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
+import { setUser } from "@/lib/redux/slices/globalSlice"
 
 type Props = {
   UserInfo: JSX.Element
   LogoutBtn: JSX.Element
+  userId: string | null
 }
 
 type TaskPageType =
@@ -32,10 +35,16 @@ type TaskPageType =
       break: boolean
     }
 
-export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
+export default function Sidebar({ UserInfo, LogoutBtn, userId }: Props) {
   const [isOpen, setIsOpen] = useState(true)
   const pathname = usePathname()
-  console.log(pathname)
+  const dispatch = useAppDispatch()
+  const { user } = useAppSelector(state => state.global)
+
+  useEffect(() => {
+    if (userId) dispatch(setUser({ loginId: userId }))
+  }, [])
+
   const toggleNav = () => {
     setIsOpen(x => !x)
   }

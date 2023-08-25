@@ -8,4 +8,7 @@
   .btnIcon {
     @apply block sm:hover:bg-neutral-500 active:bg-neutral-600 rounded-md duration-300;
   }
+  .input {
+    @apply px-2 py-1 text-neutral-950 rounded-md bg-neutral-300 placeholder-neutral-700;
+  }
 }

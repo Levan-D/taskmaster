@@ -4,7 +4,7 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import Image from "next/image"
 
 export default function UserInfo() {
-  const { isAuthenticated, getUser } = getKindeServerSession()
+  const { getUser } = getKindeServerSession()
   const user = getUser()
 
   return (
