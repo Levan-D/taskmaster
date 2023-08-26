@@ -40,7 +40,7 @@ model Habit {
   state        Boolean     @default(false)
   creationDate DateTime    @default(now())
   recurrence   Recurrence
-  user         User        @relation(fields: [userId], references: [id])
+  user         User        @relation(fields: [userId], references: [loginId])
   userId       String
   habitSteps   HabitStep[]
 
@@ -60,12 +60,13 @@ model HabitStep {
 model Task {
   id           String       @id @default(uuid())
   title        String
+  deleted      Boolean      @default(false)
   description  String?
   state        Boolean      @default(false)
   creationDate DateTime     @default(now())
   dueDate      DateTime?
   priority     TaskPriority
-  user         User         @relation(fields: [userId], references: [id])
+  user         User         @relation(fields: [userId], references: [loginId])
   userId       String
   steps        Step[]
 

@@ -1,4 +1,11 @@
-import { authMiddleware } from "@kinde-oss/kinde-auth-nextjs/server";
+/** @format */
+
+import { authMiddleware } from "@kinde-oss/kinde-auth-nextjs/server"
+import { cookies } from "next/headers"
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
+
+import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
 
 export const config = {
   matcher: [
@@ -11,6 +18,7 @@ export const config = {
      */
     "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
-};
+}
 
-export default authMiddleware;
+export default authMiddleware
+

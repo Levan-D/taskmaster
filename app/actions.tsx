@@ -2,39 +2,113 @@
 
 "use server"
 import { prisma } from "./db"
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 
-export const checkUserExits = async (user: UserType) => {
-  let userData
-  if (user && user.email && user.id) {
-    userData = await prisma.user.upsert({
-      where: { loginId: user.id }, // Use loginId to find a user
-      update: {}, // Update nothing if user exists
-      create: {
-        loginId: user.id,
-        email: user.email,
-      },
-    })
+const checkAuth = async () => {
+  const { getUser, isAuthenticated } = getKindeServerSession()
+
+  const authStatus = isAuthenticated()
+
+  if (!authStatus) {
+    throw new Error("Unauthorized")
   }
 
-  return userData
+  const user: UserType = getUser()
+  return user
 }
 
-export const createTask = async (data: FormData, userId: string) => {
-  const title = data.get("title")?.toString() || ""
+export const checkUserExists = async () => {
+  const userData = await checkAuth()
 
-  const user = await prisma.user.findUnique({
-    where: { loginId: userId },
-  })
-
-  if (!user) {
-    throw new Error("User not found")
+  try {
+    if (userData && userData.email && userData.id) {
+      await prisma.user.upsert({
+        where: { loginId: userData.id },
+        update: {},
+        create: {
+          loginId: userData.id,
+          email: userData.email,
+        },
+      })
+      return { success: true }
+    } else {
+      throw new Error("Bad Request: Missing user data")
+    }
+  } catch (error) {
+    console.error("API Error:", error)
+    return { error: error || "Internal Server Error" }
   }
+}
 
-  await prisma.task.create({
-    data: {
-      title: title,
-      priority: "LOW",
-      userId: user.id,
-    },
-  })
+export const createTask = async (data: FormData) => {
+  const title = data.get("title")?.toString() || ""
+  const userData = await checkAuth()
+
+  try {
+    if (userData && userData.id) {
+      await prisma.task.create({
+        data: {
+          title: title,
+          priority: "LOW",
+          userId: userData.id,
+        },
+      })
+      return { success: true }
+    } else {
+      throw new Error("Bad Request: Missing user data")
+    }
+  } catch (error) {
+    console.error("API Error:", error)
+    return { error: error || "Internal Server Error" }
+  }
+}
+
+export const getTasks = async ({ deleted }: { deleted: boolean }) => {
+  const userData = await checkAuth()
+
+  try {
+    if (userData && userData.id) {
+      const tasks = await prisma.task.findMany({
+        where: { userId: userData.id, deleted: deleted },
+        orderBy: {
+          creationDate: "desc",
+        },
+      })
+
+      return { success: true, data: tasks }
+    } else {
+      throw new Error("Bad Request: Missing user data")
+    }
+  } catch (error) {
+    console.error("API Error:", error)
+    return { error: error || "Internal Server Error" }
+  }
+}
+
+export const recycleTask = async ({ taskId }: { taskId: string }): Promise<void> => {
+  try {
+    await prisma.task.update({
+      where: { id: taskId },
+      data: { deleted: true },
+    })
+  } catch (error) {
+    console.error("API Error:", error)
+  }
+}
+
+export const toggleComplete = async ({
+  taskId,
+  state,
+}: {
+  taskId: string
+  state: boolean
+}): Promise<void> => {
+  try {
+    await prisma.task.update({
+      where: { id: taskId },
+      data: {  state: state },
+    })
+  } catch (error) {
+    console.error("API Error:", error)
+  }
 }

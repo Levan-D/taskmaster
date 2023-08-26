@@ -1,7 +1,7 @@
 /** @format */
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Icon from "@mdi/react"
 import {
   mdiChevronRight,
@@ -16,13 +16,10 @@ import Tooltip from "@/app/components/Tooltip"
 import DropdownMenu from "@/app/components/DropdownMenu"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
-import { setUser } from "@/lib/redux/slices/globalSlice"
 
 type Props = {
   UserInfo: JSX.Element
   LogoutBtn: JSX.Element
-  userId: string | null
 }
 
 type TaskPageType =
@@ -35,15 +32,48 @@ type TaskPageType =
       break: boolean
     }
 
-export default function Sidebar({ UserInfo, LogoutBtn, userId }: Props) {
+const taskPages: TaskPageType[] = [
+  {
+    icon: mdiSync,
+    title: "Habits",
+    path: "/dashboard/habits",
+  },
+  {
+    icon: mdiOrderBoolAscendingVariant,
+    title: "Today",
+    path: "/dashboard/today",
+  },
+  {
+    icon: mdiViewWeekOutline,
+    title: "Week",
+    path: "/dashboard/week",
+  },
+  {
+    break: true,
+  },
+  {
+    icon: mdiCheckCircleOutline,
+    title: "Finished",
+    path: "/dashboard/finished",
+  },
+  {
+    icon: mdiClockAlertOutline,
+    title: "Missed",
+    path: "/dashboard/missed",
+  },
+  {
+    break: true,
+  },
+  {
+    icon: mdiTrashCanOutline,
+    title: "Bin",
+    path: "/dashboard/bin",
+  },
+]
+
+export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
   const [isOpen, setIsOpen] = useState(true)
   const pathname = usePathname()
-  const dispatch = useAppDispatch()
-  const { user } = useAppSelector(state => state.global)
-
-  useEffect(() => {
-    if (userId) dispatch(setUser({ loginId: userId }))
-  }, [])
 
   const toggleNav = () => {
     setIsOpen(x => !x)
@@ -59,45 +89,6 @@ export default function Sidebar({ UserInfo, LogoutBtn, userId }: Props) {
     },
     {
       JSX: LogoutBtn,
-    },
-  ]
-
-  const taskPages: TaskPageType[] = [
-    {
-      icon: mdiSync,
-      title: "Habits",
-      path: "/dashboard/habits",
-    },
-    {
-      icon: mdiOrderBoolAscendingVariant,
-      title: "Today",
-      path: "/dashboard/today",
-    },
-    {
-      icon: mdiViewWeekOutline,
-      title: "Week",
-      path: "/dashboard/week",
-    },
-    {
-      break: true,
-    },
-    {
-      icon: mdiCheckCircleOutline,
-      title: "Finished",
-      path: "/dashboard/finished",
-    },
-    {
-      icon: mdiClockAlertOutline,
-      title: "Missed",
-      path: "/dashboard/missed",
-    },
-    {
-      break: true,
-    },
-    {
-      icon: mdiTrashCanOutline,
-      title: "Bin",
-      path: "/dashboard/bin",
     },
   ]
 
