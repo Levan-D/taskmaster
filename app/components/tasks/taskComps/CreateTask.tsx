@@ -11,9 +11,8 @@ export default function CreateTask() {
   const formRef = useRef<HTMLFormElement>(null)
 
   return (
-    <div className=" pt-1 p-2 mainContainer w-full sm:hover:border-neutral-600 transition-colors duration-300">
-      <h1 className="text-xl font-semibold mb-2">Create a task!</h1>
-      <form
+    <div className="   p-2 mainContainer w-full sm:hover:border-neutral-600 transition-colors duration-300">
+       <form
         ref={formRef}
         action={data => {
           createTask(data)
