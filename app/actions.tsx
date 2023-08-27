@@ -99,8 +99,6 @@ export const recycleTask = async ({
 }: {
   taskId: string
 }): Promise<ApiResponse<void>> => {
-  const userData = await checkAuth()
-
   try {
     await prisma.task.update({
       where: { id: taskId },
@@ -119,8 +117,6 @@ export const toggleTaskComplete = async ({
   taskId: string
   state: boolean
 }): Promise<ApiResponse<void>> => {
-  const userData = await checkAuth()
-
   try {
     await prisma.task.update({
       where: { id: taskId },
@@ -139,8 +135,6 @@ export const setPriority = async ({
   taskId: string
   priority: TaskPriority
 }): Promise<ApiResponse<void>> => {
-  const userData = await checkAuth()
-
   try {
     await prisma.task.update({
       where: { id: taskId },
@@ -156,7 +150,6 @@ export const createStep = async (
   data: FormData,
   taskId: string
 ): Promise<ApiResponse<void>> => {
-  const userData = await checkAuth()
   const title = data.get("title")?.toString() || ""
 
   try {
@@ -179,8 +172,6 @@ export const getSteps = async ({
   taskId: string
   deleted: boolean
 }): Promise<ApiResponse<Step[]>> => {
-  const userData = await checkAuth()
-
   try {
     const steps = await prisma.step.findMany({
       where: { taskId: taskId, deleted: deleted },
@@ -200,8 +191,6 @@ export const recycleStep = async ({
 }: {
   stepId: string
 }): Promise<ApiResponse<void>> => {
-  const userData = await checkAuth()
-
   try {
     await prisma.step.update({
       where: { id: stepId },
@@ -220,8 +209,6 @@ export const toggleStepComplete = async ({
   stepId: string
   state: boolean
 }): Promise<ApiResponse<void>> => {
-  const userData = await checkAuth()
-
   try {
     await prisma.step.update({
       where: { id: stepId },
