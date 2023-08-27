@@ -26,13 +26,13 @@ export default function CreateTask() {
         <div className="flex gap-2">
           <input
             placeholder="Create a task"
-            className="input grow"
+            className="input p-4 text-lg grow"
             name="title"
             type="text"
             required
           />
-          <button className="btnSecondary px-3 ">
-            <Icon path={mdiPlus} size={1} />
+          <button className="btnSecondary px-4 ">
+            <Icon path={mdiPlus} size={1.4} />
           </button>
         </div>
       </form>

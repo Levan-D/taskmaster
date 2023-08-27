@@ -15,8 +15,10 @@ export default function Task({ id, title, state }: Task) {
         <div>drop</div>
       </div>
 
-      <CreateStep taskId={id} />
-      <Steps taskId={id} />
+      <div className="mb-2">
+        <CreateStep taskId={id} />
+        <Steps taskId={id} />
+      </div>
 
       {/* <RecycleTask taskId={id} /> */}
     </div>

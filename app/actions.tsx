@@ -175,9 +175,14 @@ export const getSteps = async ({
   try {
     const steps = await prisma.step.findMany({
       where: { taskId: taskId, deleted: deleted },
-      orderBy: {
-        creationDate: "desc",
-      },
+      orderBy: [
+        {
+          state: "asc",
+        },
+        {
+          creationDate: "desc",
+        },
+      ],
     })
 
     return { success: true, data: steps }

@@ -17,7 +17,7 @@ export default function CreateStep({ taskId }: Props) {
   const formRef = useRef<HTMLFormElement>(null)
 
   return (
-    <div className="bg-neutral-800 p-2 rounded-lg w-full">
+    <div className="bg-neutral-800 px-2 pt-2 rounded-lg w-full">
       <form
         ref={formRef}
         action={data => {
@@ -36,7 +36,7 @@ export default function CreateStep({ taskId }: Props) {
             type="text"
             required
           />
-          <button className="btnSecondary px-3 ">
+          <button className="btnSecondary px-2.5 ">
             <Icon path={mdiPlus} size={1} />
           </button>
         </div>

@@ -18,7 +18,7 @@ export default function UserInfo() {
           alt="user profile avatar"
         />
       ) : (
-        <div className="bg-lime-500 text-neutral-950 rounded-md  w-8 h-8   items-center flex flex-col justify-center">
+        <div className="bg-lime-600 text-white rounded-md  w-8 h-8   items-center flex flex-col justify-center">
           {user?.given_name?.[0]}
           {user?.family_name?.[0]}
         </div>

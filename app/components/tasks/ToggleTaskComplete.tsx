@@ -5,7 +5,7 @@ import { toggleTaskComplete } from "@/app/actions"
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 import Icon from "@mdi/react"
-import { mdiCheckBold, mdiCheckOutline } from "@mdi/js"
+import { mdiCheckBold } from "@mdi/js"
 
 type Props = { taskId: string; state: boolean }
 
