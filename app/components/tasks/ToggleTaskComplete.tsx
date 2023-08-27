@@ -13,6 +13,11 @@ export default function ToggleTaskComplete({ taskId, state }: Props) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
+  const handleToggleTaskComplete = async () => {
+    await toggleTaskComplete({ taskId: taskId, state: !state })
+    router.refresh()
+  }
+
   return (
     <button
       className={` ${
@@ -21,7 +26,7 @@ export default function ToggleTaskComplete({ taskId, state }: Props) {
           : "bg-neutral-700 md:hover:bg-neutral-600"
       } block  rounded-tl-lg p-2 duration-300 md:hover:bg-neutral-600`}
       onClick={() => {
-        startTransition(() => toggleTaskComplete({ taskId: taskId, state: !state }))
+        startTransition(handleToggleTaskComplete)
         router.refresh()
       }}
     >

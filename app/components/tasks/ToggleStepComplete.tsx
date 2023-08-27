@@ -12,6 +12,12 @@ type Props = { stepId: string; state: boolean }
 export default function ToggleStepComplete({ stepId, state }: Props) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
+
+  const handleToggleStepComplete = async () => {
+    await toggleStepComplete({ stepId: stepId, state: !state })
+    router.refresh()
+  }
+
   return (
     <button
       className={` ${
@@ -20,7 +26,7 @@ export default function ToggleStepComplete({ stepId, state }: Props) {
           : "bg-neutral-700 md:hover:bg-neutral-600"
       } block  rounded-full p-1 duration-300 md:hover:bg-neutral-600`}
       onClick={() => {
-        startTransition(() => toggleStepComplete({ stepId: stepId, state: !state }))
+        startTransition(handleToggleStepComplete)
         router.refresh()
       }}
     >

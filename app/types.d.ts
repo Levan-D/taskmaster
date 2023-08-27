@@ -32,3 +32,22 @@ type UserType = {
 }
 
 type TaskPriority = "LOW" | "MEDIUM" | "HIGH"
+
+type Step = {
+  id: string
+  title: string
+  state: boolean
+  creationDate: Date
+  taskId: string
+}
+
+type Task = {
+  id: string
+  title: string
+  deleted: boolean
+  state: boolean
+  creationDate: Date
+  dueDate: Date | null
+  priority: TaskPriority
+  userId: string
+}

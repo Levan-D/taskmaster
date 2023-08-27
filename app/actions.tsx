@@ -17,10 +17,12 @@ const checkAuth = async () => {
   return user
 }
 
-const handleApiError = (error: any) => {
+const handleApiError = <T,>(error: any): ApiResponse<T> => {
   console.error("API Error:", error)
-  return { error: error || "Internal Server Error" }
+  return { success: false, error: error || "Internal Server Error" }
 }
+
+type ApiResponse<T> = { success: boolean; data?: T; error?: any }
 
 export const checkUserExists = async () => {
   const userData = await checkAuth()
@@ -44,7 +46,7 @@ export const checkUserExists = async () => {
   }
 }
 
-export const createTask = async (data: FormData) => {
+export const createTask = async (data: FormData): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
 
   const title = data.get("title")?.toString() || ""
@@ -67,7 +69,11 @@ export const createTask = async (data: FormData) => {
   }
 }
 
-export const getTasks = async ({ deleted }: { deleted: boolean }) => {
+export const getTasks = async ({
+  deleted,
+}: {
+  deleted: boolean
+}): Promise<ApiResponse<Task[]>> => {
   const userData = await checkAuth()
 
   try {
@@ -92,7 +98,7 @@ export const recycleTask = async ({
   taskId,
 }: {
   taskId: string
-}): Promise<void | { error: any }> => {
+}): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
 
   try {
@@ -100,6 +106,7 @@ export const recycleTask = async ({
       where: { id: taskId },
       data: { deleted: true },
     })
+    return { success: true }
   } catch (error) {
     return handleApiError(error)
   }
@@ -111,7 +118,7 @@ export const toggleTaskComplete = async ({
 }: {
   taskId: string
   state: boolean
-}): Promise<void | { error: any }> => {
+}): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
 
   try {
@@ -119,6 +126,7 @@ export const toggleTaskComplete = async ({
       where: { id: taskId },
       data: { state: state },
     })
+    return { success: true }
   } catch (error) {
     return handleApiError(error)
   }
@@ -130,7 +138,7 @@ export const setPriority = async ({
 }: {
   taskId: string
   priority: TaskPriority
-}): Promise<void | { error: any }> => {
+}): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
 
   try {
@@ -138,12 +146,16 @@ export const setPriority = async ({
       where: { id: taskId },
       data: { priority: priority },
     })
+    return { success: true }
   } catch (error) {
     return handleApiError(error)
   }
 }
 
-export const createStep = async (data: FormData, taskId: string) => {
+export const createStep = async (
+  data: FormData,
+  taskId: string
+): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
   const title = data.get("title")?.toString() || ""
 
@@ -166,7 +178,7 @@ export const getSteps = async ({
 }: {
   taskId: string
   deleted: boolean
-}) => {
+}): Promise<ApiResponse<Step[]>> => {
   const userData = await checkAuth()
 
   try {
@@ -187,7 +199,7 @@ export const recycleStep = async ({
   stepId,
 }: {
   stepId: string
-}): Promise<void | { error: any }> => {
+}): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
 
   try {
@@ -195,6 +207,7 @@ export const recycleStep = async ({
       where: { id: stepId },
       data: { deleted: true },
     })
+    return { success: true }
   } catch (error) {
     return handleApiError(error)
   }
@@ -206,7 +219,7 @@ export const toggleStepComplete = async ({
 }: {
   stepId: string
   state: boolean
-}): Promise<void | { error: any }> => {
+}): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
 
   try {
@@ -214,26 +227,8 @@ export const toggleStepComplete = async ({
       where: { id: stepId },
       data: { state: state },
     })
+    return { success: true }
   } catch (error) {
-    console.error("API Error:", error)
-  }
-}
-
-export const toggleComplete = async ({
-  id,
-  state,
-}: {
-  id: string
-  state: boolean
-}): Promise<void | { error: any }> => {
-  const userData = await checkAuth()
-
-  try {
-    await prisma.step.update({
-      where: { id: id },
-      data: { state: state },
-    })
-  } catch (error) {
-    console.error("API Error:", error)
+    return handleApiError(error)
   }
 }
