@@ -95,7 +95,7 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
   return (
     <nav
       className={` ${
-        isOpen ? "w-[200px] " : "w-[60px]"
+        isOpen ? "w-[200px] " : "w-[56px]"
       }  bg-neutral-950 duration-300  flex flex-col  justify-between select-none `}
     >
       <div className={`${isOpen && "flex gap-1"}`}>
