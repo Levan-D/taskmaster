@@ -8,6 +8,7 @@ type DropDownItemJSXType = {
 
 type DropDownItemActionType = {
   title: string
+  icon?: JSX.Element
   action: () => void
   disabled?: boolean
   invisible?: boolean

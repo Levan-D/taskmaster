@@ -1,7 +1,7 @@
 /** @format */
 
 "use client"
-import { recycleStep } from "../../actions"
+import { recycleStep } from "../../../actions"
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 import Icon from '@mdi/react';

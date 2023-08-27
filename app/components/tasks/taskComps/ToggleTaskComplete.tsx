@@ -1,20 +1,20 @@
 /** @format */
 
 "use client"
-import { toggleStepComplete } from "@/app/actions"
+import { toggleTaskComplete } from "@/app/actions"
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 import Icon from "@mdi/react"
 import { mdiCheckBold } from "@mdi/js"
 
-type Props = { stepId: string; state: boolean }
+type Props = { taskId: string; state: boolean }
 
-export default function ToggleStepComplete({ stepId, state }: Props) {
+export default function ToggleTaskComplete({ taskId, state }: Props) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
-  const handleToggleStepComplete = async () => {
-    await toggleStepComplete({ stepId: stepId, state: !state })
+  const handleToggleTaskComplete = async () => {
+    await toggleTaskComplete({ taskId: taskId, state: !state })
     router.refresh()
   }
 
@@ -23,17 +23,17 @@ export default function ToggleStepComplete({ stepId, state }: Props) {
       className={` ${
         state
           ? "bg-lime-600 md:hover:bg-lime-500"
-          : "bg-neutral-900 md:hover:bg-neutral-800"
-      } block  rounded-md   p-1 duration-300 `}
+          : "bg-neutral-950 md:hover:bg-neutral-900"
+      } block  rounded-tl-lg rounded-br-lg p-2 duration-300 transition-colors `}
       onClick={() => {
-        startTransition(handleToggleStepComplete)
+        startTransition(handleToggleTaskComplete)
         router.refresh()
       }}
     >
       <Icon
         path={mdiCheckBold}
         className={`${state ? "text-white" : "text-neutral-300"}`}
-        size={0.8}
+        size={1}
       />
     </button>
   )

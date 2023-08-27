@@ -80,9 +80,14 @@ export const getTasks = async ({
     if (userData && userData.id) {
       const tasks = await prisma.task.findMany({
         where: { userId: userData.id, deleted: deleted },
-        orderBy: {
-          creationDate: "desc",
-        },
+        orderBy: [
+          {
+            state: "asc",
+          },
+          {
+            creationDate: "desc",
+          },
+        ],
       })
 
       return { success: true, data: tasks }

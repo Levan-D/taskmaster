@@ -1,7 +1,7 @@
 /** @format */
 
 import { getTasks } from "../../actions"
-import Task from "./Task"
+import Task from "./taskComps/Task"
 
 export default async function Tasks() {
   const tasks = await getTasks({ deleted: false })

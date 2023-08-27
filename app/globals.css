@@ -6,17 +6,17 @@
 
 @layer components {
   .btnPrimary {
-    @apply block bg-sky-600 shadow-sm sm:hover:bg-sky-500  p-1 shadow-neutral-950  rounded-md duration-300;
+    @apply block bg-sky-600 shadow-sm sm:hover:bg-sky-500  p-1 shadow-neutral-950  rounded-md duration-300 transition-colors;
   }
   .btnSecondary {
-    @apply block bg-neutral-600 shadow-sm sm:hover:bg-neutral-500  p-1 shadow-neutral-950  rounded-md duration-300;
+    @apply block bg-neutral-600 shadow-sm sm:hover:bg-neutral-500  p-1 shadow-neutral-950  rounded-md duration-300 transition-colors;
   }
   .btnError {
-    @apply block bg-rose-600 shadow-sm sm:hover:bg-rose-500  p-1 shadow-neutral-950 transition-colors  duration-300 rounded-md;
+    @apply block bg-rose-600 shadow-sm sm:hover:bg-rose-500  p-1 shadow-neutral-950    duration-300 transition-colors rounded-md;
   }
 
   .btnIcon {
-    @apply block sm:hover:bg-neutral-700 rounded-md duration-300;
+    @apply block sm:hover:bg-neutral-700 rounded-md duration-300 transition-colors;
   }
   .input {
     @apply px-4 py-2 border-opacity-60 border-neutral-600 border-[2px] text-white shadow-neutral-950 shadow-sm rounded-md bg-neutral-700 placeholder-neutral-200;
@@ -29,3 +29,39 @@
     @apply bg-neutral-700 rounded-lg border-[2px] shadow-sm shadow-neutral-950 border-opacity-60 border-neutral-600;
   }
 }
+
+
+/* scrollbar */
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+.invisTrack::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 5px;
+}
+.invisTrack::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #404040;
+}
+.invisTrack::-webkit-scrollbar-thumb:hover {
+  background: #404040;
+}
+/* scrollbar */
