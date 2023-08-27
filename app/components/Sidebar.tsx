@@ -137,7 +137,7 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
               <Tooltip
                 key={i}
                 text={page.title}
-                customCSS={"translate-x-8 "}
+                customCSS={"translate-x-7 "}
                 position="right"
               >
                 <Link
