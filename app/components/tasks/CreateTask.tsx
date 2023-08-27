@@ -11,7 +11,7 @@ export default function CreateTask() {
   const formRef = useRef<HTMLFormElement>(null)
 
   return (
-    <div className=" pt-1 p-2 mainContainer w-full">
+    <div className=" pt-1 p-2 mainContainer w-full sm:hover:border-neutral-600 transition-colors duration-300">
       <h1 className="text-xl font-semibold mb-2">Create a task!</h1>
       <form
         ref={formRef}
@@ -31,7 +31,7 @@ export default function CreateTask() {
             type="text"
             required
           />
-          <button className="btnSecondary px-4 ">
+          <button className="btnPrimary px-4 ">
             <Icon path={mdiPlus} size={1.4} />
           </button>
         </div>

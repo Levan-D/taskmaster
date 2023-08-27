@@ -53,7 +53,7 @@ export default function DropdownMenu({
       {isDropdownMenuOpen && (
         <div
           ref={dropdownRef}
-          className={`  absolute   shadow-md shad bg-neutral-800 border-[1px] border-neutral-700 mt-1 z-40 rounded-md text-left`}
+          className={`  absolute   shadow-md shadow-neutral-950 shad bg-neutral-800 border-[1px] border-neutral-700 mt-1 z-40 rounded-md text-left`}
         >
           <ul className="dropdown-menu">
             {items.map((item, i) => {
