@@ -11,10 +11,15 @@ export default function RecycleTask({ taskId }: Props) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
+  const handleRecycleTask = async () => {
+    await recycleTask({ taskId: taskId })
+    router.refresh()
+  }
+
   return (
     <button
       onClick={() => {
-        startTransition(() => recycleTask({ taskId: taskId }))
+        startTransition(handleRecycleTask)
         router.refresh()
       }}
     >

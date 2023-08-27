@@ -6,7 +6,7 @@ import Task from "./Task"
 export default async function Tasks() {
   const tasks = await getTasks({ deleted: false })
 
-  if (tasks.success)
+  if (tasks.success && tasks.data)
     return (
       <div>
         {tasks.data.map(task => (
