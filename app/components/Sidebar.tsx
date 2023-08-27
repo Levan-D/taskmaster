@@ -96,7 +96,7 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
     <nav
       className={` ${
         isOpen ? "w-[200px] " : "w-[56px]"
-      }  bg-neutral-950 duration-300  flex flex-col  justify-between select-none `}
+      }  bg-neutral-950   duration-300   flex flex-col  justify-between select-none `}
     >
       <div className={`${isOpen && "flex gap-1"}`}>
         <div className="grow">
@@ -125,7 +125,7 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
                 key={i}
                 href={page.path}
                 className={`${!isOpen && "justify-center w-10"} ${
-                  pathname.includes(page.path) && "!bg-neutral-700"
+                  pathname.includes(page.path) && "!bg-neutral-800"
                 } px-2 mx-2 flex gap-2 btnIcon h-10 items-center text-sm`}
               >
                 <div>
@@ -143,7 +143,7 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
                 <Link
                   href={page.path}
                   className={`${!isOpen && "justify-center w-10"}  ${
-                    pathname.includes(page.path) && "!bg-neutral-700"
+                    pathname.includes(page.path) && "!bg-neutral-800"
                   } px-2 mx-2 flex gap-2 btnIcon h-10 items-center text-sm`}
                 >
                   <div>
@@ -155,7 +155,7 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
           }
 
           if ("break" in page) {
-            return <hr key={i} className="mx-4 my-1 border-t-[1px] border-neutral-700" />
+            return <hr key={i} className="mx-4 my-1 border-t-[1px] border-neutral-800" />
           }
         })}
       </div>

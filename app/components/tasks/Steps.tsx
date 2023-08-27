@@ -10,9 +10,9 @@ type Props = {
 export default async function Steps({ taskId }: Props) {
   const steps = await getSteps({ taskId: taskId, deleted: false })
 
-  if (steps.success && steps.data)
+  if (steps.success && steps.data && steps.data.length > 0)
     return (
-      <div>
+      <div className="innerContainer m-2      ">
         {steps.data.map(step => (
           <Step key={step.id} {...step} />
         ))}

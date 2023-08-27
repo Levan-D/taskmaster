@@ -23,14 +23,18 @@ export default function ToggleStepComplete({ stepId, state }: Props) {
       className={` ${
         state
           ? "bg-lime-600 md:hover:bg-lime-500"
-          : "bg-neutral-700 md:hover:bg-neutral-600"
-      } block  rounded-full p-1 duration-300 md:hover:bg-neutral-600`}
+          : "bg-neutral-900 md:hover:bg-neutral-800"
+      } block  rounded-md   p-1 duration-300 `}
       onClick={() => {
         startTransition(handleToggleStepComplete)
         router.refresh()
       }}
     >
-      <Icon path={mdiCheckBold} size={0.8} />
+      <Icon
+        path={mdiCheckBold}
+        className={`${state ? "text-white" : "text-neutral-300"}`}
+        size={0.8}
+      />
     </button>
   )
 }

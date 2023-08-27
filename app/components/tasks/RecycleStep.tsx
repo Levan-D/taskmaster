@@ -4,6 +4,9 @@
 import { recycleStep } from "../../actions"
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
+import Icon from '@mdi/react';
+import { mdiTrashCanOutline } from '@mdi/js';
+
 
 type Props = { stepId: string }
 
@@ -18,12 +21,13 @@ export default function RecycleStep({ stepId }: Props) {
 
   return (
     <button
+      className="btnError"
       onClick={() => {
         startTransition(handleRecycleStep)
         router.refresh()
       }}
     >
-      delete
+      <Icon path={mdiTrashCanOutline} size={0.8} />
     </button>
   )
 }

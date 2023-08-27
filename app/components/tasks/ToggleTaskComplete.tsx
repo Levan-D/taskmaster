@@ -5,7 +5,7 @@ import { toggleTaskComplete } from "@/app/actions"
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 import Icon from "@mdi/react"
-import { mdiCheckBold } from "@mdi/js"
+import { mdiCheckBold, mdiCheckOutline } from "@mdi/js"
 
 type Props = { taskId: string; state: boolean }
 
@@ -23,14 +23,18 @@ export default function ToggleTaskComplete({ taskId, state }: Props) {
       className={` ${
         state
           ? "bg-lime-600 md:hover:bg-lime-500"
-          : "bg-neutral-700 md:hover:bg-neutral-600"
-      } block  rounded-tl-lg p-2 duration-300 md:hover:bg-neutral-600`}
+          : "bg-neutral-950 md:hover:bg-neutral-900"
+      } block  rounded-tl-lg rounded-br-lg p-2 duration-300 `}
       onClick={() => {
         startTransition(handleToggleTaskComplete)
         router.refresh()
       }}
     >
-      <Icon path={mdiCheckBold} size={1} />
+      <Icon
+        path={mdiCheckBold}
+        className={`${state ? "text-white" : "text-neutral-300"}`}
+        size={1}
+      />
     </button>
   )
 }

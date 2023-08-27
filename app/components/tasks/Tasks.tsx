@@ -8,7 +8,7 @@ export default async function Tasks() {
 
   if (tasks.success && tasks.data)
     return (
-      <div>
+      <div className="flex flex-col gap-4">
         {tasks.data.map(task => (
           <Task key={task.id} {...task} />
         ))}

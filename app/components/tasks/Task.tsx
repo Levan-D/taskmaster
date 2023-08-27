@@ -7,7 +7,7 @@ import CreateStep from "./CreateStep"
 
 export default function Task({ id, title, state }: Task) {
   return (
-    <div className="bg-neutral-900 rounded-lg ">
+    <div className="mainContainer ">
       <div className="flex items-center">
         <ToggleTaskComplete taskId={id} state={state} />
         <p className="grow text-lg  mx-2 ">{title}</p>

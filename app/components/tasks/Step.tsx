@@ -6,10 +6,12 @@ import RecycleStep from "./RecycleStep"
 
 export default function Step({ title, id, state }: Step) {
   return (
-    <div className="flex gap-2 items-center">
+    <div className="flex gap-2 items-center group sm:hover:bg-neutral-600 p-2  rounded-md">
       <ToggleStepComplete stepId={id} state={state} />
-      <p>{title}</p>
-      <RecycleStep stepId={id} />
+      <p className={`${state && "text-neutral-300 "}   grow `}>{title}</p>
+      <div className={`group-hover:visible invisible `}>
+        <RecycleStep stepId={id} />
+      </div>
     </div>
   )
 }
