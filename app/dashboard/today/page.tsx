@@ -7,7 +7,9 @@ export default function Today() {
   return (
     <section className="m-4">
       <CreateTask />
-      <Tasks />
+      <div className="mt-4">
+        <Tasks />
+      </div>
     </section>
   )
 }

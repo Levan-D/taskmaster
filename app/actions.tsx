@@ -17,6 +17,11 @@ const checkAuth = async () => {
   return user
 }
 
+const handleApiError = (error: any) => {
+  console.error("API Error:", error)
+  return { error: error || "Internal Server Error" }
+}
+
 export const checkUserExists = async () => {
   const userData = await checkAuth()
 
@@ -35,14 +40,14 @@ export const checkUserExists = async () => {
       throw new Error("Bad Request: Missing user data")
     }
   } catch (error) {
-    console.error("API Error:", error)
-    return { error: error || "Internal Server Error" }
+    return handleApiError(error)
   }
 }
 
 export const createTask = async (data: FormData) => {
-  const title = data.get("title")?.toString() || ""
   const userData = await checkAuth()
+
+  const title = data.get("title")?.toString() || ""
 
   try {
     if (userData && userData.id) {
@@ -58,8 +63,7 @@ export const createTask = async (data: FormData) => {
       throw new Error("Bad Request: Missing user data")
     }
   } catch (error) {
-    console.error("API Error:", error)
-    return { error: error || "Internal Server Error" }
+    return handleApiError(error)
   }
 }
 
@@ -80,16 +84,135 @@ export const getTasks = async ({ deleted }: { deleted: boolean }) => {
       throw new Error("Bad Request: Missing user data")
     }
   } catch (error) {
-    console.error("API Error:", error)
-    return { error: error || "Internal Server Error" }
+    return handleApiError(error)
   }
 }
 
-export const recycleTask = async ({ taskId }: { taskId: string }): Promise<void> => {
+export const recycleTask = async ({
+  taskId,
+}: {
+  taskId: string
+}): Promise<void | { error: any }> => {
+  const userData = await checkAuth()
+
   try {
     await prisma.task.update({
       where: { id: taskId },
       data: { deleted: true },
+    })
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const toggleTaskComplete = async ({
+  taskId,
+  state,
+}: {
+  taskId: string
+  state: boolean
+}): Promise<void | { error: any }> => {
+  const userData = await checkAuth()
+
+  try {
+    await prisma.task.update({
+      where: { id: taskId },
+      data: { state: state },
+    })
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const setPriority = async ({
+  taskId,
+  priority,
+}: {
+  taskId: string
+  priority: TaskPriority
+}): Promise<void | { error: any }> => {
+  const userData = await checkAuth()
+
+  try {
+    await prisma.task.update({
+      where: { id: taskId },
+      data: { priority: priority },
+    })
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const createStep = async (data: FormData, taskId: string) => {
+  const userData = await checkAuth()
+  const title = data.get("title")?.toString() || ""
+
+  try {
+    await prisma.step.create({
+      data: {
+        title: title,
+        taskId: taskId,
+      },
+    })
+    return { success: true }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const getSteps = async ({
+  taskId,
+  deleted,
+}: {
+  taskId: string
+  deleted: boolean
+}) => {
+  const userData = await checkAuth()
+
+  try {
+    const steps = await prisma.step.findMany({
+      where: { taskId: taskId, deleted: deleted },
+      orderBy: {
+        creationDate: "desc",
+      },
+    })
+
+    return { success: true, data: steps }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const recycleStep = async ({
+  stepId,
+}: {
+  stepId: string
+}): Promise<void | { error: any }> => {
+  const userData = await checkAuth()
+
+  try {
+    await prisma.step.update({
+      where: { id: stepId },
+      data: { deleted: true },
+    })
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const toggleStepComplete = async ({
+  stepId,
+  state,
+}: {
+  stepId: string
+  state: boolean
+}): Promise<void | { error: any }> => {
+  const userData = await checkAuth()
+
+  try {
+    await prisma.step.update({
+      where: { id: stepId },
+      data: { state: state },
     })
   } catch (error) {
     console.error("API Error:", error)
@@ -97,16 +220,18 @@ export const recycleTask = async ({ taskId }: { taskId: string }): Promise<void>
 }
 
 export const toggleComplete = async ({
-  taskId,
+  id,
   state,
 }: {
-  taskId: string
+  id: string
   state: boolean
-}): Promise<void> => {
+}): Promise<void | { error: any }> => {
+  const userData = await checkAuth()
+
   try {
-    await prisma.task.update({
-      where: { id: taskId },
-      data: {  state: state },
+    await prisma.step.update({
+      where: { id: id },
+      data: { state: state },
     })
   } catch (error) {
     console.error("API Error:", error)

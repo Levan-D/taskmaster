@@ -30,3 +30,5 @@ type UserType = {
   email: string | null
   picture: string | null
 }
+
+type TaskPriority = "LOW" | "MEDIUM" | "HIGH"

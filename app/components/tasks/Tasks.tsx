@@ -1,8 +1,7 @@
 /** @format */
 
 import { getTasks } from "../../actions"
-import RecycleTask from "./RecycleTask"
-import ToggleComplete from "./ToggleComplete"
+import Task from "./Task"
 
 export default async function Tasks() {
   const tasks = await getTasks({ deleted: false })
@@ -11,11 +10,7 @@ export default async function Tasks() {
     return (
       <div>
         {tasks.data.map(task => (
-          <div key={task.id}>
-            <p>{task.title}</p>
-            <RecycleTask taskId={task.id} />
-            <ToggleComplete taskId={task.id} state={task.state} />
-          </div>
+          <Task key={task.id} {...task} />
         ))}
       </div>
     )

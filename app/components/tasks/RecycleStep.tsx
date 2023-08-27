@@ -1,24 +1,24 @@
 /** @format */
 
 "use client"
-import { toggleComplete } from "@/app/actions"
+import { recycleStep } from "../../actions"
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 
-type Props = { taskId: string; state: boolean }
+type Props = { stepId: string }
 
-export default function ToggleComplete({ taskId, state }: Props) {
+export default function RecycleStep({ stepId }: Props) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
   return (
     <button
       onClick={() => {
-        startTransition(() => toggleComplete({ taskId: taskId, state: !state }))
+        startTransition(() => recycleStep({ stepId: stepId }))
         router.refresh()
       }}
     >
-      {state ? "complete" : "not complete"}
+      delete
     </button>
   )
 }

@@ -15,7 +15,6 @@ enum TaskPriority {
   LOW
   MEDIUM
   HIGH
-  URGENT
 }
 
 enum Recurrence {
@@ -36,7 +35,6 @@ model User {
 model Habit {
   id           String      @id @default(uuid())
   title        String
-  description  String?
   state        Boolean     @default(false)
   creationDate DateTime    @default(now())
   recurrence   Recurrence
@@ -61,11 +59,10 @@ model Task {
   id           String       @id @default(uuid())
   title        String
   deleted      Boolean      @default(false)
-  description  String?
   state        Boolean      @default(false)
   creationDate DateTime     @default(now())
   dueDate      DateTime?
-  priority     TaskPriority
+  priority     TaskPriority @default(LOW)
   user         User         @relation(fields: [userId], references: [loginId])
   userId       String
   steps        Step[]
@@ -74,11 +71,13 @@ model Task {
 }
 
 model Step {
-  id     String  @id @default(uuid())
-  title  String
-  state  Boolean @default(false)
-  task   Task    @relation(fields: [taskId], references: [id])
-  taskId String
+  id           String   @id @default(uuid())
+  title        String
+  deleted      Boolean  @default(false)
+  state        Boolean  @default(false)
+  creationDate DateTime @default(now())
+  task         Task     @relation(fields: [taskId], references: [id])
+  taskId       String
 
   @@index([taskId])
 }
