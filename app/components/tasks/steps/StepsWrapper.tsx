@@ -14,7 +14,9 @@ type Props = {
 }
 
 export default function StepsWrapper({ taskId, data, taskState }: Props) {
-  const [isOpen, setIsOpen] = useState(data && data.length > 0 &&  !taskState ? true : false)
+  const [isOpen, setIsOpen] = useState(
+    data && data.length > 0 && !taskState ? true : false
+  )
   return (
     <>
       <div className={`${isOpen ? " visible   mt-4" : "collapse h-0 "} `}>
@@ -33,7 +35,7 @@ export default function StepsWrapper({ taskId, data, taskState }: Props) {
 
       <button
         onClick={() => setIsOpen(x => !x)}
-        className={`  w-full btnSecondary bg-transparent rounded-t-none py-0 rounded-b-lg`}
+        className={`  w-full sm:hover:bg-neutral-500 block transition-color duration-300 rounded-b-lg`}
       >
         <Icon
           className={` ${
