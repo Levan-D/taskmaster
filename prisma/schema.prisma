@@ -35,7 +35,7 @@ model User {
 model Habit {
   id           String      @id @default(uuid())
   title        String
-  state        Boolean     @default(false)
+  isComplete   Boolean     @default(false)
   creationDate DateTime    @default(now())
   recurrence   Recurrence
   user         User        @relation(fields: [userId], references: [loginId])
@@ -46,11 +46,11 @@ model Habit {
 }
 
 model HabitStep {
-  id      String  @id @default(uuid())
-  title   String
-  state   Boolean @default(false)
-  habit   Habit   @relation(fields: [habitId], references: [id])
-  habitId String
+  id         String  @id @default(uuid())
+  title      String
+  isComplete Boolean @default(false)
+  habit      Habit   @relation(fields: [habitId], references: [id])
+  habitId    String
 
   @@index([habitId])
 }
@@ -58,8 +58,8 @@ model HabitStep {
 model Task {
   id           String       @id @default(uuid())
   title        String
-  deleted      Boolean      @default(false)
-  state        Boolean      @default(false)
+  isDeleted      Boolean      @default(false)
+  isComplete   Boolean      @default(false)
   creationDate DateTime     @default(now())
   dueDate      DateTime?
   priority     TaskPriority @default(LOW)
@@ -73,8 +73,8 @@ model Task {
 model Step {
   id           String   @id @default(uuid())
   title        String
-  deleted      Boolean  @default(false)
-  state        Boolean  @default(false)
+  isDeleted      Boolean  @default(false)
+  isComplete   Boolean  @default(false)
   creationDate DateTime @default(now())
   task         Task     @relation(fields: [taskId], references: [id])
   taskId       String

@@ -10,12 +10,12 @@ import { mdiChevronDown } from "@mdi/js"
 type Props = {
   taskId: string
   data: Step[] | undefined
-  taskState: boolean
+  taskIsComplete: boolean
 }
 
-export default function StepsWrapper({ taskId, data, taskState }: Props) {
+export default function StepsWrapper({ taskId, data, taskIsComplete }: Props) {
   const [isOpen, setIsOpen] = useState(
-    data && data.length > 0 && !taskState ? true : false
+    data && data.length > 0 && !taskIsComplete ? true : false
   )
   return (
     <>

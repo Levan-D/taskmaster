@@ -37,7 +37,8 @@ type TaskPriority = "LOW" | "MEDIUM" | "HIGH"
 type Step = {
   id: string
   title: string
-  state: boolean
+  isDeleted: boolean
+  isComplete: boolean
   creationDate: Date
   taskId: string
 }
@@ -45,8 +46,8 @@ type Step = {
 type Task = {
   id: string
   title: string
-  deleted: boolean
-  state: boolean
+  isDeleted: boolean
+  isComplete: boolean
   creationDate: Date
   dueDate: Date | null
   priority: TaskPriority

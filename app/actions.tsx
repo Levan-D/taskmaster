@@ -70,19 +70,19 @@ export const createTask = async (data: FormData): Promise<ApiResponse<void>> => 
 }
 
 export const getTasks = async ({
-  deleted,
+  isDeleted,
 }: {
-  deleted: boolean
+  isDeleted: boolean
 }): Promise<ApiResponse<Task[]>> => {
   const userData = await checkAuth()
 
   try {
     if (userData && userData.id) {
       const tasks = await prisma.task.findMany({
-        where: { userId: userData.id, deleted: deleted },
+        where: { userId: userData.id, isDeleted: isDeleted },
         orderBy: [
           {
-            state: "asc",
+            isComplete: "asc",
           },
           {
             creationDate: "desc",
@@ -107,7 +107,7 @@ export const recycleTask = async ({
   try {
     await prisma.task.update({
       where: { id: taskId },
-      data: { deleted: true },
+      data: { isDeleted: true },
     })
     return { success: true }
   } catch (error) {
@@ -117,15 +117,15 @@ export const recycleTask = async ({
 
 export const toggleTaskComplete = async ({
   taskId,
-  state,
+  isComplete,
 }: {
   taskId: string
-  state: boolean
+  isComplete: boolean
 }): Promise<ApiResponse<void>> => {
   try {
     await prisma.task.update({
       where: { id: taskId },
-      data: { state: state },
+      data: { isComplete: isComplete },
     })
     return { success: true }
   } catch (error) {
@@ -172,17 +172,17 @@ export const createStep = async (
 
 export const getSteps = async ({
   taskId,
-  deleted,
+  isDeleted,
 }: {
   taskId: string
-  deleted: boolean
+  isDeleted: boolean
 }): Promise<ApiResponse<Step[]>> => {
   try {
     const steps = await prisma.step.findMany({
-      where: { taskId: taskId, deleted: deleted },
+      where: { taskId: taskId, isDeleted: isDeleted },
       orderBy: [
         {
-          state: "asc",
+          isComplete: "asc",
         },
         {
           creationDate: "desc",
@@ -204,7 +204,7 @@ export const recycleStep = async ({
   try {
     await prisma.step.update({
       where: { id: stepId },
-      data: { deleted: true },
+      data: { isDeleted: true },
     })
     return { success: true }
   } catch (error) {
@@ -214,15 +214,15 @@ export const recycleStep = async ({
 
 export const toggleStepComplete = async ({
   stepId,
-  state,
+  isComplete,
 }: {
   stepId: string
-  state: boolean
+  isComplete: boolean
 }): Promise<ApiResponse<void>> => {
   try {
     await prisma.step.update({
       where: { id: stepId },
-      data: { state: state },
+      data: { isComplete: isComplete },
     })
     return { success: true }
   } catch (error) {
