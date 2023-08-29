@@ -56,7 +56,6 @@ export const createTask = async (data: FormData): Promise<ApiResponse<void>> => 
       await prisma.task.create({
         data: {
           title: title,
-          priority: "LOW",
           userId: userData.id,
         },
       })
@@ -64,6 +63,27 @@ export const createTask = async (data: FormData): Promise<ApiResponse<void>> => 
     } else {
       throw new Error("Bad Request: Missing user data")
     }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const updateTask = async (
+  data: FormData,
+  id: string
+): Promise<ApiResponse<void>> => {
+  const title = data.get("title")?.toString() || ""
+
+  try {
+    await prisma.task.update({
+      where: {
+        id: id,
+      },
+      data: {
+        title: title,
+      },
+    })
+    return { success: true }
   } catch (error) {
     return handleApiError(error)
   }
@@ -127,6 +147,12 @@ export const toggleTaskComplete = async ({
       where: { id: taskId },
       data: { isComplete: isComplete },
     })
+
+    if(isComplete)
+    await prisma.step.updateMany({
+      where: { taskId: taskId },
+      data: { isComplete: true },
+    })
     return { success: true }
   } catch (error) {
     return handleApiError(error)
@@ -162,6 +188,27 @@ export const createStep = async (
       data: {
         title: title,
         taskId: taskId,
+      },
+    })
+    return { success: true }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const updateStep = async (
+  data: FormData,
+  id: string
+): Promise<ApiResponse<void>> => {
+  const title = data.get("title")?.toString() || ""
+
+  try {
+    await prisma.step.update({
+      where: {
+        id: id,
+      },
+      data: {
+        title: title,
       },
     })
     return { success: true }

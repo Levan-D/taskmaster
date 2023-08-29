@@ -11,7 +11,7 @@ export default async function Tasks() {
       <>
         {tasks.data.length > 0 && (
           <hr className="mx-4 my-6 border-t-[1px] border-neutral-700 border-opacity-75" />
-        )}{" "}
+        )}
         <div className="flex flex-col gap-4">
           {tasks.data.map(task => (
             <Task key={task.id} {...task} />

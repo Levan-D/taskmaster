@@ -19,7 +19,7 @@
     @apply block sm:hover:bg-neutral-700 rounded-md duration-300 transition-colors;
   }
   .input {
-    @apply px-4 py-2 border-opacity-60 border-neutral-600 border-[2px] text-white shadow-neutral-950 shadow-sm rounded-md bg-neutral-700 placeholder-neutral-200;
+    @apply px-4 py-2 border-opacity-60 border-neutral-600 border-[2px] text-sky-400 shadow-neutral-950 shadow-sm rounded-md bg-neutral-700 placeholder-neutral-200;
   }
 
   .mainContainer {
