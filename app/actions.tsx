@@ -100,6 +100,19 @@ export const getTasks = async ({
     if (userData && userData.id) {
       const tasks = await prisma.task.findMany({
         where: { userId: userData.id, isDeleted: isDeleted },
+        include: {
+          steps: {
+            where: { isDeleted: isDeleted },
+            orderBy: [
+              {
+                isComplete: "asc",
+              },
+              {
+                creationDate: "desc",
+              },
+            ],
+          },
+        },
         orderBy: [
           {
             isComplete: "asc",
@@ -109,7 +122,6 @@ export const getTasks = async ({
           },
         ],
       })
-
       return { success: true, data: tasks }
     } else {
       throw new Error("Bad Request: Missing user data")
@@ -148,11 +160,11 @@ export const toggleTaskComplete = async ({
       data: { isComplete: isComplete },
     })
 
-    if(isComplete)
-    await prisma.step.updateMany({
-      where: { taskId: taskId },
-      data: { isComplete: true },
-    })
+    if (isComplete)
+      await prisma.step.updateMany({
+        where: { taskId: taskId },
+        data: { isComplete: true },
+      })
     return { success: true }
   } catch (error) {
     return handleApiError(error)
@@ -217,31 +229,33 @@ export const updateStep = async (
   }
 }
 
-export const getSteps = async ({
-  taskId,
-  isDeleted,
-}: {
-  taskId: string
-  isDeleted: boolean
-}): Promise<ApiResponse<Step[]>> => {
-  try {
-    const steps = await prisma.step.findMany({
-      where: { taskId: taskId, isDeleted: isDeleted },
-      orderBy: [
-        {
-          isComplete: "asc",
-        },
-        {
-          creationDate: "desc",
-        },
-      ],
-    })
+// atm we are getting steps only with tasks
 
-    return { success: true, data: steps }
-  } catch (error) {
-    return handleApiError(error)
-  }
-}
+// export const getSteps = async ({
+//   taskId,
+//   isDeleted,
+// }: {
+//   taskId: string
+//   isDeleted: boolean
+// }): Promise<ApiResponse<Step[]>> => {
+//   try {
+//     const steps = await prisma.step.findMany({
+//       where: { taskId: taskId, isDeleted: isDeleted },
+//       orderBy: [
+//         {
+//           isComplete: "asc",
+//         },
+//         {
+//           creationDate: "desc",
+//         },
+//       ],
+//     })
+
+//     return { success: true, data: steps }
+//   } catch (error) {
+//     return handleApiError(error)
+//   }
+// }
 
 export const recycleStep = async ({
   stepId,

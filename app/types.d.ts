@@ -52,4 +52,5 @@ type Task = {
   dueDate: Date | null
   priority: TaskPriority
   userId: string
+  steps: Step[] | []
 }

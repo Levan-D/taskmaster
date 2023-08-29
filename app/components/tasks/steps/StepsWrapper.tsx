@@ -9,13 +9,13 @@ import { mdiChevronDown } from "@mdi/js"
 
 type Props = {
   taskId: string
-  data: Step[] | undefined
+  steps: Step[] | undefined
   taskIsComplete: boolean
 }
 
-export default function StepsWrapper({ taskId, data, taskIsComplete }: Props) {
+export default function StepsWrapper({ taskId, steps, taskIsComplete }: Props) {
   const [isOpen, setIsOpen] = useState(
-    data && data.length > 0 && !taskIsComplete ? true : false
+    steps && steps.length > 0 && !taskIsComplete ? true : false
   )
   return (
     <>
@@ -23,12 +23,11 @@ export default function StepsWrapper({ taskId, data, taskIsComplete }: Props) {
         <hr className={`mx-4 mb-2  border-t-[1px] border-neutral-700`} />
 
         <div className="my-2">
-          {" "}
           <CreateStep taskId={taskId} />
         </div>
-        {data && data.length > 0 && (
+        {steps && steps.length > 0 && (
           <div className="my-2">
-            <Steps data={data} />
+            <Steps steps={steps} />
           </div>
         )}
       </div>

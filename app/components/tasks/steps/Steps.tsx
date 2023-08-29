@@ -3,13 +3,13 @@
 import Step from "./Step"
 
 type Props = {
-  data: Step[]
+  steps: Step[]
 }
 
-export default function Steps({ data }: Props) {
+export default function Steps({ steps }: Props) {
   return (
     <div className="innerContainer mx-2 ">
-      {data.map(step => (
+      {steps.map(step => (
         <Step key={step.id} {...step} />
       ))}
     </div>
