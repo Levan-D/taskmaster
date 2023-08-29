@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation"
 import Icon from "@mdi/react"
 import { mdiCheckBold } from "@mdi/js"
 
-type Props = { taskId: string; isComplete: boolean }
+type Props = { taskId: string; isComplete: boolean; priority: TaskPriority }
 
-export default function ToggleTaskComplete({ taskId, isComplete }: Props) {
+export default function ToggleTaskComplete({ taskId, isComplete, priority }: Props) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
@@ -32,7 +32,15 @@ export default function ToggleTaskComplete({ taskId, isComplete }: Props) {
     >
       <Icon
         path={mdiCheckBold}
-        className={`${isComplete ? "text-white" : "text-neutral-300"}`}
+        className={`${
+          isComplete
+            ? "text-white"
+            : priority === "LOW"
+            ? "text-sky-400"
+            : priority === "MEDIUM"
+            ? "text-amber-400"
+            : "text-rose-400"
+        }`}
         size={1}
       />
     </button>

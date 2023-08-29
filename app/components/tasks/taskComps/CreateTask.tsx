@@ -8,6 +8,7 @@ import { useRef } from "react"
 import Icon from "@mdi/react"
 import { mdiPlus, mdiTimerAlertOutline, mdiCalendarClockOutline } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
+import Tooltip from "../../Tooltip"
 
 export default function CreateTask() {
   const router = useRouter()
@@ -15,23 +16,25 @@ export default function CreateTask() {
   const [priority, setPriority] = useState<TaskPriority>("LOW")
 
   const priorityButton = (
-    <div
-      className={`${
-        priority === "LOW"
-          ? "text-lime-400"
-          : priority === "MEDIUM"
-          ? "text-amber-400"
-          : "text-rose-400"
-      } btnSecondary`}
-    >
-      <Icon path={mdiTimerAlertOutline} size={1} />
-    </div>
+    <Tooltip text="Task priority" position="bot" customCSS="delay-1000">
+      <div
+        className={`${
+          priority === "LOW"
+            ? "text-sky-400"
+            : priority === "MEDIUM"
+            ? "text-amber-400"
+            : "text-rose-400"
+        } btnSecondary`}
+      >
+        <Icon path={mdiTimerAlertOutline} size={1} />
+      </div>
+    </Tooltip>
   )
 
   const priorityItems: DropDownItemType = [
     {
       title: "Low",
-      icon: <Icon className="text-lime-400" path={mdiTimerAlertOutline} size={0.7} />,
+      icon: <Icon className="text-sky-400" path={mdiTimerAlertOutline} size={0.7} />,
       action: () => setPriority("LOW"),
     },
     {
@@ -75,9 +78,11 @@ export default function CreateTask() {
             </div>
           </div>
 
-          <button className="btnPrimary px-5 ">
-            <Icon path={mdiPlus} size={1.4} />
-          </button>
+          <Tooltip text="Create new task" position="bot" customCSS="delay-1000">
+            <button className="btnPrimary px-5 h-full">
+              <Icon path={mdiPlus} size={1.4} />
+            </button>
+          </Tooltip>
         </div>
       </form>
     </div>
