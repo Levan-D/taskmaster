@@ -44,17 +44,32 @@ export default function TaskUpdate({ title, taskId, taskPriority }: Props) {
     {
       title: "Low",
       icon: <Icon className="text-sky-400" path={mdiTimerAlertOutline} size={0.7} />,
-      action: () => setPriority("LOW"),
+      action: () => {
+        setPriority("LOW")
+        if (inputRef.current && edit) {
+          inputRef.current.focus()
+        }
+      },
     },
     {
       title: "Medium",
       icon: <Icon className="text-amber-400" path={mdiTimerAlertOutline} size={0.7} />,
-      action: () => setPriority("MEDIUM"),
+      action: () => {
+        setPriority("MEDIUM")
+        if (inputRef.current && edit) {
+          inputRef.current.focus()
+        }
+      },
     },
     {
       title: "High",
       icon: <Icon className="text-rose-400" path={mdiTimerAlertOutline} size={0.7} />,
-      action: () => setPriority("HIGH"),
+      action: () => {
+        setPriority("HIGH")
+        if (inputRef.current && edit) {
+          inputRef.current.focus()
+        }
+      },
     },
   ]
 
@@ -66,6 +81,7 @@ export default function TaskUpdate({ title, taskId, taskPriority }: Props) {
   const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
     if (containerRef.current && !containerRef.current.contains(e.relatedTarget as Node)) {
       setEdit(false)
+      setPriority(taskPriority)
     }
   }
 
@@ -76,7 +92,10 @@ export default function TaskUpdate({ title, taskId, taskPriority }: Props) {
   }, [edit])
 
   const submitForm = (data: FormData) => {
+    console.log(`cccclik`)
+
     if (inputValue !== title || priority !== taskPriority) {
+      console.log(`submited`)
       updateTask(data, taskId, priority)
       router.refresh()
     }
@@ -107,7 +126,10 @@ export default function TaskUpdate({ title, taskId, taskPriority }: Props) {
       </form>
     </div>
   ) : (
-    <button onDoubleClick={toggleEdit} className="block text-left text-lg  w-full mx-2   ">
+    <button
+      onDoubleClick={toggleEdit}
+      className="block text-left text-lg  w-full mx-2   "
+    >
       {title}
     </button>
   )
