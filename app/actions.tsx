@@ -46,7 +46,10 @@ export const checkUserExists = async () => {
   }
 }
 
-export const createTask = async (data: FormData): Promise<ApiResponse<void>> => {
+export const createTask = async (
+  data: FormData,
+  priority: TaskPriority
+): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
 
   const title = data.get("title")?.toString() || ""
@@ -57,6 +60,7 @@ export const createTask = async (data: FormData): Promise<ApiResponse<void>> => 
         data: {
           title: title,
           userId: userData.id,
+          priority: priority,
         },
       })
       return { success: true }

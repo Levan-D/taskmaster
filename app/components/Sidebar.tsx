@@ -103,7 +103,7 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
           {isOpen && (
             <DropdownMenu
               items={items}
-              customCSS={"w-full block btnIcon  m-2 w-full"}
+              customCSS={"    btnIcon  m-2 w-full"}
               button={UserInfo}
             />
           )}

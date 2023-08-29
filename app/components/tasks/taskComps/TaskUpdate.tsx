@@ -37,17 +37,17 @@ export default function TaskUpdate({ title, taskId }: Props) {
     }
   }, [edit])
 
+  const submitForm = (data: FormData) => {
+    if (inputValue !== title) {
+      updateTask(data, taskId)
+      router.refresh()
+    }
+    setEdit(false)
+  }
+
   return edit ? (
     <div ref={containerRef} onBlur={handleBlur} className="mx-2">
-      <form
-        action={data => {
-          if (inputValue !== title) {
-            updateTask(data, taskId)
-            router.refresh()
-          }
-          setEdit(false)
-        }}
-      >
+      <form action={submitForm}>
         <div className="flex gap-2">
           <input
             ref={inputRef}

@@ -36,7 +36,7 @@ export default function TaskDropDown({ taskId }: Props) {
   )
   return (
     <div>
-      <DropdownMenu customCSS="block" button={button} items={items} />
+      <DropdownMenu button={button} items={items} />
     </div>
   )
 }

@@ -15,18 +15,17 @@ export default function CreateStep({ taskId }: Props) {
   const router = useRouter()
   const formRef = useRef<HTMLFormElement>(null)
 
+  const submitForm = (data: FormData) => {
+    createStep(data, taskId)
+    router.refresh()
+    if (formRef.current) {
+      formRef.current.reset()
+    }
+  }
+
   return (
     <div className=" px-2 pt-2  w-full">
-      <form
-        ref={formRef}
-        action={data => {
-          createStep(data, taskId)
-          router.refresh()
-          if (formRef.current) {
-            formRef.current.reset()
-          }
-        }}
-      >
+      <form ref={formRef} action={submitForm}>
         <div className="flex gap-2">
           <input
             placeholder="Add a step"
