@@ -74,7 +74,8 @@ export const createTask = async (
 
 export const updateTask = async (
   data: FormData,
-  id: string
+  id: string,
+  priority: TaskPriority
 ): Promise<ApiResponse<void>> => {
   const title = data.get("title")?.toString() || ""
 
@@ -85,6 +86,7 @@ export const updateTask = async (
       },
       data: {
         title: title,
+        priority: priority,
       },
     })
     return { success: true }

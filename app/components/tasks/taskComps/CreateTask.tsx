@@ -73,9 +73,7 @@ export default function CreateTask() {
             <div className="btnSecondary">
               <Icon path={mdiCalendarClockOutline} size={1} />
             </div>
-            <div>
-              <DropdownMenu button={priorityButton} items={priorityItems} />
-            </div>
+        
           </div>
 
           <Tooltip text="Create new task" position="bot" customCSS="delay-1000">

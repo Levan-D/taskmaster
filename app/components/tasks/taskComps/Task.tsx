@@ -13,7 +13,7 @@ export default async function Task({ id, title, isComplete, steps, priority }: T
       <div className="flex items-center">
         <ToggleTaskComplete priority={priority} taskId={id} isComplete={isComplete} />
         <div className="grow truncate line-clamp-1">
-          <TaskUpdate title={title} taskId={id} />
+          <TaskUpdate title={title} taskId={id} taskPriority={priority} />
         </div>
         <TaskDropDown taskId={id} />
       </div>
