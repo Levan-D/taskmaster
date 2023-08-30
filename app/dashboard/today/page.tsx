@@ -8,10 +8,8 @@ export default function Today() {
     <section className="m-4">
       <div className="max-w-3xl mx-auto">
         <CreateTask />
-  
-        <div className="mt-4">
-          <Tasks />
-        </div>
+
+        <Tasks />
       </div>
     </section>
   )
