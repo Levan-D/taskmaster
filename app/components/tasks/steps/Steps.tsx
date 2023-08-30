@@ -25,7 +25,7 @@ export default function Steps({ taskId, steps, taskIsComplete }: Props) {
   const completeTasks = totalSteps === stepsCompleted && totalSteps > 0
 
   return (
-    <>
+    <div>
       <div className={`${isOpen ? " visible   mt-4" : "collapse h-0 "} `}>
         <div className="flex items-center">
           {totalSteps > 0 ? (
@@ -58,10 +58,10 @@ export default function Steps({ taskId, steps, taskIsComplete }: Props) {
           </div>
         )}
       </div>
-
       <button
         onClick={() => setIsOpen(x => !x)}
-        className={`w-full sm:hover:bg-neutral-500 px-2 transition-color duration-300 rounded-b-lg`}
+        className={`w-full sm:hover:bg-neutral-500 px-2 
+    transition-color block duration-300 rounded-b-lg  mb-0`}
       >
         <Icon
           className={` ${
@@ -71,6 +71,6 @@ export default function Steps({ taskId, steps, taskIsComplete }: Props) {
           size={1}
         />
       </button>
-    </>
+    </div>
   )
 }
