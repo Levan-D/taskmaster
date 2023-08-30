@@ -6,16 +6,25 @@ import { useRouter } from "next/navigation"
 import { useRef } from "react"
 import Icon from "@mdi/react"
 import { mdiPlus } from "@mdi/js"
+import { toast } from "react-toastify"
 
 type Props = {
   taskId: string
+  totalSteps: number
 }
 
-export default function CreateStep({ taskId }: Props) {
+export default function CreateStep({ taskId, totalSteps }: Props) {
   const router = useRouter()
   const formRef = useRef<HTMLFormElement>(null)
 
   const submitForm = (data: FormData) => {
+    if (totalSteps > 9) {
+      return toast.warning(
+        <div className="text-neutral-950">
+          Step limit reached
+        </div>
+      )
+    }
     createStep(data, taskId)
     router.refresh()
     if (formRef.current) {

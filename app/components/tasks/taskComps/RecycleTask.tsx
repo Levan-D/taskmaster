@@ -28,7 +28,7 @@ export default function RecycleTask({ taskIsComplete, taskId }: Props) {
         startTransition(handleRecycleTask)
       }}
       className={`${
-        taskIsComplete ? "-translate-y-3 " : "-translate-y-14  h-0"
+        taskIsComplete ? "-translate-y-3 h-[44px] " : "-translate-y-14  h-0"
       } justify-center hover:bg-neutral-700 ease-in-out  duration-300  flex mainContainer w-full  pt-4 px-2    pb-1  gap-2 items-center`}
     >
       <div>

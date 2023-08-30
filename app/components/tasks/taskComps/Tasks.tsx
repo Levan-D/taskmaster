@@ -1,21 +1,15 @@
 /** @format */
 
-import { getTasks } from "../../actions"
-import Task from "./taskComps/Task"
+import Task from "./Task"
 
-export default async function Tasks() {
-  const tasks = await getTasks({ isDeleted: false })
+type Props = { tasks: Task[]; totalTasks: number; tasksCompleted: number }
 
-  if (!tasks.success || !tasks.data) return <span></span>
-
-  const totalTasks = tasks.data.length
-  const tasksCompleted = tasks.data.filter(task => task.isComplete).length
-
+export default async function Tasks({ tasks, totalTasks, tasksCompleted }: Props) {
   const completeTasks = totalTasks === tasksCompleted && totalTasks > 0
 
   return (
     <>
-      {tasks.data.length > 0 && (
+      {tasks.length > 0 && (
         <div className="flex items-center select-none">
           <hr
             className={` ${
@@ -37,7 +31,7 @@ export default async function Tasks() {
         </div>
       )}
       <div>
-        {tasks.data.map(task => (
+        {tasks.map(task => (
           <Task key={task.id} {...task} />
         ))}
       </div>

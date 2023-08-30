@@ -4,7 +4,7 @@ import Step from "./Step"
 import { useState } from "react"
 import CreateStep from "./CreateStep"
 import Icon from "@mdi/react"
-import { mdiChevronDown, mdiCheck } from "@mdi/js"
+import { mdiChevronDown } from "@mdi/js"
 
 type Props = {
   taskId: string
@@ -48,7 +48,7 @@ export default function Steps({ taskId, steps, taskIsComplete }: Props) {
         </div>
 
         <div className="my-2">
-          <CreateStep taskId={taskId} />
+          <CreateStep  totalSteps={totalSteps} taskId={taskId} />
         </div>
         {steps && steps.length > 0 && (
           <div className="innerContainer m-2 ">

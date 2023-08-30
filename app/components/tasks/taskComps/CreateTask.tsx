@@ -9,8 +9,11 @@ import Icon from "@mdi/react"
 import { mdiPlus, mdiTimerAlertOutline, mdiCalendarClockOutline } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
 import Tooltip from "../../Tooltip"
+import { toast } from "react-toastify"
 
-export default function CreateTask() {
+type Props = { totalTasks: number }
+
+export default function CreateTask({ totalTasks }: Props) {
   const router = useRouter()
   const formRef = useRef<HTMLFormElement>(null)
   const [priority, setPriority] = useState<TaskPriority>("LOW")
@@ -50,6 +53,13 @@ export default function CreateTask() {
   ]
 
   const submitForm = (data: FormData) => {
+    if (totalTasks > 19) {
+      return toast.warning(
+        <div className="text-neutral-950">
+          Complete some of your current tasks before adding new ones
+        </div>
+      )
+    }
     createTask(data, priority)
     router.refresh()
     setPriority("LOW")
