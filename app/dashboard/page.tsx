@@ -3,5 +3,5 @@
 import { redirect } from "next/navigation"
 
 export default function Dashboard() {
-  redirect("/dashboard/today")
+  return redirect("/dashboard/today")
 }
