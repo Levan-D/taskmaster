@@ -12,6 +12,7 @@ export default async function Today() {
   const tasks = await getTasks({ deleted: false })
 
   if (!tasks.success) return <span></span>
+  
   const today = DateTime.now().startOf("day")
 
   const expiredTasks =
@@ -58,28 +59,31 @@ export default async function Today() {
       )}
 
       {todayTasks.length > 0 && expiredTasks.length === 0 && (
-        <div className="flex items-center select-none mt-10 mb-12">
-          <hr
-            className={` ${
-              completeTasks ? "  border-lime-400" : "  border-neutral-500"
-            } mx-4  block grow border-t-[1px] border-neutral-700 border-opacity-75`}
-          />
-          <div
-            className={`${
-              completeTasks ? "text-lime-400 " : "text-neutral-500 "
-            }  p-1.5 text-sm  shrink-0 `}
-          >
-            {totalTasks}/{tasksCompleted}
+        <>
+          <div className="flex items-center select-none mt-10 mb-12">
+            <hr
+              className={` ${
+                completeTasks ? "  border-lime-400" : "  border-neutral-500"
+              } mx-4  block grow border-t-[1px] border-neutral-700 border-opacity-75`}
+            />
+            <div
+              className={`${
+                completeTasks ? "text-lime-400 " : "text-neutral-500 "
+              }  p-1.5 text-sm  shrink-0 `}
+            >
+              {totalTasks}/{tasksCompleted}
+            </div>
+            <hr
+              className={` ${
+                completeTasks ? "  border-lime-400" : "  border-neutral-500"
+              } mx-4    block grow border-t-[1px] border-neutral-700 border-opacity-75`}
+            />
           </div>
-          <hr
-            className={` ${
-              completeTasks ? "  border-lime-400" : "  border-neutral-500"
-            } mx-4    block grow border-t-[1px] border-neutral-700 border-opacity-75`}
-          />
-        </div>
+          <Tasks className={"my-8"} tasks={todayTasks} />
+        </>
       )}
 
-      {todayTasks.length > 0 && (
+      {todayTasks.length > 0 && expiredTasks.length !== 0 && (
         <Accordion className="my-8" title={`Today (${totalTasks}/${tasksCompleted})`}>
           <Tasks className={"my-8"} tasks={todayTasks} />
         </Accordion>
