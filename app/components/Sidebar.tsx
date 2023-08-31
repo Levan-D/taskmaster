@@ -102,6 +102,7 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
         <div className="grow">
           {isOpen && (
             <DropdownMenu
+              menuClassName="translate-x-12"
               items={items}
               className={"  grow  btnIcon  m-2 w-full"}
               button={UserInfo}

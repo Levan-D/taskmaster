@@ -40,7 +40,7 @@ export default async function Today() {
         <Accordion className="my-8" title={`Expired (${expiredTasks.length})`}>
           <>
             <div className="mainContainer bg-neutral-700 mt-8 mb-4 flex items-center   py-2 px-4">
-              <p className="basis-3/4 ">
+              <p className="basis-3/4 text-neutral-200">
                 Expired tasks will auto recycle in 7 days. Either revive, recycle, or
                 complete them.
               </p>

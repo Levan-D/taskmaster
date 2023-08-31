@@ -37,7 +37,7 @@ export default function CreateStep({ taskId, totalSteps, className }: Props) {
         <div className="flex gap-2">
           <input
             placeholder="Add a step"
-            className="input grow"
+            className="input grow placeholder-neutral-300"
             name="title"
             type="text"
             required

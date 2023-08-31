@@ -5,14 +5,16 @@ import { useState } from "react"
 import CreateStep from "./CreateStep"
 import Icon from "@mdi/react"
 import { mdiChevronDown } from "@mdi/js"
+import { DateTime } from "luxon"
 
 type Props = {
   taskId: string
   steps: Step[] | undefined
   taskcomplete: boolean
+  due_date: string | null
 }
 
-export default function Steps({ taskId, steps, taskcomplete }: Props) {
+export default function Steps({ taskId, steps, taskcomplete, due_date }: Props) {
   const [open, setOpen] = useState(
     steps && steps.length > 0 && !taskcomplete ? true : false
   )
@@ -23,6 +25,24 @@ export default function Steps({ taskId, steps, taskcomplete }: Props) {
   const stepsCompleted = steps.filter(step => step.complete).length
 
   const completeTasks = totalSteps === stepsCompleted && totalSteps > 0
+
+  function formatDueDate(due_date: string) {
+    const dueDate = DateTime.fromISO(due_date).startOf("day")
+    const now = DateTime.now().startOf("day")
+
+    if (dueDate.hasSame(now, "day")) {
+      return "Today"
+    } else if (dueDate.plus({ days: 1 }).hasSame(now, "day")) {
+      return "Yesterday"
+    } else if (
+      dueDate.diff(now, "days").days <= 6 &&
+      dueDate.diff(now, "days").days >= -6
+    ) {
+      return dueDate.toFormat("cccc") // Formats to the day of the week (e.g., Monday)
+    } else {
+      return dueDate.toFormat("dd/MM/yy") // Formats to a date
+    }
+  }
 
   return (
     <div>
@@ -62,15 +82,19 @@ export default function Steps({ taskId, steps, taskcomplete }: Props) {
       <button
         onClick={() => setOpen(x => !x)}
         className={`w-full sm:hover:bg-neutral-500 px-2 
-    transition-color block duration-300 rounded-b-lg  mb-0`}
+    transition-color flex justify-between items-center duration-300 rounded-b-lg  mb-0`}
       >
+        <div className="basis-1/3"></div>
         <Icon
           className={` ${
             open && "rotate-180 "
-          } transition-transform duration-300 mx-auto `}
+          } transition-transform basis-1/3 duration-300 mx-auto `}
           path={mdiChevronDown}
           size={1}
         />
+        <div className="basis-1/3 text-xs text-neutral-300 text-end">
+          {typeof due_date === "string" && !taskcomplete && formatDueDate(due_date)}
+        </div>
       </button>
     </div>
   )

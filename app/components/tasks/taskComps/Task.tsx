@@ -4,7 +4,6 @@ import ToggleTaskComplete from "./ToggleTaskComplete"
 import Steps from "../steps/Steps"
 import TaskDropDown from "./TaskDropDown"
 import TaskUpdate from "./TaskUpdate"
-import { DateTime } from "luxon"
 
 type Props = Task & { expired: boolean }
 
@@ -17,8 +16,6 @@ export default async function Task({
   due_date,
   expired,
 }: Props) {
-  const dateTimeFromISO = due_date ? DateTime.fromISO(due_date).toFormat("d M y H m") : ""
-
   return (
     <div
       className={`relative z-10 mainContainer sm:hover:border-neutral-600 transition-colors duration-300`}
@@ -35,7 +32,7 @@ export default async function Task({
 
         <TaskDropDown expired={expired} taskId={id} taskComplete={complete} />
       </div>
-      <Steps taskId={id} steps={steps} taskcomplete={complete} />
+      <Steps due_date={due_date} taskId={id} steps={steps} taskcomplete={complete} />
     </div>
   )
 }
