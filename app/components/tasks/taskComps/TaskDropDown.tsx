@@ -4,9 +4,10 @@
 import Icon from "@mdi/react"
 import { mdiDotsVertical, mdiTrashCanOutline, mdiHeartOutline } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
-import { recycleTask } from "../../../actions"
+import { recycleTask, reviveTask } from "../../../actions"
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
+import { DateTime } from "luxon"
 
 type Props = { taskId: string; expired: boolean; taskComplete: boolean }
 
@@ -14,10 +15,18 @@ export default function TaskDropDown({ taskId, expired, taskComplete }: Props) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
+  const today = DateTime.now().toISO() ?? ""
+
   const handleRecycleTask = async () => {
     await recycleTask({ taskId: taskId })
     router.refresh()
   }
+
+  const handleReviveTask = async () => {
+    await reviveTask({ taskId: taskId, dueDate: today })
+    router.refresh()
+  }
+
   const items: DropDownItemType = [
     {
       title: "Recycle",
@@ -42,7 +51,12 @@ export default function TaskDropDown({ taskId, expired, taskComplete }: Props) {
   return (
     <div className="flex">
       {expired && (
-        <button className=" block bg-lime-600 shadow-sm sm:hover:bg-lime-500    rounded-bl-lg p-2 duration-300">
+        <button
+          onClick={() => {
+            startTransition(handleReviveTask)
+          }}
+          className=" block bg-lime-600 shadow-sm sm:hover:bg-lime-500    rounded-bl-lg p-2 duration-300"
+        >
           <Icon path={mdiHeartOutline} size={1} />
         </button>
       )}

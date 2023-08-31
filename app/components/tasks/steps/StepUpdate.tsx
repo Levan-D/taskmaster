@@ -41,7 +41,7 @@ export default function StepUpdate({ title, stepId, complete, className }: Props
 
   const submitForm = (data: FormData) => {
     if (inputValue !== title) {
-      updateStep(data, stepId)
+      updateStep({ data: data, stepId: stepId })
       router.refresh()
     }
     setEdit(false)

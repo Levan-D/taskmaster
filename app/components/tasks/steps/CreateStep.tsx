@@ -24,7 +24,7 @@ export default function CreateStep({ taskId, totalSteps, className }: Props) {
         toastId: "stepLimit",
       })
     }
-    createStep(data, taskId)
+    createStep({ data: data, taskId: taskId })
     router.refresh()
     if (formRef.current) {
       formRef.current.reset()

@@ -5,6 +5,8 @@ import Tasks from "@/app/components/tasks/taskComps/Tasks"
 import { getTasks } from "../../actions"
 import { DateTime } from "luxon"
 import Accordion from "@/app/components/Accordion"
+import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
+import TasksRevive from "@/app/components/tasks/taskComps/TasksRevive"
 
 export default async function Today() {
   const tasks = await getTasks({ deleted: false })
@@ -19,6 +21,8 @@ export default async function Today() {
       const taskDueDate = DateTime.fromISO(task.due_date).startOf("day")
       return taskDueDate.hasSame(today, "day") === false && taskDueDate < today
     }) ?? []
+
+  const expiredTaskIds = expiredTasks.map(task => task.id)
 
   const todayTasks =
     tasks?.data?.filter((task: Task) => {
@@ -44,11 +48,8 @@ export default async function Today() {
                 Expired tasks will auto recycle in 7 days. Either revive, recycle, or
                 complete them.
               </p>
-
-              <button className="btnSecondary bg-lime-600 shrink-0 mx-4  px-4 sm:hover:bg-lime-50  ">
-                Revive All
-              </button>
-              <button className="btnError  shrink-0 px-4  ">Recycle All</button>
+              <TasksRevive expiredTaskIds={expiredTaskIds} className="shrink-0 mx-4 " />
+              <TasksRecycle expiredTaskIds={expiredTaskIds} className="shrink-0" />
             </div>
 
             <Tasks expired tasks={expiredTasks} />

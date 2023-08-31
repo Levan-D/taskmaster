@@ -94,7 +94,7 @@ export default function TaskUpdate({ title, taskId, taskPriority, className }: P
 
   const submitForm = (data: FormData) => {
     if (inputValue !== title || priority !== taskPriority) {
-      updateTask(data, taskId, priority)
+      updateTask({ data: data, taskId: taskId, priority: priority })
       router.refresh()
     }
     setEdit(false)

@@ -19,7 +19,7 @@ export default function CreateTask({ totalTasks }: Props) {
   const formRef = useRef<HTMLFormElement>(null)
   const [priority, setPriority] = useState<TaskPriority>("LOW")
 
-  const today = DateTime.now().toISO() ?? ""
+  const today = DateTime.now().minus({ day: 1 }).toISO() ?? ""
 
   const priorityButton = (
     <Tooltip text="Task priority" position="bot" className="delay-1000">
@@ -66,7 +66,7 @@ export default function CreateTask({ totalTasks }: Props) {
         }
       )
     }
-    createTask(data, priority, today)
+    createTask({ data: data, priority: priority, today: today })
     router.refresh()
     setPriority("LOW")
     if (formRef.current) {

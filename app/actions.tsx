@@ -46,11 +46,15 @@ export const checkUserExists = async () => {
   }
 }
 
-export const createTask = async (
-  data: FormData,
-  priority: TaskPriority,
+export const createTask = async ({
+  data,
+  priority,
+  today,
+}: {
+  data: FormData
+  priority: TaskPriority
   today: string
-): Promise<ApiResponse<void>> => {
+}): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
 
   const title = data.get("title")?.toString() || ""
@@ -74,21 +78,47 @@ export const createTask = async (
   }
 }
 
-export const updateTask = async (
-  data: FormData,
-  id: string,
+export const updateTask = async ({
+  data,
+  taskId,
+  priority,
+}: {
+  data: FormData
+  taskId: string
   priority: TaskPriority
-): Promise<ApiResponse<void>> => {
+}): Promise<ApiResponse<void>> => {
   const title = data.get("title")?.toString() || ""
 
   try {
     await prisma.task.update({
       where: {
-        id: id,
+        id: taskId,
       },
       data: {
         title: title,
         priority: priority,
+      },
+    })
+    return { success: true }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const reviveTask = async ({
+  taskId,
+  dueDate,
+}: {
+  taskId: string
+  dueDate: string
+}): Promise<ApiResponse<void>> => {
+  try {
+    await prisma.task.update({
+      where: {
+        id: taskId,
+      },
+      data: {
+        due_date: dueDate,
       },
     })
     return { success: true }
@@ -155,6 +185,42 @@ export const recycleTask = async ({
   }
 }
 
+export const recycleTasks = async ({
+  taskIds,
+}: {
+  taskIds: string[]
+}): Promise<ApiResponse<void>> => {
+  try {
+    await prisma.task.updateMany({
+      where: { id: { in: taskIds } },
+      data: { deleted: true },
+    })
+
+    return { success: true }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const reviveTasks = async ({
+  taskIds,
+  dueDate,
+}: {
+  taskIds: string[]
+  dueDate: string
+}): Promise<ApiResponse<void>> => {
+  try {
+    await prisma.task.updateMany({
+      where: { id: { in: taskIds } },
+      data: { due_date: dueDate },
+    })
+
+    return { success: true }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
 export const toggleTaskComplete = async ({
   taskId,
   complete,
@@ -197,10 +263,13 @@ export const setPriority = async ({
   }
 }
 
-export const createStep = async (
-  data: FormData,
+export const createStep = async ({
+  data,
+  taskId,
+}: {
+  data: FormData
   taskId: string
-): Promise<ApiResponse<void>> => {
+}): Promise<ApiResponse<void>> => {
   const title = data.get("title")?.toString() || ""
 
   try {
@@ -216,16 +285,19 @@ export const createStep = async (
   }
 }
 
-export const updateStep = async (
-  data: FormData,
-  id: string
-): Promise<ApiResponse<void>> => {
+export const updateStep = async ({
+  data,
+  stepId,
+}: {
+  data: FormData
+  stepId: string
+}): Promise<ApiResponse<void>> => {
   const title = data.get("title")?.toString() || ""
 
   try {
     await prisma.step.update({
       where: {
-        id: id,
+        id: stepId,
       },
       data: {
         title: title,
