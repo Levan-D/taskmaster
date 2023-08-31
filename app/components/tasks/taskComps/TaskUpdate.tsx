@@ -14,9 +14,10 @@ type Props = {
   title: string
   taskId: string
   taskPriority: TaskPriority
+  className?: string
 }
 
-export default function TaskUpdate({ title, taskId, taskPriority }: Props) {
+export default function TaskUpdate({ title, taskId, taskPriority, className }: Props) {
   const [edit, setEdit] = useState(false)
   const [inputValue, setInputValue] = useState(title)
   const router = useRouter()
@@ -25,7 +26,7 @@ export default function TaskUpdate({ title, taskId, taskPriority }: Props) {
   const [priority, setPriority] = useState<TaskPriority>(taskPriority)
 
   const priorityButton = (
-    <Tooltip text="Task priority" position="bot" customCSS="delay-1000 shrink-0 ">
+    <Tooltip text="Task priority" position="bot" className="delay-1000 shrink-0 ">
       <div
         className={`${
           priority === "LOW"
@@ -92,10 +93,7 @@ export default function TaskUpdate({ title, taskId, taskPriority }: Props) {
   }, [edit])
 
   const submitForm = (data: FormData) => {
-    console.log(`cccclik`)
-
     if (inputValue !== title || priority !== taskPriority) {
-      console.log(`submited`)
       updateTask(data, taskId, priority)
       router.refresh()
     }
@@ -103,7 +101,7 @@ export default function TaskUpdate({ title, taskId, taskPriority }: Props) {
   }
 
   return edit ? (
-    <div ref={containerRef} onBlur={handleBlur} className="mx-2">
+    <div ref={containerRef} onBlur={handleBlur} className={`${className} mx-2`}>
       <form action={submitForm}>
         <div className="flex gap-2">
           <input

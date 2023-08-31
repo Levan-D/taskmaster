@@ -5,7 +5,7 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 
 interface initialStateType {
   user: {
-    loginId: string
+    login_id: string
   } | null
 }
 

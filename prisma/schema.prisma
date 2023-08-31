@@ -23,61 +23,62 @@ enum Recurrence {
 }
 
 model User {
-  id      String  @id @default(uuid())
-  loginId String  @unique
-  email   String  @unique
-  todos   Task[]
-  habits  Habit[]
+  id       String  @id @default(uuid())
+  // login id is from kinde auth. this links login with database
+  login_id String  @unique
+  email    String  @unique
+  tasks    Task[]
+  habits   Habit[]
 
-  @@index([loginId])
+  @@index([login_id])
 }
 
 model Habit {
-  id           String      @id @default(uuid())
-  title        String
-  isComplete   Boolean     @default(false)
-  creationDate DateTime    @default(now())
-  recurrence   Recurrence
-  user         User        @relation(fields: [userId], references: [loginId])
-  userId       String
-  habitSteps   HabitStep[]
+  id            String      @id @default(uuid())
+  title         String
+  complete      Boolean     @default(false)
+  creation_date DateTime    @default(now())
+  recurrence    Recurrence
+  user          User        @relation(fields: [user_id], references: [login_id])
+  user_id       String
+  habit_steps   HabitStep[]
 
-  @@index([userId])
+  @@index([user_id])
 }
 
 model HabitStep {
-  id         String  @id @default(uuid())
-  title      String
-  isComplete Boolean @default(false)
-  habit      Habit   @relation(fields: [habitId], references: [id])
-  habitId    String
+  id       String  @id @default(uuid())
+  title    String
+  complete Boolean @default(false)
+  habit    Habit   @relation(fields: [habit_id], references: [id])
+  habit_id String
 
-  @@index([habitId])
+  @@index([habit_id])
 }
 
 model Task {
-  id           String       @id @default(uuid())
-  title        String
-  isDeleted      Boolean      @default(false)
-  isComplete   Boolean      @default(false)
-  creationDate DateTime     @default(now())
-  dueDate      DateTime?
-  priority     TaskPriority @default(LOW)
-  user         User         @relation(fields: [userId], references: [loginId])
-  userId       String
-  steps        Step[]
+  id            String       @id @default(uuid())
+  title         String
+  deleted       Boolean      @default(false)
+  complete      Boolean      @default(false)
+  creation_date DateTime     @default(now())
+  due_date      String?
+  priority      TaskPriority @default(LOW)
+  user          User         @relation(fields: [user_id], references: [login_id])
+  user_id       String
+  steps         Step[]
 
-  @@index([userId])
+  @@index([user_id])
 }
 
 model Step {
-  id           String   @id @default(uuid())
-  title        String
-  isDeleted      Boolean  @default(false)
-  isComplete   Boolean  @default(false)
-  creationDate DateTime @default(now())
-  task         Task     @relation(fields: [taskId], references: [id])
-  taskId       String
+  id            String   @id @default(uuid())
+  title         String
+  deleted       Boolean  @default(false)
+  complete      Boolean  @default(false)
+  creation_date DateTime @default(now())
+  task          Task     @relation(fields: [taskId], references: [id])
+  taskId        String
 
   @@index([taskId])
 }

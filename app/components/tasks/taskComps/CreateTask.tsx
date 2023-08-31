@@ -10,6 +10,7 @@ import { mdiPlus, mdiTimerAlertOutline, mdiCalendarClockOutline } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
 import Tooltip from "../../Tooltip"
 import { toast } from "react-toastify"
+import { DateTime } from "luxon"
 
 type Props = { totalTasks: number }
 
@@ -18,8 +19,10 @@ export default function CreateTask({ totalTasks }: Props) {
   const formRef = useRef<HTMLFormElement>(null)
   const [priority, setPriority] = useState<TaskPriority>("LOW")
 
+  const today = DateTime.now().toISO() ?? ""
+
   const priorityButton = (
-    <Tooltip text="Task priority" position="bot" customCSS="delay-1000">
+    <Tooltip text="Task priority" position="bot" className="delay-1000">
       <div
         className={`${
           priority === "LOW"
@@ -57,10 +60,13 @@ export default function CreateTask({ totalTasks }: Props) {
       return toast.warning(
         <div className="text-neutral-950">
           Complete some of your current tasks before adding new ones
-        </div>
+        </div>,
+        {
+          toastId: "taskLimit",
+        }
       )
     }
-    createTask(data, priority)
+    createTask(data, priority, today)
     router.refresh()
     setPriority("LOW")
     if (formRef.current) {
@@ -83,12 +89,11 @@ export default function CreateTask({ totalTasks }: Props) {
             <div className="btnSecondary">
               <Icon path={mdiCalendarClockOutline} size={1} />
             </div>
-            <div>
-              <DropdownMenu button={priorityButton} items={priorityItems} />
-            </div>
+
+            <DropdownMenu button={priorityButton} items={priorityItems} />
           </div>
 
-          <Tooltip text="Create new task" position="bot" customCSS="delay-1000">
+          <Tooltip text="Create new task" position="bot" className="delay-1000">
             <button className="btnPrimary px-5 h-full">
               <Icon path={mdiPlus} size={1.4} />
             </button>

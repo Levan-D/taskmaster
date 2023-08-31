@@ -96,14 +96,14 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
     <nav
       className={` ${
         isOpen ? "w-[200px] " : "w-[56px]"
-      }  bg-neutral-950   duration-300   flex flex-col  justify-between select-none `}
+      }  bg-neutral-950  h-screen fixed  duration-300   flex flex-col  justify-between select-none `}
     >
       <div className={`${isOpen && "flex gap-1"}`}>
         <div className="grow">
           {isOpen && (
             <DropdownMenu
               items={items}
-              customCSS={"    btnIcon  m-2 w-full"}
+              className={"  grow  btnIcon  m-2 w-full"}
               button={UserInfo}
             />
           )}
@@ -137,7 +137,7 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
               <Tooltip
                 key={i}
                 text={page.title}
-                customCSS={"translate-x-7 "}
+                className={"translate-x-7 "}
                 position="right"
               >
                 <Link
@@ -162,17 +162,15 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
 
       <div></div>
 
-      <div>
-        <footer className={`text-xs p-2 text-center `}>
-          {isOpen ? (
-            "© 2023 Levan Dolidze. All Rights Reserved."
-          ) : (
-            <Tooltip position="right" text="2023 Levan Dolidze. All Rights Reserved.">
-              <div className="text-center text-lg">©</div>
-            </Tooltip>
-          )}
-        </footer>
-      </div>
+      <footer className={`text-xs p-2 text-center `}>
+        {isOpen ? (
+          "© 2023 Levan Dolidze. All Rights Reserved."
+        ) : (
+          <Tooltip position="right" text="2023 Levan Dolidze. All Rights Reserved.">
+            <div className="text-center text-lg">©</div>
+          </Tooltip>
+        )}
+      </footer>
     </nav>
   )
 }

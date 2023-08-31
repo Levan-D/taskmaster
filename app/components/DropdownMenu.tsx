@@ -6,14 +6,16 @@ type Props = {
   button: JSX.Element
   items: DropDownItemType
   disabled?: boolean
-  customCSS?: string
+  className?: string
+  menuClassName?: string
 }
 
 export default function DropdownMenu({
   items,
   button,
   disabled = false,
-  customCSS,
+  className,
+  menuClassName,
 }: Props) {
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -42,11 +44,11 @@ export default function DropdownMenu({
   }
 
   return (
-    <>
+    <div>
       <button
         type="button"
         disabled={disabled}
-        className={`${customCSS} block relative`}
+        className={`${className} block relative`}
         onMouseDown={handleDropdownClick}
       >
         {button}
@@ -54,7 +56,7 @@ export default function DropdownMenu({
       {isDropdownMenuOpen && (
         <div
           ref={dropdownRef}
-          className={`  absolute   shadow-md shadow-neutral-950 shad bg-neutral-800 border-[1px] border-neutral-700 mt-1 z-40 rounded-md text-left`}
+          className={` ${menuClassName} absolute   shadow-md shadow-neutral-950 shad bg-neutral-800 border-[1px] border-neutral-700 mt-1 z-40 rounded-md text-left`}
         >
           <ul className="dropdown-menu">
             {items.map((item, i) => {
@@ -102,6 +104,6 @@ export default function DropdownMenu({
           </ul>
         </div>
       )}
-    </>
+    </div>
   )
 }

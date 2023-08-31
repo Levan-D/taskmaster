@@ -9,18 +9,18 @@ import { mdiChevronDown } from "@mdi/js"
 type Props = {
   taskId: string
   steps: Step[] | undefined
-  taskIsComplete: boolean
+  taskcomplete: boolean
 }
 
-export default function Steps({ taskId, steps, taskIsComplete }: Props) {
+export default function Steps({ taskId, steps, taskcomplete }: Props) {
   const [isOpen, setIsOpen] = useState(
-    steps && steps.length > 0 && !taskIsComplete ? true : false
+    steps && steps.length > 0 && !taskcomplete ? true : false
   )
 
   if (!steps) return <span></span>
 
   const totalSteps = steps.length
-  const stepsCompleted = steps.filter(step => step.isComplete).length
+  const stepsCompleted = steps.filter(step => step.complete).length
 
   const completeTasks = totalSteps === stepsCompleted && totalSteps > 0
 
@@ -47,9 +47,8 @@ export default function Steps({ taskId, steps, taskIsComplete }: Props) {
           )}
         </div>
 
-        <div className="my-2">
-          <CreateStep  totalSteps={totalSteps} taskId={taskId} />
-        </div>
+        <CreateStep className="my-2" totalSteps={totalSteps} taskId={taskId} />
+
         {steps && steps.length > 0 && (
           <div className="innerContainer m-2 ">
             {steps.map(step => (

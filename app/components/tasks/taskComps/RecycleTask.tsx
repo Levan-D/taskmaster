@@ -10,11 +10,11 @@ import { useRouter } from "next/navigation"
 import { recycleTask } from "../../../actions"
 
 type Props = {
-  taskIsComplete: boolean
+  taskcomplete: boolean
   taskId: string
 }
 
-export default function RecycleTask({ taskIsComplete, taskId }: Props) {
+export default function RecycleTask({ taskcomplete, taskId }: Props) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
@@ -28,12 +28,11 @@ export default function RecycleTask({ taskIsComplete, taskId }: Props) {
         startTransition(handleRecycleTask)
       }}
       className={`${
-        taskIsComplete ? "-translate-y-3 h-[44px] " : "-translate-y-14  h-0"
+        taskcomplete ? "-translate-y-3 h-[44px] " : "-translate-y-14  h-0"
       } justify-center hover:bg-neutral-700 ease-in-out  duration-300  flex mainContainer w-full  pt-4 px-2    pb-1  gap-2 items-center`}
     >
-      <div>
-        <Icon path={mdiTrashCanOutline} size={0.7} />
-      </div>
+      <Icon path={mdiTrashCanOutline} size={0.7} />
+
       <div>Recycle</div>
     </button>
   )

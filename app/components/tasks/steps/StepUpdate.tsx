@@ -11,10 +11,11 @@ import { updateStep } from "@/app/actions"
 type Props = {
   title: string
   stepId: string
-  isComplete: boolean
+  complete: boolean
+  className?: string
 }
 
-export default function StepUpdate({ title, stepId, isComplete }: Props) {
+export default function StepUpdate({ title, stepId, complete, className }: Props) {
   const [edit, setEdit] = useState(false)
   const [inputValue, setInputValue] = useState(title)
   const router = useRouter()
@@ -47,7 +48,7 @@ export default function StepUpdate({ title, stepId, isComplete }: Props) {
   }
 
   return edit ? (
-    <div ref={containerRef} onBlur={handleBlur} className="mx-2">
+    <div ref={containerRef} onBlur={handleBlur} className={`${className} mx-2`}>
       <form action={submitForm}>
         <div className="flex gap-2">
           <input
@@ -69,7 +70,7 @@ export default function StepUpdate({ title, stepId, isComplete }: Props) {
   ) : (
     <p
       onDoubleClick={toggleEdit}
-      className={`${isComplete && "text-neutral-300 "}     w-full mx-2 `}
+      className={`${complete && "text-neutral-300 "}     w-full mx-2 `}
     >
       {title}
     </p>

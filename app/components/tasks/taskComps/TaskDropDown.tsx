@@ -2,15 +2,15 @@
 "use client"
 
 import Icon from "@mdi/react"
-import { mdiDotsVertical, mdiTrashCanOutline } from "@mdi/js"
+import { mdiDotsVertical, mdiTrashCanOutline, mdiHeartOutline } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
 import { recycleTask } from "../../../actions"
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 
-type Props = { taskId: string }
+type Props = { taskId: string; expired: boolean }
 
-export default function TaskDropDown({ taskId }: Props) {
+export default function TaskDropDown({ taskId, expired }: Props) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
@@ -30,13 +30,24 @@ export default function TaskDropDown({ taskId }: Props) {
     },
   ]
   const button = (
-    <div className="  hover:bg-neutral-600  rounded-tr-lg rounded-bl-lg p-2 duration-300">
+    <div
+      className={`${
+        !expired ?"rounded-bl-lg ":"bg-neutral-600 shadow-sm sm:hover:bg-neutral-500"
+      } hover:bg-neutral-600  rounded-tr-lg   p-2 duration-300`}
+    >
       <Icon path={mdiDotsVertical} size={1} />
     </div>
   )
   return (
-    <div>
-      <DropdownMenu button={button} items={items} />
+    <div className="flex">
+      {expired && (
+        <button className=" block bg-lime-600 shadow-sm sm:hover:bg-lime-500    rounded-bl-lg p-2 duration-300">
+          <Icon path={mdiHeartOutline} size={1} />
+        </button>
+      )}
+      <div>
+        <DropdownMenu menuClassName="-translate-x-24" button={button} items={items} />
+      </div>
     </div>
   )
 }

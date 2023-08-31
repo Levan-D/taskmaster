@@ -30,10 +30,10 @@ export const checkUserExists = async () => {
   try {
     if (userData && userData.email && userData.id) {
       await prisma.user.upsert({
-        where: { loginId: userData.id },
+        where: { login_id: userData.id },
         update: {},
         create: {
-          loginId: userData.id,
+          login_id: userData.id,
           email: userData.email,
         },
       })
@@ -48,7 +48,8 @@ export const checkUserExists = async () => {
 
 export const createTask = async (
   data: FormData,
-  priority: TaskPriority
+  priority: TaskPriority,
+  today: string
 ): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
 
@@ -59,8 +60,9 @@ export const createTask = async (
       await prisma.task.create({
         data: {
           title: title,
-          userId: userData.id,
+          user_id: userData.id,
           priority: priority,
+          due_date: today,
         },
       })
       return { success: true }
@@ -96,35 +98,35 @@ export const updateTask = async (
 }
 
 export const getTasks = async ({
-  isDeleted,
+  deleted,
 }: {
-  isDeleted: boolean
+  deleted: boolean
 }): Promise<ApiResponse<Task[]>> => {
   const userData = await checkAuth()
 
   try {
     if (userData && userData.id) {
       const tasks = await prisma.task.findMany({
-        where: { userId: userData.id, isDeleted: isDeleted },
+        where: { user_id: userData.id, deleted: deleted },
         include: {
           steps: {
-            where: { isDeleted: isDeleted },
+            where: { deleted: deleted },
             orderBy: [
               {
-                isComplete: "asc",
+                complete: "asc",
               },
               {
-                creationDate: "desc",
+                creation_date: "desc",
               },
             ],
           },
         },
         orderBy: [
           {
-            isComplete: "asc",
+            complete: "asc",
           },
           {
-            creationDate: "desc",
+            creation_date: "desc",
           },
         ],
       })
@@ -145,7 +147,7 @@ export const recycleTask = async ({
   try {
     await prisma.task.update({
       where: { id: taskId },
-      data: { isDeleted: true },
+      data: { deleted: true },
     })
     return { success: true }
   } catch (error) {
@@ -155,21 +157,21 @@ export const recycleTask = async ({
 
 export const toggleTaskComplete = async ({
   taskId,
-  isComplete,
+  complete,
 }: {
   taskId: string
-  isComplete: boolean
+  complete: boolean
 }): Promise<ApiResponse<void>> => {
   try {
     await prisma.task.update({
       where: { id: taskId },
-      data: { isComplete: isComplete },
+      data: { complete: complete },
     })
 
-    if (isComplete)
+    if (complete)
       await prisma.step.updateMany({
         where: { taskId: taskId },
-        data: { isComplete: true },
+        data: { complete: true },
       })
     return { success: true }
   } catch (error) {
@@ -239,20 +241,20 @@ export const updateStep = async (
 
 // export const getSteps = async ({
 //   taskId,
-//   isDeleted,
+//   deleted,
 // }: {
 //   taskId: string
-//   isDeleted: boolean
+//   deleted: boolean
 // }): Promise<ApiResponse<Step[]>> => {
 //   try {
 //     const steps = await prisma.step.findMany({
-//       where: { taskId: taskId, isDeleted: isDeleted },
+//       where: { taskId: taskId, deleted: deleted },
 //       orderBy: [
 //         {
-//           isComplete: "asc",
+//           complete: "asc",
 //         },
 //         {
-//           creationDate: "desc",
+//           creation_date: "desc",
 //         },
 //       ],
 //     })
@@ -271,7 +273,7 @@ export const recycleStep = async ({
   try {
     await prisma.step.update({
       where: { id: stepId },
-      data: { isDeleted: true },
+      data: { deleted: true },
     })
     return { success: true }
   } catch (error) {
@@ -281,15 +283,15 @@ export const recycleStep = async ({
 
 export const toggleStepComplete = async ({
   stepId,
-  isComplete,
+  complete,
 }: {
   stepId: string
-  isComplete: boolean
+  complete: boolean
 }): Promise<ApiResponse<void>> => {
   try {
     await prisma.step.update({
       where: { id: stepId },
-      data: { isComplete: isComplete },
+      data: { complete: complete },
     })
     return { success: true }
   } catch (error) {
