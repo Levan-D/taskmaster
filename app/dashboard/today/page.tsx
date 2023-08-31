@@ -12,7 +12,7 @@ export default async function Today() {
   const tasks = await getTasks({ deleted: false })
 
   if (!tasks.success) return <span></span>
-  
+
   const today = DateTime.now().startOf("day")
 
   const expiredTasks =
@@ -58,6 +58,12 @@ export default async function Today() {
         </Accordion>
       )}
 
+      {todayTasks.length > 0 && expiredTasks.length !== 0 && (
+        <Accordion className="my-8" title={`Today (${totalTasks}/${tasksCompleted})`}>
+          <Tasks className={"my-8"} tasks={todayTasks} />
+        </Accordion>
+      )}
+
       {todayTasks.length > 0 && expiredTasks.length === 0 && (
         <>
           <div className="flex items-center select-none mt-10 mb-12">
@@ -81,12 +87,6 @@ export default async function Today() {
           </div>
           <Tasks className={"my-8"} tasks={todayTasks} />
         </>
-      )}
-
-      {todayTasks.length > 0 && expiredTasks.length !== 0 && (
-        <Accordion className="my-8" title={`Today (${totalTasks}/${tasksCompleted})`}>
-          <Tasks className={"my-8"} tasks={todayTasks} />
-        </Accordion>
       )}
     </section>
   )
