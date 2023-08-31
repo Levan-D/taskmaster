@@ -8,9 +8,9 @@ import { recycleTask } from "../../../actions"
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 
-type Props = { taskId: string; expired: boolean }
+type Props = { taskId: string; expired: boolean; taskComplete: boolean }
 
-export default function TaskDropDown({ taskId, expired }: Props) {
+export default function TaskDropDown({ taskId, expired, taskComplete }: Props) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
@@ -18,7 +18,6 @@ export default function TaskDropDown({ taskId, expired }: Props) {
     await recycleTask({ taskId: taskId })
     router.refresh()
   }
-
   const items: DropDownItemType = [
     {
       title: "Recycle",
@@ -32,8 +31,10 @@ export default function TaskDropDown({ taskId, expired }: Props) {
   const button = (
     <div
       className={`${
-        !expired ?"rounded-bl-lg ":"bg-neutral-600 shadow-sm sm:hover:bg-neutral-500"
-      } hover:bg-neutral-600  rounded-tr-lg   p-2 duration-300`}
+        expired || taskComplete
+          ? "bg-neutral-600 shadow-sm sm:hover:bg-neutral-500"
+          : "rounded-bl-lg"
+      } hover:bg-neutral-600 rounded-tr-lg p-2 duration-300`}
     >
       <Icon path={mdiDotsVertical} size={1} />
     </div>
@@ -43,6 +44,16 @@ export default function TaskDropDown({ taskId, expired }: Props) {
       {expired && (
         <button className=" block bg-lime-600 shadow-sm sm:hover:bg-lime-500    rounded-bl-lg p-2 duration-300">
           <Icon path={mdiHeartOutline} size={1} />
+        </button>
+      )}
+      {taskComplete && (
+        <button
+          onClick={() => {
+            startTransition(handleRecycleTask)
+          }}
+          className={`block bg-rose-600 shadow-sm sm:hover:bg-rose-500    rounded-bl-lg p-2 duration-300 `}
+        >
+          <Icon path={mdiTrashCanOutline} size={1} />
         </button>
       )}
       <div>
