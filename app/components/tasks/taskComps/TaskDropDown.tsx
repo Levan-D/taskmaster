@@ -12,21 +12,22 @@ import { experimental_useOptimistic as useOptimistic } from "react"
 type Props = {
   taskId: string
   expired: boolean
-  taskComplete: boolean
   optimisticComplete: boolean
+  addOptimisticDelete: (action: boolean) => void
 }
 
 export default function TaskDropDown({
   taskId,
   expired,
-  taskComplete,
   optimisticComplete,
+  addOptimisticDelete,
 }: Props) {
   const [isPending, startTransition] = useTransition()
 
   const today = DateTime.now().toISO() ?? ""
 
   const handleRecycleTask = async () => {
+    addOptimisticDelete(true)
     await recycleTask({ taskId: taskId })
   }
 

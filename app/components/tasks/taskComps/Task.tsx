@@ -16,6 +16,7 @@ export default function Task({
   priority,
   due_date,
   expired,
+  deleted,
 }: Props) {
   const [optimisticComplete, addOptimisticComplete] = useOptimistic(
     complete,
@@ -24,9 +25,18 @@ export default function Task({
     }
   )
 
+  const [optimisticDelete, addOptimisticDelete] = useOptimistic(
+    deleted,
+    (state, newDelete: boolean) => {
+      return newDelete
+    }
+  )
+
   return (
     <div
-      className={`relative z-10 mainContainer sm:hover:border-neutral-600 transition-colors duration-300`}
+      className={`${
+        optimisticDelete && "hidden"
+      } relative z-10 mainContainer  sm:hover:border-neutral-600 transition-colors duration-300`}
     >
       <div className="flex items-center">
         <ToggleTaskComplete
@@ -45,10 +55,10 @@ export default function Task({
         />
 
         <TaskDropDown
+          addOptimisticDelete={addOptimisticDelete}
           optimisticComplete={optimisticComplete}
           expired={expired}
           taskId={id}
-          taskComplete={complete}
         />
       </div>
       <Steps
