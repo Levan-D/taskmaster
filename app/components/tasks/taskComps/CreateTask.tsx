@@ -17,7 +17,7 @@ export default function CreateTask({ totalTasks }: Props) {
   const formRef = useRef<HTMLFormElement>(null)
   const [priority, setPriority] = useState<TaskPriority>("LOW")
 
-  const today = DateTime.now().toISO() ?? ""
+  const today = DateTime.now().minus({ day: 2 }).toISO() ?? ""
 
   const priorityButton = (
     <Tooltip text="Task priority" position="bot" className="delay-1000">

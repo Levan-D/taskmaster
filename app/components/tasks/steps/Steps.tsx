@@ -1,5 +1,5 @@
 /** @format */
-"use client"
+
 import Step from "./Step"
 import { useState } from "react"
 import CreateStep from "./CreateStep"
@@ -8,30 +8,16 @@ import { mdiChevronDown } from "@mdi/js"
 import { DateTime } from "luxon"
 
 type Props = {
-  taskId: string
-  steps: Step[] | undefined
-  taskcomplete: boolean
-  due_date: string | null
-  optimisticComplete: boolean
+  task: Task
+  addOptimisticTask: (action: Task[]) => void
 }
 
-export default function Steps({
-  taskId,
-  steps,
-  taskcomplete,
-  due_date,
-  optimisticComplete,
-}: Props) {
-  const [open, setOpen] = useState(
-    steps && steps.length > 0 && !taskcomplete ? true : false
-  )
+export default function Steps({ task, addOptimisticTask }: Props) {
+  const [open, setOpen] = useState(task.steps.length > 0 && !task.complete ? true : false)
 
-  if (!steps) return <span></span>
-
-  const totalSteps = steps.length
-  const stepsCompleted = steps.filter(step => step.complete).length
-
-  const completeTasks = totalSteps === stepsCompleted && totalSteps > 0
+  const totalSteps = task.steps.length
+  const stepsCompleted = task.steps.filter(step => step.complete).length
+  const allStepsCompleted = totalSteps === stepsCompleted && totalSteps > 0
 
   function formatDueDate(due_date: string) {
     const dueDate = DateTime.fromISO(due_date).startOf("day")
@@ -45,9 +31,9 @@ export default function Steps({
       dueDate.diff(now, "days").days <= 6 &&
       dueDate.diff(now, "days").days >= -6
     ) {
-      return dueDate.toFormat("cccc") // Formats to the day of the week (e.g., Monday)
+      return dueDate.toFormat("cccc")
     } else {
-      return dueDate.toFormat("dd/MM/yy") // Formats to a date
+      return dueDate.toFormat("dd/MM/yy")
     }
   }
 
@@ -62,7 +48,7 @@ export default function Steps({
 
                 <div
                   className={`${
-                    completeTasks ? "text-lime-400   " : "text-neutral-500   "
+                    allStepsCompleted ? "text-lime-400   " : "text-neutral-500   "
                   }  p-1.5 text-sm  shrink-0 `}
                 >
                   {totalSteps}/{stepsCompleted}
@@ -75,12 +61,12 @@ export default function Steps({
             )}
           </div>
 
-          <CreateStep className="my-2" totalSteps={totalSteps} taskId={taskId} />
+          <CreateStep className="my-2" totalSteps={totalSteps} taskId={task.id} />
 
-          {steps && steps.length > 0 && (
+          {task.steps.length > 0 && (
             <div className="innerContainer m-2 ">
-              {steps.map(step => (
-                <Step key={step.id} {...step} />
+              {task.steps.map(step => (
+                <Step addOptimisticTask={addOptimisticTask} key={step.id} task={task} step={step} />
               ))}
             </div>
           )}
@@ -100,7 +86,7 @@ export default function Steps({
           size={1}
         />
         <div className="basis-1/3 text-xs text-neutral-300 text-end">
-          {typeof due_date === "string" && !optimisticComplete && formatDueDate(due_date)}
+          {typeof task.due_date === "string" && formatDueDate(task.due_date)}
         </div>
       </button>
     </div>

@@ -9,21 +9,17 @@ import { updateStep } from "@/app/actions"
 import { useTransition } from "react"
 
 type Props = {
-  title: string
-  stepId: string
-  complete: boolean
+  task: Task
+  step: Step
+  addOptimisticTask: (action: Task[]) => void
   className?: string
-  optimisticTitle: string
-  addOptimisticTitle: (action: string) => void
 }
 
 export default function StepUpdate({
-  title,
-  stepId,
-  complete,
-  className,
-  optimisticTitle,
-  addOptimisticTitle,
+  task,
+  step,
+  addOptimisticTask,
+  className = "",
 }: Props) {
   const [edit, setEdit] = useState(false)
   const [inputValue, setInputValue] = useState(title)

@@ -11,27 +11,17 @@ import DropdownMenu from "../../DropdownMenu"
 import { useTransition } from "react"
 
 type Props = {
-  title: string
-  taskId: string
-  taskPriority: TaskPriority
+  task: Task
   className?: string
-  optimisticTitle: string
-  addOptimisticTitle: (action: string) => void
+  addOptimisticTask: (action: Task[]) => void
 }
 
-export default function TaskUpdate({
-  title,
-  taskId,
-  taskPriority,
-  className,
-  optimisticTitle,
-  addOptimisticTitle,
-}: Props) {
+export default function TaskUpdate({ task, className, addOptimisticTask }: Props) {
   const [edit, setEdit] = useState(false)
-  const [inputValue, setInputValue] = useState(title)
+  const [inputValue, setInputValue] = useState(task.title)
   const inputRef = useRef<HTMLInputElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const [priority, setPriority] = useState<TaskPriority>(taskPriority)
+  const [priority, setPriority] = useState<TaskPriority>(task.priority)
   const [isPending, startTransition] = useTransition()
 
   const priorityButton = (
@@ -84,14 +74,14 @@ export default function TaskUpdate({
   ]
 
   const toggleEdit = () => {
-    setInputValue(title)
+    setInputValue(task.title)
     setEdit(x => !x)
   }
 
   const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
     if (containerRef.current && !containerRef.current.contains(e.relatedTarget as Node)) {
       toggleEdit()
-      setPriority(taskPriority)
+      setPriority(task.priority)
     }
   }
 
@@ -105,13 +95,14 @@ export default function TaskUpdate({
     e.preventDefault()
 
     const handleUpdateTask = async () => {
-      await updateTask({ title: inputValue, taskId: taskId, priority: priority })
+      await updateTask({ title: inputValue, taskId: task.id, priority: priority })
     }
 
     toggleEdit()
 
-    if (inputValue !== title || priority !== taskPriority) {
-      addOptimisticTitle(inputValue)
+    if (inputValue !== task.title || priority !== task.priority) {
+      addOptimisticTask([{ ...task, title: inputValue }])
+
       startTransition(handleUpdateTask)
     }
   }
@@ -145,7 +136,7 @@ export default function TaskUpdate({
       onDoubleClick={toggleEdit}
       className="block text-left text-lg  w-full mx-2   "
     >
-      {optimisticTitle}
+      {task.title}
     </button>
   )
 }

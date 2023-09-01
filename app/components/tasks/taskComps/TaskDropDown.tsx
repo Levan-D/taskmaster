@@ -5,34 +5,30 @@ import Icon from "@mdi/react"
 import { mdiDotsVertical, mdiTrashCanOutline, mdiHeartOutline } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
 import { recycleTask, reviveTask } from "../../../actions"
-import { useState, useTransition } from "react"
+import { useTransition } from "react"
 import { DateTime } from "luxon"
-import { experimental_useOptimistic as useOptimistic } from "react"
 
 type Props = {
-  taskId: string
+  task: Task
   expired: boolean
-  optimisticComplete: boolean
-  addOptimisticDelete: (action: boolean) => void
+  addOptimisticTask: (action: Task[]) => void
 }
 
-export default function TaskDropDown({
-  taskId,
-  expired,
-  optimisticComplete,
-  addOptimisticDelete,
-}: Props) {
+export default function TaskDropDown({ task, expired, addOptimisticTask }: Props) {
   const [isPending, startTransition] = useTransition()
 
   const today = DateTime.now().toISO() ?? ""
 
   const handleRecycleTask = async () => {
-    addOptimisticDelete(true)
-    await recycleTask({ taskId: taskId })
+    addOptimisticTask([{ ...task, deleted: true, complete: false }])
+
+    await recycleTask({ taskId: task.id })
   }
 
   const handleReviveTask = async () => {
-    await reviveTask({ taskId: taskId, dueDate: today })
+    addOptimisticTask([{ ...task, due_date: today }])
+
+    await reviveTask({ taskId: task.id, dueDate: today })
   }
 
   const items: DropDownItemType = [
@@ -47,7 +43,7 @@ export default function TaskDropDown({
   const button = (
     <div
       className={`${
-        expired || optimisticComplete
+        expired || task.complete
           ? "bg-neutral-600 shadow-sm sm:hover:bg-neutral-500"
           : "rounded-bl-lg"
       } hover:bg-neutral-600 rounded-tr-lg p-2 duration-300`}
@@ -56,7 +52,7 @@ export default function TaskDropDown({
     </div>
   )
   return (
-    <div className="flex">
+    <div className="flex z-20 ">
       {expired && (
         <button
           disabled={isPending}
@@ -68,7 +64,7 @@ export default function TaskDropDown({
           <Icon path={mdiHeartOutline} size={1} />
         </button>
       )}
-      {optimisticComplete && (
+      {task.complete && (
         <button
           disabled={isPending}
           onClick={() => {

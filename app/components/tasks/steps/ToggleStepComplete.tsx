@@ -7,18 +7,12 @@ import Icon from "@mdi/react"
 import { mdiCheckBold } from "@mdi/js"
 
 type Props = {
-  stepId: string
-  complete: boolean
-  optimisticComplete: boolean
-  addOptimisticComplete: (action: boolean) => void
+  task: Task
+  step: Step
+  addOptimisticTask: (action: Task[]) => void
 }
 
-export default function ToggleStepComplete({
-  stepId,
-  complete,
-  optimisticComplete,
-  addOptimisticComplete,
-}: Props) {
+export default function ToggleStepComplete({ task, step, addOptimisticTask }: Props) {
   const [isPending, startTransition] = useTransition()
 
   const handleToggleStepComplete = async () => {
