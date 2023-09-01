@@ -292,14 +292,12 @@ export const createStep = async ({
 }
 
 export const updateStep = async ({
-  data,
+  title,
   stepId,
 }: {
-  data: FormData
+  title: string
   stepId: string
 }): Promise<ApiResponse<void>> => {
-  const title = data.get("title")?.toString() || ""
-
   try {
     await prisma.step.update({
       where: {

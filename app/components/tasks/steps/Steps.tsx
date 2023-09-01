@@ -12,10 +12,16 @@ type Props = {
   steps: Step[] | undefined
   taskcomplete: boolean
   due_date: string | null
-  optimisticComplete:boolean
+  optimisticComplete: boolean
 }
 
-export default function Steps({ taskId, steps, taskcomplete, due_date,optimisticComplete }: Props) {
+export default function Steps({
+  taskId,
+  steps,
+  taskcomplete,
+  due_date,
+  optimisticComplete,
+}: Props) {
   const [open, setOpen] = useState(
     steps && steps.length > 0 && !taskcomplete ? true : false
   )

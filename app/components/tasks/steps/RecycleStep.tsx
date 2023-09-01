@@ -6,12 +6,13 @@ import { useTransition } from "react"
 import Icon from "@mdi/react"
 import { mdiTrashCanOutline } from "@mdi/js"
 
-type Props = { stepId: string }
+type Props = { stepId: string; addOptimisticDelete: (action: boolean) => void }
 
-export default function RecycleStep({ stepId }: Props) {
+export default function RecycleStep({ stepId, addOptimisticDelete }: Props) {
   const [isPending, startTransition] = useTransition()
 
   const handleRecycleStep = async () => {
+    addOptimisticDelete(true)
     await recycleStep({ stepId: stepId })
   }
 

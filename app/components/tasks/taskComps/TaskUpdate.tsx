@@ -133,7 +133,7 @@ export default function TaskUpdate({
           <div>
             <DropdownMenu button={priorityButton} items={priorityItems} />
           </div>
-          <button className="btnSecondary px-2.5 shrink-0 ">
+          <button disabled={isPending} className="btnSecondary px-2.5 shrink-0 ">
             <Icon path={mdiNoteEditOutline} size={0.8} />
           </button>
         </div>
@@ -141,6 +141,7 @@ export default function TaskUpdate({
     </div>
   ) : (
     <button
+      disabled={isPending}
       onDoubleClick={toggleEdit}
       className="block text-left text-lg  w-full mx-2   "
     >
