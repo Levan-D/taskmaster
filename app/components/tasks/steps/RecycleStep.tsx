@@ -17,6 +17,7 @@ export default function RecycleStep({ stepId }: Props) {
 
   return (
     <button
+      disabled={isPending}
       className="btnError"
       onClick={() => {
         startTransition(handleRecycleStep)

@@ -21,6 +21,7 @@ export default function TasksRecycle({ className, expiredTaskIds }: Props) {
 
   return (
     <button
+      disabled={isPending}
       onClick={() => {
         startTransition(handleRecycleTasks)
       }}

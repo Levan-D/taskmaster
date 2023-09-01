@@ -12,9 +12,10 @@ type Props = {
   steps: Step[] | undefined
   taskcomplete: boolean
   due_date: string | null
+  optimisticComplete:boolean
 }
 
-export default function Steps({ taskId, steps, taskcomplete, due_date }: Props) {
+export default function Steps({ taskId, steps, taskcomplete, due_date,optimisticComplete }: Props) {
   const [open, setOpen] = useState(
     steps && steps.length > 0 && !taskcomplete ? true : false
   )
@@ -93,7 +94,7 @@ export default function Steps({ taskId, steps, taskcomplete, due_date }: Props) 
           size={1}
         />
         <div className="basis-1/3 text-xs text-neutral-300 text-end">
-          {typeof due_date === "string" && !taskcomplete && formatDueDate(due_date)}
+          {typeof due_date === "string" && !optimisticComplete && formatDueDate(due_date)}
         </div>
       </button>
     </div>

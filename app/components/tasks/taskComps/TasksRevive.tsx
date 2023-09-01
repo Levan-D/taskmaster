@@ -24,6 +24,7 @@ export default function TasksRevive({ className, expiredTaskIds }: Props) {
 
   return (
     <button
+      disabled={isPending}
       onClick={() => {
         startTransition(handleReviveTasks)
       }}

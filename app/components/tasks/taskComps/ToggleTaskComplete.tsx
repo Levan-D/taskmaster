@@ -6,21 +6,34 @@ import { useTransition } from "react"
 import Icon from "@mdi/react"
 import { mdiCheckBold } from "@mdi/js"
 
-import { experimental_useOptimistic as useOptimistic } from "react"
+type Props = {
+  taskId: string
+  complete: boolean
+  priority: TaskPriority
+  optimisticComplete: boolean
+  addOptimisticComplete: (action: boolean) => void
+}
 
-type Props = { taskId: string; complete: boolean; priority: TaskPriority }
-
-export default function ToggleTaskComplete({ taskId, complete, priority }: Props) {
+export default function ToggleTaskComplete({
+  taskId,
+  complete,
+  priority,
+  optimisticComplete,
+  addOptimisticComplete,
+}: Props) {
   const [isPending, startTransition] = useTransition()
 
   const handleToggleTaskComplete = async () => {
+    addOptimisticComplete(!complete)
+
     await toggleTaskComplete({ taskId: taskId, complete: !complete })
   }
 
   return (
     <button
+      disabled={isPending}
       className={` ${
-        complete
+        optimisticComplete
           ? "bg-lime-600 md:hover:bg-lime-500"
           : "bg-neutral-950 md:hover:bg-neutral-900"
       } block  rounded-tl-lg rounded-br-lg p-2 duration-300 transition-colors `}
@@ -31,7 +44,7 @@ export default function ToggleTaskComplete({ taskId, complete, priority }: Props
       <Icon
         path={mdiCheckBold}
         className={`${
-          complete
+          optimisticComplete
             ? "text-white"
             : priority === "LOW"
             ? "text-sky-400"

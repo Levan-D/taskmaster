@@ -17,6 +17,7 @@ export default function ToggleStepComplete({ stepId, complete }: Props) {
 
   return (
     <button
+      disabled={isPending}
       className={` ${
         complete
           ? "bg-lime-600 md:hover:bg-lime-500"

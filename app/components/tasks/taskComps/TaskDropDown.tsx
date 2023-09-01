@@ -5,12 +5,23 @@ import Icon from "@mdi/react"
 import { mdiDotsVertical, mdiTrashCanOutline, mdiHeartOutline } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
 import { recycleTask, reviveTask } from "../../../actions"
-import { useTransition } from "react"
+import { useState, useTransition } from "react"
 import { DateTime } from "luxon"
+import { experimental_useOptimistic as useOptimistic } from "react"
 
-type Props = { taskId: string; expired: boolean; taskComplete: boolean }
+type Props = {
+  taskId: string
+  expired: boolean
+  taskComplete: boolean
+  optimisticComplete: boolean
+}
 
-export default function TaskDropDown({ taskId, expired, taskComplete }: Props) {
+export default function TaskDropDown({
+  taskId,
+  expired,
+  taskComplete,
+  optimisticComplete,
+}: Props) {
   const [isPending, startTransition] = useTransition()
 
   const today = DateTime.now().toISO() ?? ""
@@ -35,7 +46,7 @@ export default function TaskDropDown({ taskId, expired, taskComplete }: Props) {
   const button = (
     <div
       className={`${
-        expired || taskComplete
+        expired || optimisticComplete
           ? "bg-neutral-600 shadow-sm sm:hover:bg-neutral-500"
           : "rounded-bl-lg"
       } hover:bg-neutral-600 rounded-tr-lg p-2 duration-300`}
@@ -47,6 +58,7 @@ export default function TaskDropDown({ taskId, expired, taskComplete }: Props) {
     <div className="flex">
       {expired && (
         <button
+          disabled={isPending}
           onClick={() => {
             startTransition(handleReviveTask)
           }}
@@ -55,8 +67,9 @@ export default function TaskDropDown({ taskId, expired, taskComplete }: Props) {
           <Icon path={mdiHeartOutline} size={1} />
         </button>
       )}
-      {taskComplete && (
+      {optimisticComplete && (
         <button
+          disabled={isPending}
           onClick={() => {
             startTransition(handleRecycleTask)
           }}
