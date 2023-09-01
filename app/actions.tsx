@@ -145,18 +145,12 @@ export const getTasks = async ({
             where: { deleted: deleted },
             orderBy: [
               {
-                complete: "asc",
-              },
-              {
                 creation_date: "desc",
               },
             ],
           },
         },
         orderBy: [
-          {
-            complete: "asc",
-          },
           {
             creation_date: "desc",
           },
