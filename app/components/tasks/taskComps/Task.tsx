@@ -32,6 +32,13 @@ export default function Task({
     }
   )
 
+  const [optimisticTitle, addOptimisticTitle] = useOptimistic(
+    title,
+    (state, newTitle: string) => {
+      return newTitle
+    }
+  )
+
   return (
     <div
       className={`${
@@ -50,6 +57,8 @@ export default function Task({
         <TaskUpdate
           className="grow truncate line-clamp-1"
           title={title}
+          addOptimisticTitle={addOptimisticTitle}
+          optimisticTitle={optimisticTitle}
           taskId={id}
           taskPriority={priority}
         />

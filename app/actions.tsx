@@ -81,16 +81,14 @@ export const createTask = async ({
 }
 
 export const updateTask = async ({
-  data,
+  title,
   taskId,
   priority,
 }: {
-  data: FormData
+  title: string
   taskId: string
   priority: TaskPriority
 }): Promise<ApiResponse<void>> => {
-  const title = data.get("title")?.toString() || ""
-
   try {
     await prisma.task.update({
       where: {

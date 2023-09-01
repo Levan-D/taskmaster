@@ -8,20 +8,31 @@ import { mdiNoteEditOutline, mdiTimerAlertOutline } from "@mdi/js"
 import { updateTask } from "@/app/actions"
 import Tooltip from "../../Tooltip"
 import DropdownMenu from "../../DropdownMenu"
+import { useTransition } from "react"
 
 type Props = {
   title: string
   taskId: string
   taskPriority: TaskPriority
   className?: string
+  optimisticTitle: string
+  addOptimisticTitle: (action: string) => void
 }
 
-export default function TaskUpdate({ title, taskId, taskPriority, className }: Props) {
+export default function TaskUpdate({
+  title,
+  taskId,
+  taskPriority,
+  className,
+  optimisticTitle,
+  addOptimisticTitle,
+}: Props) {
   const [edit, setEdit] = useState(false)
   const [inputValue, setInputValue] = useState(title)
   const inputRef = useRef<HTMLInputElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [priority, setPriority] = useState<TaskPriority>(taskPriority)
+  const [isPending, startTransition] = useTransition()
 
   const priorityButton = (
     <Tooltip text="Task priority" position="bot" className="delay-1000 shrink-0 ">
@@ -74,12 +85,12 @@ export default function TaskUpdate({ title, taskId, taskPriority, className }: P
 
   const toggleEdit = () => {
     setInputValue(title)
-    setEdit(true)
+    setEdit(x => !x)
   }
 
   const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
     if (containerRef.current && !containerRef.current.contains(e.relatedTarget as Node)) {
-      setEdit(false)
+      toggleEdit()
       setPriority(taskPriority)
     }
   }
@@ -90,16 +101,24 @@ export default function TaskUpdate({ title, taskId, taskPriority, className }: P
     }
   }, [edit])
 
-  const submitForm = (data: FormData) => {
-    if (inputValue !== title || priority !== taskPriority) {
-      updateTask({ data: data, taskId: taskId, priority: priority })
+  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    const handleUpdateTask = async () => {
+      await updateTask({ title: inputValue, taskId: taskId, priority: priority })
     }
-    setEdit(false)
+
+    toggleEdit()
+
+    if (inputValue !== title || priority !== taskPriority) {
+      addOptimisticTitle(inputValue)
+      startTransition(handleUpdateTask)
+    }
   }
 
   return edit ? (
     <div ref={containerRef} onBlur={handleBlur} className={`${className} mx-2`}>
-      <form action={submitForm}>
+      <form onSubmit={submitForm}>
         <div className="flex gap-2">
           <input
             ref={inputRef}
@@ -125,7 +144,7 @@ export default function TaskUpdate({ title, taskId, taskPriority, className }: P
       onDoubleClick={toggleEdit}
       className="block text-left text-lg  w-full mx-2   "
     >
-      {title}
+      {optimisticTitle}
     </button>
   )
 }

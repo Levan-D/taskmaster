@@ -37,9 +37,7 @@ export default function ToggleTaskComplete({
           ? "bg-lime-600 md:hover:bg-lime-500"
           : "bg-neutral-950 md:hover:bg-neutral-900"
       } block  rounded-tl-lg rounded-br-lg p-2 duration-300 transition-colors `}
-      onClick={() => {
-        startTransition(handleToggleTaskComplete)
-      }}
+      onClick={() => startTransition(handleToggleTaskComplete)}
     >
       <Icon
         path={mdiCheckBold}

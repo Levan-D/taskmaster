@@ -74,7 +74,7 @@ export default function TaskDropDown({
           onClick={() => {
             startTransition(handleRecycleTask)
           }}
-          className={`block bg-rose-600 shadow-sm sm:hover:bg-rose-500    rounded-bl-lg p-2 duration-300 `}
+          className={`block bg-neutral-600 shadow-sm sm:hover:bg-neutral-500 border-r-[2px]  border-neutral-700    rounded-bl-lg p-2 duration-300 `}
         >
           <Icon path={mdiTrashCanOutline} size={1} />
         </button>
