@@ -93,85 +93,89 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
   ]
 
   return (
-    <nav
-      className={` ${
-        isOpen ? "w-[200px] " : "w-[56px]"
-      }  bg-neutral-950  h-screen fixed  duration-300   flex flex-col  justify-between select-none `}
-    >
-      <div className={`${isOpen && "flex gap-1"}`}>
-        <div className="grow">
-          {isOpen && (
-            <DropdownMenu
-              menuClassName="translate-x-12"
-              items={items}
-              className={"  grow  btnIcon  m-2 w-full"}
-              button={UserInfo}
+    <div className={` ${isOpen ? "w-[200px] " : "w-[56px]"} shrink-0`}>
+      <nav
+        className={` ${
+          isOpen ? "w-[200px] " : "w-[56px]"
+        }  bg-neutral-950  h-screen fixed  duration-300   flex flex-col  justify-between select-none `}
+      >
+        <div className={`${isOpen && "flex gap-1"}`}>
+          <div className="grow">
+            {isOpen && (
+              <DropdownMenu
+                menuClassName="translate-x-12"
+                items={items}
+                className={"  grow  btnIcon  m-2 w-full"}
+                button={UserInfo}
+              />
+            )}
+          </div>
+          <button onClick={toggleNav} className="  w-10 h-10 m-2 btnIcon ">
+            <Icon
+              path={mdiChevronRight}
+              className={`  ${isOpen && "rotate-180 "} duration-300 mx-auto`}
+              size={1}
             />
-          )}
+          </button>
         </div>
-        <button onClick={toggleNav} className="  w-10 h-10 m-2 btnIcon ">
-          <Icon
-            path={mdiChevronRight}
-            className={`  ${isOpen && "rotate-180 "} duration-300 mx-auto`}
-            size={1}
-          />
-        </button>
-      </div>
 
-      <div>
-        {taskPages.map((page, i) => {
-          if ("icon" in page) {
-            return isOpen ? (
-              <Link
-                key={i}
-                href={page.path}
-                className={`${!isOpen && "justify-center w-10"} ${
-                  pathname.includes(page.path) && "!bg-neutral-800"
-                } px-2 mx-2 flex gap-2 btnIcon h-10 items-center text-sm`}
-              >
-                <div>
-                  <Icon path={page.icon} size={0.8} />
-                </div>
-                <p>{page.title}</p>
-              </Link>
-            ) : (
-              <Tooltip
-                key={i}
-                text={page.title}
-                className={"translate-x-7 "}
-                position="right"
-              >
+        <div>
+          {taskPages.map((page, i) => {
+            if ("icon" in page) {
+              return isOpen ? (
                 <Link
+                  key={i}
                   href={page.path}
-                  className={`${!isOpen && "justify-center w-10"}  ${
+                  className={`${!isOpen && "justify-center w-10"} ${
                     pathname.includes(page.path) && "!bg-neutral-800"
                   } px-2 mx-2 flex gap-2 btnIcon h-10 items-center text-sm`}
                 >
                   <div>
                     <Icon path={page.icon} size={0.8} />
                   </div>
+                  <p>{page.title}</p>
                 </Link>
-              </Tooltip>
-            )
-          }
+              ) : (
+                <Tooltip
+                  key={i}
+                  text={page.title}
+                  className={"translate-x-7 "}
+                  position="right"
+                >
+                  <Link
+                    href={page.path}
+                    className={`${!isOpen && "justify-center w-10"}  ${
+                      pathname.includes(page.path) && "!bg-neutral-800"
+                    } px-2 mx-2 flex gap-2 btnIcon h-10 items-center text-sm`}
+                  >
+                    <div>
+                      <Icon path={page.icon} size={0.8} />
+                    </div>
+                  </Link>
+                </Tooltip>
+              )
+            }
 
-          if ("break" in page) {
-            return <hr key={i} className="mx-4 my-1 border-t-[1px] border-neutral-800" />
-          }
-        })}
-      </div>
+            if ("break" in page) {
+              return (
+                <hr key={i} className="mx-4 my-1 border-t-[1px] border-neutral-800" />
+              )
+            }
+          })}
+        </div>
 
-      <div></div>
+        <div></div>
 
-      <footer className={`text-xs p-2 text-center `}>
-        {isOpen ? (
-          "© 2023 Levan Dolidze. All Rights Reserved."
-        ) : (
-          <Tooltip position="right" text="2023 Levan Dolidze. All Rights Reserved.">
-            <div className="text-center text-lg">©</div>
-          </Tooltip>
-        )}
-      </footer>
-    </nav>
+        <footer className={`text-xs p-2 text-center `}>
+          {isOpen ? (
+            "© 2023 Levan Dolidze. All Rights Reserved."
+          ) : (
+            <Tooltip position="right" text="2023 Levan Dolidze. All Rights Reserved.">
+              <div className="text-center text-lg">©</div>
+            </Tooltip>
+          )}
+        </footer>
+      </nav>
+    </div>
   )
 }

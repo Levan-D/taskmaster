@@ -3,8 +3,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import Icon from "@mdi/react"
+ import Icon from "@mdi/react"
 import { mdiNoteEditOutline } from "@mdi/js"
 import { updateStep } from "@/app/actions"
 
@@ -18,7 +17,6 @@ type Props = {
 export default function StepUpdate({ title, stepId, complete, className }: Props) {
   const [edit, setEdit] = useState(false)
   const [inputValue, setInputValue] = useState(title)
-  const router = useRouter()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
 
@@ -42,7 +40,6 @@ export default function StepUpdate({ title, stepId, complete, className }: Props
   const submitForm = (data: FormData) => {
     if (inputValue !== title) {
       updateStep({ data: data, stepId: stepId })
-      router.refresh()
     }
     setEdit(false)
   }

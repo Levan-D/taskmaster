@@ -3,6 +3,7 @@
 "use server"
 import { prisma } from "./db"
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
+import { revalidatePath } from "next/cache"
 
 const checkAuth = async () => {
   const { getUser, isAuthenticated } = getKindeServerSession()
@@ -69,6 +70,7 @@ export const createTask = async ({
           due_date: today,
         },
       })
+      revalidatePath("/dashboard/today")
       return { success: true }
     } else {
       throw new Error("Bad Request: Missing user data")
@@ -99,6 +101,7 @@ export const updateTask = async ({
         priority: priority,
       },
     })
+    revalidatePath("/dashboard/today")
     return { success: true }
   } catch (error) {
     return handleApiError(error)
@@ -121,6 +124,7 @@ export const reviveTask = async ({
         due_date: dueDate,
       },
     })
+    revalidatePath("/dashboard/today")
     return { success: true }
   } catch (error) {
     return handleApiError(error)
@@ -179,6 +183,7 @@ export const recycleTask = async ({
       where: { id: taskId },
       data: { deleted: true },
     })
+    revalidatePath("/dashboard/today")
     return { success: true }
   } catch (error) {
     return handleApiError(error)
@@ -195,7 +200,7 @@ export const recycleTasks = async ({
       where: { id: { in: taskIds } },
       data: { deleted: true },
     })
-
+    revalidatePath("/dashboard/today")
     return { success: true }
   } catch (error) {
     return handleApiError(error)
@@ -214,7 +219,7 @@ export const reviveTasks = async ({
       where: { id: { in: taskIds } },
       data: { due_date: dueDate },
     })
-
+    revalidatePath("/dashboard/today")
     return { success: true }
   } catch (error) {
     return handleApiError(error)
@@ -239,6 +244,7 @@ export const toggleTaskComplete = async ({
         where: { taskId: taskId },
         data: { complete: true },
       })
+    revalidatePath("/dashboard/today")
     return { success: true }
   } catch (error) {
     return handleApiError(error)
@@ -279,6 +285,8 @@ export const createStep = async ({
         taskId: taskId,
       },
     })
+
+    revalidatePath("/dashboard/today")
     return { success: true }
   } catch (error) {
     return handleApiError(error)
@@ -303,6 +311,7 @@ export const updateStep = async ({
         title: title,
       },
     })
+    revalidatePath("/dashboard/today")
     return { success: true }
   } catch (error) {
     return handleApiError(error)
@@ -347,6 +356,7 @@ export const recycleStep = async ({
       where: { id: stepId },
       data: { deleted: true },
     })
+    revalidatePath("/dashboard/today")
     return { success: true }
   } catch (error) {
     return handleApiError(error)
@@ -365,6 +375,7 @@ export const toggleStepComplete = async ({
       where: { id: stepId },
       data: { complete: complete },
     })
+    revalidatePath("/dashboard/today")
     return { success: true }
   } catch (error) {
     return handleApiError(error)

@@ -3,7 +3,6 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import Icon from "@mdi/react"
 import { mdiNoteEditOutline, mdiTimerAlertOutline } from "@mdi/js"
 import { updateTask } from "@/app/actions"
@@ -20,7 +19,6 @@ type Props = {
 export default function TaskUpdate({ title, taskId, taskPriority, className }: Props) {
   const [edit, setEdit] = useState(false)
   const [inputValue, setInputValue] = useState(title)
-  const router = useRouter()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [priority, setPriority] = useState<TaskPriority>(taskPriority)
@@ -95,7 +93,6 @@ export default function TaskUpdate({ title, taskId, taskPriority, className }: P
   const submitForm = (data: FormData) => {
     if (inputValue !== title || priority !== taskPriority) {
       updateTask({ data: data, taskId: taskId, priority: priority })
-      router.refresh()
     }
     setEdit(false)
   }

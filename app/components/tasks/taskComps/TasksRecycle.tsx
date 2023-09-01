@@ -4,7 +4,6 @@
 import React from "react"
 import { useTransition } from "react"
 import { recycleTasks } from "@/app/actions"
-import { useRouter } from "next/navigation"
 
 type Props = {
   className?: string
@@ -13,13 +12,11 @@ type Props = {
 
 export default function TasksRecycle({ className, expiredTaskIds }: Props) {
   const [isPending, startTransition] = useTransition()
-  const router = useRouter()
 
   const handleRecycleTasks = async () => {
     if (expiredTaskIds.length === 0) return
 
     await recycleTasks({ taskIds: expiredTaskIds })
-    router.refresh()
   }
 
   return (

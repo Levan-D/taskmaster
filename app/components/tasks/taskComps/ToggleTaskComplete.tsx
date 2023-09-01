@@ -3,19 +3,18 @@
 "use client"
 import { toggleTaskComplete } from "@/app/actions"
 import { useTransition } from "react"
-import { useRouter } from "next/navigation"
 import Icon from "@mdi/react"
 import { mdiCheckBold } from "@mdi/js"
+
+import { experimental_useOptimistic as useOptimistic } from "react"
 
 type Props = { taskId: string; complete: boolean; priority: TaskPriority }
 
 export default function ToggleTaskComplete({ taskId, complete, priority }: Props) {
   const [isPending, startTransition] = useTransition()
-  const router = useRouter()
 
   const handleToggleTaskComplete = async () => {
     await toggleTaskComplete({ taskId: taskId, complete: !complete })
-    router.refresh()
   }
 
   return (
@@ -27,7 +26,6 @@ export default function ToggleTaskComplete({ taskId, complete, priority }: Props
       } block  rounded-tl-lg rounded-br-lg p-2 duration-300 transition-colors `}
       onClick={() => {
         startTransition(handleToggleTaskComplete)
-        router.refresh()
       }}
     >
       <Icon

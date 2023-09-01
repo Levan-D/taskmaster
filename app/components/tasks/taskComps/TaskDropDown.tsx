@@ -6,25 +6,21 @@ import { mdiDotsVertical, mdiTrashCanOutline, mdiHeartOutline } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
 import { recycleTask, reviveTask } from "../../../actions"
 import { useTransition } from "react"
-import { useRouter } from "next/navigation"
 import { DateTime } from "luxon"
 
 type Props = { taskId: string; expired: boolean; taskComplete: boolean }
 
 export default function TaskDropDown({ taskId, expired, taskComplete }: Props) {
   const [isPending, startTransition] = useTransition()
-  const router = useRouter()
 
   const today = DateTime.now().toISO() ?? ""
 
   const handleRecycleTask = async () => {
     await recycleTask({ taskId: taskId })
-    router.refresh()
   }
 
   const handleReviveTask = async () => {
     await reviveTask({ taskId: taskId, dueDate: today })
-    router.refresh()
   }
 
   const items: DropDownItemType = [
@@ -33,7 +29,6 @@ export default function TaskDropDown({ taskId, expired, taskComplete }: Props) {
       icon: <Icon path={mdiTrashCanOutline} size={0.7} />,
       action: () => {
         startTransition(handleRecycleTask)
-        router.refresh()
       },
     },
   ]

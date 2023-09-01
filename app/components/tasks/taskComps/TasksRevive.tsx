@@ -3,7 +3,6 @@
 
 import React from "react"
 import { useTransition } from "react"
-import { useRouter } from "next/navigation"
 import { DateTime } from "luxon"
 import { reviveTasks } from "@/app/actions"
 
@@ -14,7 +13,6 @@ type Props = {
 
 export default function TasksRevive({ className, expiredTaskIds }: Props) {
   const [isPending, startTransition] = useTransition()
-  const router = useRouter()
 
   const today = DateTime.now().toISO() ?? ""
 
@@ -22,7 +20,6 @@ export default function TasksRevive({ className, expiredTaskIds }: Props) {
     if (expiredTaskIds.length === 0) return
 
     await reviveTasks({ taskIds: expiredTaskIds, dueDate: today })
-    router.refresh()
   }
 
   return (

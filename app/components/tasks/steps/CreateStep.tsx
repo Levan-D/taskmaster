@@ -2,7 +2,6 @@
 "use client"
 
 import { createStep } from "../../../actions"
-import { useRouter } from "next/navigation"
 import { useRef } from "react"
 import Icon from "@mdi/react"
 import { mdiPlus } from "@mdi/js"
@@ -15,7 +14,6 @@ type Props = {
 }
 
 export default function CreateStep({ taskId, totalSteps, className }: Props) {
-  const router = useRouter()
   const formRef = useRef<HTMLFormElement>(null)
 
   const submitForm = (data: FormData) => {
@@ -25,7 +23,7 @@ export default function CreateStep({ taskId, totalSteps, className }: Props) {
       })
     }
     createStep({ data: data, taskId: taskId })
-    router.refresh()
+
     if (formRef.current) {
       formRef.current.reset()
     }
