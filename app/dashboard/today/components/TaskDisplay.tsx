@@ -45,7 +45,7 @@ export default function TaskDisplay({ tasks }: Props) {
 
         if (taskIndex !== -1) {
           oldTasks[taskIndex] = updatedTask
-        } else if (updatedTask.id === "000") {
+        } else if (updatedTask.id === "optimistic") {
           oldTasks.unshift(updatedTask)
         }
       })

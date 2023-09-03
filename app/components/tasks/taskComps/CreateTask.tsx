@@ -71,14 +71,14 @@ export default function CreateTask({ totalTasks, addOptimisticTask }: Props) {
       )
     }
     const newTask: Task = {
-      id: "000",
+      id: "optimistic",
       title: title,
       deleted: false,
       complete: false,
       creation_date: DateTime.now().toJSDate(),
       due_date: today,
       priority: priority,
-      user_id: "000",
+      user_id: "optimistic",
       steps: [],
     }
 

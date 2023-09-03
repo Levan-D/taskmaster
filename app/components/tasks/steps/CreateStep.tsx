@@ -38,7 +38,7 @@ export default function CreateStep({
     }
 
     const newStep: Step = {
-      id: "000",
+      id: "optimistic",
       title: title,
       deleted: false,
       complete: false,
