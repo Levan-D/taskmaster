@@ -21,9 +21,7 @@ type TaskProps = {
 function Task({ task, expired, addOptimisticTask }: TaskProps) {
   return (
     <div
-      className={`${
-        task.deleted && "hidden"
-      }   z-10 mainContainer  sm:hover:border-neutral-600 transition-colors duration-300`}
+      className={`   z-10 mainContainer  sm:hover:border-neutral-600 transition-colors duration-300`}
     >
       <div className="flex items-center">
         <ToggleTaskComplete addOptimisticTask={addOptimisticTask} task={task} />

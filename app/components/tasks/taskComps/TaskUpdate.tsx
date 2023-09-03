@@ -1,7 +1,5 @@
 /** @format */
 
-
-
 import { useState, useRef, useEffect } from "react"
 import Icon from "@mdi/react"
 import { mdiNoteEditOutline, mdiTimerAlertOutline } from "@mdi/js"

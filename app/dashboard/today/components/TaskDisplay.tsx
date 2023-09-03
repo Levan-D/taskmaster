@@ -14,6 +14,26 @@ type Props = {
   tasks: Task[]
 }
 
+const filterExpiredTasks = (tasks: Task[], today: DateTime) =>
+  tasks.filter((task: Task) => {
+    if (!task.due_date || task.complete) return false
+    const taskDueDate = DateTime.fromISO(task.due_date).startOf("day")
+    return taskDueDate.hasSame(today, "day") === false && taskDueDate < today
+  })
+
+const filterTodayTasks = (tasks: Task[], today: DateTime) =>
+  tasks
+    .filter((task: Task) => {
+      if (task.deleted) return false
+      if (!task.due_date) return true
+      const taskDueDate = DateTime.fromISO(task.due_date).startOf("day")
+      return taskDueDate.hasSame(today, "day")
+    })
+    .map((task: Task) => ({
+      ...task,
+      steps: task.steps.filter((step: Step) => !step.deleted),
+    }))
+
 export default function TaskDisplay({ tasks }: Props) {
   const [optimisticTasks, addOptimisticTask] = useOptimistic(
     tasks,
@@ -31,41 +51,19 @@ export default function TaskDisplay({ tasks }: Props) {
       return oldTasks
     }
   )
-
   const today = DateTime.now().startOf("day")
 
-  const expiredTasks =
-    optimisticTasks.filter((task: Task) => {
-      if (!task.due_date || task.complete) return false
+  const expiredTasks = filterExpiredTasks(optimisticTasks, today)
+  const totalExpiredTasks = expiredTasks.filter((task: Task) => !task.deleted).length
 
-      const taskDueDate = DateTime.fromISO(task.due_date).startOf("day")
-      return taskDueDate.hasSame(today, "day") === false && taskDueDate < today
-    }) ?? []
+  const todayTasks = filterTodayTasks(optimisticTasks, today)
+  const totalTodaysTasks = todayTasks.length
+  const todaysTasksCompleted = todayTasks.filter((task: Task) => task.complete).length
 
-  const totalExpiredTasks = expiredTasks.filter((task: Task) => !task.deleted).length ?? 0
+  const todaysTasksRatio = `${totalTodaysTasks}/${todaysTasksCompleted}`
 
-  const todayTasksUnfiltered =
-    optimisticTasks.filter((task: Task) => {
-      if (task.deleted) return false
-
-      if (!task.due_date) return true
-
-      const taskDueDate = DateTime.fromISO(task.due_date).startOf("day")
-
-      return taskDueDate.hasSame(today, "day")
-    }) ?? []
-
-  const todayTasks = todayTasksUnfiltered.map((task: Task) => {
-    const filteredSteps = task.steps.filter((step: Step) => !step.deleted)
-    return { ...task, steps: filteredSteps }
-  })
-
-  const totalTodaysTasks = todayTasks.filter((task: Task) => !task.deleted).length
-  const todaysTasksCompleted =
-    todayTasks.filter((task: Task) => task.complete).length ?? 0
   const allATodaysTasksCompleted =
     totalTodaysTasks === todaysTasksCompleted && totalTodaysTasks > 0
-  const todaysTasksRatio = `${totalTodaysTasks}/${todaysTasksCompleted}`
 
   return (
     <div>
