@@ -1,5 +1,5 @@
 /** @format */
-"use client"
+
 
 import React from "react"
 import { useTransition } from "react"
@@ -20,10 +20,10 @@ export default function TasksRevive({ className, tasks, addOptimisticTask }: Pro
   const handleReviveTasks = async () => {
     if (expiredTaskIds.length === 0) return
 
-    const recycledTasks = tasks.map(task => {
+    const updatedTasks = tasks.map(task => {
       return { ...task, due_date: today }
     })
-    addOptimisticTask(recycledTasks)
+    addOptimisticTask(updatedTasks)
 
     await reviveTasks({ taskIds: expiredTaskIds, dueDate: today })
   }

@@ -66,7 +66,12 @@ export default function Steps({ task, addOptimisticTask }: Props) {
           {task.steps.length > 0 && (
             <div className="innerContainer m-2 ">
               {task.steps.map(step => (
-                <Step addOptimisticTask={addOptimisticTask} key={step.id} task={task} step={step} />
+                <Step
+                  addOptimisticTask={addOptimisticTask}
+                  key={step.id}
+                  task={task}
+                  step={step}
+                />
               ))}
             </div>
           )}

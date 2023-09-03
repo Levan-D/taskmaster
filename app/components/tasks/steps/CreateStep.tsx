@@ -1,5 +1,5 @@
 /** @format */
-"use client"
+
 
 import { createStep } from "../../../actions"
 import { useRef } from "react"

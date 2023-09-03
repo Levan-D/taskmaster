@@ -1,5 +1,4 @@
 /** @format */
-"use client"
 
 import Icon from "@mdi/react"
 import { mdiDotsVertical, mdiTrashCanOutline, mdiHeartOutline } from "@mdi/js"

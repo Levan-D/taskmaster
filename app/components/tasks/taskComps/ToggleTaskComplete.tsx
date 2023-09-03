@@ -1,6 +1,6 @@
 /** @format */
 
-"use client"
+
 import { toggleTaskComplete } from "@/app/actions"
 import { useTransition } from "react"
 import Icon from "@mdi/react"

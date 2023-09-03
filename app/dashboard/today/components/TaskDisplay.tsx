@@ -27,7 +27,7 @@ export default function TaskDisplay({ tasks }: Props) {
           oldTasks[taskIndex] = updatedTask
         }
       })
-      console.log(tasks)
+
       return oldTasks
     }
   )
@@ -44,15 +44,23 @@ export default function TaskDisplay({ tasks }: Props) {
 
   const totalExpiredTasks = expiredTasks.filter((task: Task) => !task.deleted).length ?? 0
 
-  const todayTasks =
+  const todayTasksUnfiltered =
     optimisticTasks.filter((task: Task) => {
+      if (task.deleted) return false
+
       if (!task.due_date) return true
 
       const taskDueDate = DateTime.fromISO(task.due_date).startOf("day")
+
       return taskDueDate.hasSame(today, "day")
     }) ?? []
 
-  const totalTodaysTasks = todayTasks.length
+  const todayTasks = todayTasksUnfiltered.map((task: Task) => {
+    const filteredSteps = task.steps.filter((step: Step) => !step.deleted)
+    return { ...task, steps: filteredSteps }
+  })
+
+  const totalTodaysTasks = todayTasks.filter((task: Task) => !task.deleted).length
   const todaysTasksCompleted =
     todayTasks.filter((task: Task) => task.complete).length ?? 0
   const allATodaysTasksCompleted =

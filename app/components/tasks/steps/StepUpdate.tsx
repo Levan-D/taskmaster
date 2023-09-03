@@ -1,7 +1,5 @@
 /** @format */
 
-"use client"
-
 import { useState, useRef, useEffect } from "react"
 import Icon from "@mdi/react"
 import { mdiNoteEditOutline } from "@mdi/js"
@@ -15,6 +13,21 @@ type Props = {
   className?: string
 }
 
+const updateStepInTask = (task: Task, updatedStep: Step): Task => {
+  const stepIndex = task.steps.findIndex(step => step.id === updatedStep.id)
+
+  if (stepIndex !== -1) {
+    const newSteps = [...task.steps]
+    newSteps[stepIndex] = updatedStep
+
+    const updatedTask = { ...task, steps: newSteps }
+
+    return updatedTask
+  }
+
+  return task
+}
+
 export default function StepUpdate({
   task,
   step,
@@ -22,13 +35,13 @@ export default function StepUpdate({
   className = "",
 }: Props) {
   const [edit, setEdit] = useState(false)
-  const [inputValue, setInputValue] = useState(title)
+  const [inputValue, setInputValue] = useState(step.title)
   const inputRef = useRef<HTMLInputElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [isPending, startTransition] = useTransition()
 
   const toggleEdit = () => {
-    setInputValue(title)
+    setInputValue(step.title)
     setEdit(x => !x)
   }
 
@@ -48,13 +61,16 @@ export default function StepUpdate({
     e.preventDefault()
 
     const handleUpdateStep = async () => {
-      await updateStep({ title: inputValue, stepId: stepId })
+      await updateStep({ title: inputValue, stepId: step.id })
     }
 
     toggleEdit()
 
-    if (inputValue !== title) {
-      addOptimisticTitle(inputValue)
+    if (inputValue !== step.title) {
+      const updatedStep = { ...step, title: inputValue }
+      const updatedTasks = updateStepInTask(task, updatedStep)
+
+      addOptimisticTask([updatedTasks])
       startTransition(handleUpdateStep)
     }
   }
@@ -83,9 +99,9 @@ export default function StepUpdate({
     <button
       disabled={isPending}
       onDoubleClick={toggleEdit}
-      className={`${complete && "text-neutral-300 "}  block text-left w-full mx-2 `}
+      className={`${step.complete && "text-neutral-300 "}  block text-left w-full mx-2 `}
     >
-      {optimisticTitle}
+      {step.title}
     </button>
   )
 }

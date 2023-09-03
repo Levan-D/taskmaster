@@ -1,6 +1,5 @@
 /** @format */
 
-"use client"
 import { recycleStep } from "../../../actions"
 import { useTransition } from "react"
 import Icon from "@mdi/react"
@@ -11,12 +10,32 @@ type Props = {
   step: Step
   addOptimisticTask: (action: Task[]) => void
 }
+
+const updateStepInTask = (task: Task, updatedStep: Step): Task => {
+  const stepIndex = task.steps.findIndex(step => step.id === updatedStep.id)
+
+  if (stepIndex !== -1) {
+    const newSteps = [...task.steps]
+    newSteps[stepIndex] = updatedStep
+
+    const updatedTask = { ...task, steps: newSteps }
+
+    return updatedTask
+  }
+
+  return task
+}
+
 export default function RecycleStep({ task, step, addOptimisticTask }: Props) {
   const [isPending, startTransition] = useTransition()
 
   const handleRecycleStep = async () => {
-    addOptimisticDelete(true)
-    await recycleStep({ stepId: stepId })
+    const updatedStep = { ...step, deleted: true }
+    const updatedTasks = updateStepInTask(task, updatedStep)
+
+    addOptimisticTask([updatedTasks])
+
+    await recycleStep({ stepId: step.id })
   }
 
   return (

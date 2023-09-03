@@ -22,41 +22,41 @@ enum Recurrence {
   WEEKLY
 }
 
-model User {
-  id       String  @id @default(uuid())
+model Users {
+  id      String   @id @default(uuid())
   // login id is from kinde auth. this links login with database
-  login_id String  @unique
-  email    String  @unique
-  tasks    Task[]
-  habits   Habit[]
-
-  @@index([login_id])
-}
-
-model Habit {
-  id            String      @id @default(uuid())
-  title         String
-  complete      Boolean     @default(false)
-  creation_date DateTime    @default(now())
-  recurrence    Recurrence
-  user          User        @relation(fields: [user_id], references: [login_id])
-  user_id       String
-  habit_steps   HabitStep[]
+  user_id String   @unique
+  email   String   @unique
+  tasks   Tasks[]
+  habits  Habits[]
 
   @@index([user_id])
 }
 
-model HabitStep {
+model Habits {
+  id            String       @id @default(uuid())
+  title         String
+  complete      Boolean      @default(false)
+  creation_date DateTime     @default(now())
+  recurrence    Recurrence
+  user          Users        @relation(fields: [user_id], references: [user_id])
+  user_id       String
+  habit_steps   HabitSteps[]
+
+  @@index([user_id])
+}
+
+model HabitSteps {
   id       String  @id @default(uuid())
   title    String
   complete Boolean @default(false)
-  habit    Habit   @relation(fields: [habit_id], references: [id])
+  habit    Habits  @relation(fields: [habit_id], references: [id])
   habit_id String
 
   @@index([habit_id])
 }
 
-model Task {
+model Tasks {
   id            String       @id @default(uuid())
   title         String
   deleted       Boolean      @default(false)
@@ -64,20 +64,20 @@ model Task {
   creation_date DateTime     @default(now())
   due_date      String?
   priority      TaskPriority @default(LOW)
-  user          User         @relation(fields: [user_id], references: [login_id])
+  user          Users        @relation(fields: [user_id], references: [user_id])
   user_id       String
-  steps         Step[]
+  steps         Steps[]
 
   @@index([user_id])
 }
 
-model Step {
+model Steps {
   id            String   @id @default(uuid())
   title         String
   deleted       Boolean  @default(false)
   complete      Boolean  @default(false)
   creation_date DateTime @default(now())
-  task          Task     @relation(fields: [taskId], references: [id])
+  task          Tasks    @relation(fields: [taskId], references: [id])
   taskId        String
 
   @@index([taskId])

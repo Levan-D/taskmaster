@@ -1,5 +1,5 @@
 /** @format */
-"use client"
+
 
 import React from "react"
 import { useTransition } from "react"
@@ -24,11 +24,11 @@ export default function TasksRecycle({
   const handleRecycleTasks = async () => {
     if (expiredTaskIds.length === 0) return
 
-    const recycledTasks = tasks.map(task => {
+    const updatedTasks = tasks.map(task => {
       return { ...task, deleted: true }
     })
 
-    addOptimisticTask(recycledTasks)
+    addOptimisticTask(updatedTasks)
 
     await recycleTasks({ taskIds: expiredTaskIds })
   }
