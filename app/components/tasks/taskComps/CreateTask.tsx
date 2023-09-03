@@ -2,19 +2,20 @@
 
 import { useState } from "react"
 import { createTask } from "../../../actions"
-import { useRef } from "react"
 import Icon from "@mdi/react"
 import { mdiPlus, mdiTimerAlertOutline, mdiCalendarClockOutline } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
 import Tooltip from "../../Tooltip"
 import { toast } from "react-toastify"
 import { DateTime } from "luxon"
+import { useTransition } from "react"
 
-type Props = { totalTasks: number }
+type Props = { totalTasks: number; addOptimisticTask: (action: Task[]) => void }
 
-export default function CreateTask({ totalTasks }: Props) {
-  const formRef = useRef<HTMLFormElement>(null)
+export default function CreateTask({ totalTasks, addOptimisticTask }: Props) {
   const [priority, setPriority] = useState<TaskPriority>("LOW")
+  const [isPending, startTransition] = useTransition()
+  const [title, setTitle] = useState("")
 
   const today = DateTime.now().toISO() ?? ""
 
@@ -52,7 +53,13 @@ export default function CreateTask({ totalTasks }: Props) {
     },
   ]
 
-  const submitForm = (data: FormData) => {
+  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    const handleCreateTask = async () => {
+      await createTask({ title: title, priority: priority, today: today })
+    }
+
     if (totalTasks > 19) {
       return toast.warning(
         <div className="text-neutral-950">
@@ -63,22 +70,34 @@ export default function CreateTask({ totalTasks }: Props) {
         }
       )
     }
-    createTask({ data: data, priority: priority, today: today })
-
-    setPriority("LOW")
-    if (formRef.current) {
-      formRef.current.reset()
+    const newTask: Task = {
+      id: "000",
+      title: title,
+      deleted: false,
+      complete: false,
+      creation_date: DateTime.now().toJSDate(),
+      due_date: today,
+      priority: priority,
+      user_id: "000",
+      steps: [],
     }
+
+    addOptimisticTask([newTask])
+    startTransition(handleCreateTask)
+    setTitle("")
+    setPriority("LOW")
   }
 
   return (
     <div className="   p-2 mainContainer w-full sm:hover:border-neutral-600 transition-colors duration-300">
-      <form ref={formRef} action={submitForm}>
+      <form onSubmit={submitForm}>
         <div className="flex gap-2">
           <input
             placeholder="Create a task"
             className="input p-4 text-lg grow"
             name="title"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
             type="text"
             required
           />

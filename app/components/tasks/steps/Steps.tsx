@@ -61,7 +61,12 @@ export default function Steps({ task, addOptimisticTask }: Props) {
             )}
           </div>
 
-          <CreateStep className="my-2" totalSteps={totalSteps} taskId={task.id} />
+          <CreateStep
+            task={task}
+            addOptimisticTask={addOptimisticTask}
+            className="my-2"
+            totalSteps={totalSteps}
+          />
 
           {task.steps.length > 0 && (
             <div className="innerContainer m-2 ">

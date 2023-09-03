@@ -1,42 +1,68 @@
 /** @format */
 
-
 import { createStep } from "../../../actions"
-import { useRef } from "react"
+import { useState } from "react"
 import Icon from "@mdi/react"
 import { mdiPlus } from "@mdi/js"
 import { toast } from "react-toastify"
+import { useTransition } from "react"
+import { DateTime } from "luxon"
 
 type Props = {
-  taskId: string
+  task: Task
   totalSteps: number
   className?: string
+  addOptimisticTask: (action: Task[]) => void
 }
 
-export default function CreateStep({ taskId, totalSteps, className }: Props) {
-  const formRef = useRef<HTMLFormElement>(null)
+export default function CreateStep({
+  task,
+  totalSteps,
+  className,
+  addOptimisticTask,
+}: Props) {
+  const [title, setTitle] = useState("")
+  const [isPending, startTransition] = useTransition()
 
-  const submitForm = (data: FormData) => {
+  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
     if (totalSteps > 9) {
       return toast.warning(<div className="text-neutral-950">Step limit reached</div>, {
         toastId: "stepLimit",
       })
     }
-    createStep({ data: data, taskId: taskId })
 
-    if (formRef.current) {
-      formRef.current.reset()
+    const handleCreateStep = async () => {
+      await createStep({ title: title, taskId: task.id })
     }
+
+    const newStep: Step = {
+      id: "000",
+      title: title,
+      deleted: false,
+      complete: false,
+      creation_date: DateTime.now().toJSDate(),
+      taskId: task.id,
+    }
+    const newSteps = [newStep, ...task.steps]
+    const updatedTasks = { ...task, steps: newSteps }
+
+    addOptimisticTask([updatedTasks])
+    startTransition(handleCreateStep)
+    setTitle("")
   }
 
   return (
     <div className={`${className}  px-2 pt-2  w-full`}>
-      <form ref={formRef} action={submitForm}>
+      <form onSubmit={submitForm}>
         <div className="flex gap-2">
           <input
             placeholder="Add a step"
             className="input grow placeholder-neutral-300"
             name="title"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
             type="text"
             required
           />

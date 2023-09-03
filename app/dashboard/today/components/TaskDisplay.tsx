@@ -45,6 +45,8 @@ export default function TaskDisplay({ tasks }: Props) {
 
         if (taskIndex !== -1) {
           oldTasks[taskIndex] = updatedTask
+        } else if (updatedTask.id === "000") {
+          oldTasks.unshift(updatedTask)
         }
       })
 
@@ -67,7 +69,7 @@ export default function TaskDisplay({ tasks }: Props) {
 
   return (
     <div>
-      <CreateTask totalTasks={totalTodaysTasks} />
+      <CreateTask addOptimisticTask={addOptimisticTask} totalTasks={totalTodaysTasks} />
 
       {totalExpiredTasks > 0 && (
         <Accordion className="my-8" title={`Expired (${totalExpiredTasks})`}>

@@ -48,17 +48,15 @@ export const checkUserExists = async () => {
 }
 
 export const createTask = async ({
-  data,
+  title,
   priority,
   today,
 }: {
-  data: FormData
+  title: string
   priority: TaskPriority
   today: string
 }): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
-
-  const title = data.get("title")?.toString() || ""
 
   try {
     if (userData && userData.id) {
@@ -262,14 +260,12 @@ export const setPriority = async ({
 }
 
 export const createStep = async ({
-  data,
+  title,
   taskId,
 }: {
-  data: FormData
+  title: string
   taskId: string
 }): Promise<ApiResponse<void>> => {
-  const title = data.get("title")?.toString() || ""
-
   try {
     await prisma.steps.create({
       data: {
