@@ -6,9 +6,10 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import { revalidatePath } from "next/cache"
 import { DateTime } from "luxon"
 
-const today = DateTime.now().startOf("day") || undefined
-const yesterday = today.minus({ days: 1 }).toISO() || undefined
-const tomorrow = today.plus({ days: 1 }).toISO() || undefined
+const today = DateTime.now().startOf("day")
+const yesterday = today.minus({ days: 1 }).toISO() || ""
+const tomorrow = today.plus({ days: 1 }).toISO() || ""
+const todayISO = today.toISO() || ""
 
 const checkAuth = async () => {
   const { getUser, isAuthenticated } = getKindeServerSession()
@@ -149,7 +150,14 @@ export const getTodaysTasks = async ({
             gte: yesterday,
             lt: tomorrow,
           },
+          OR: [
+            {
+              AND: [{ due_date: { lt: todayISO } }, { complete: false }],
+            },
+            { due_date: { gte: todayISO } },
+          ],
         },
+
         include: {
           steps: {
             where: { deleted: deleted },

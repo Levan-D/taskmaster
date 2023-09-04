@@ -81,7 +81,11 @@ export default function TaskDisplay({ tasks }: Props) {
     totalTodaysTasks === todaysTasksCompleted && totalTodaysTasks > 0
 
   return (
-    <div>
+    <div
+      className={`${
+        optimisticTasks.length === 0 && "min-h-screen flex flex-col justify-center "
+      } py-4`}
+    >
       <CreateTask addOptimisticTask={addOptimisticTask} totalTasks={totalTodaysTasks} />
 
       {totalExpiredTasks > 0 && (
@@ -108,7 +112,6 @@ export default function TaskDisplay({ tasks }: Props) {
           </>
         </Accordion>
       )}
-
       {totalTodaysTasks > 0 && totalExpiredTasks > 0 && (
         <Accordion className="my-8" title={`Pending (${todaysTasksNotCompleted})`}>
           <Tasks
@@ -118,7 +121,6 @@ export default function TaskDisplay({ tasks }: Props) {
           />
         </Accordion>
       )}
-
       {totalTodaysTasks > 0 && totalExpiredTasks === 0 && (
         <>
           <div className="flex items-center select-none mt-10 mb-12">
@@ -147,13 +149,8 @@ export default function TaskDisplay({ tasks }: Props) {
           />
         </>
       )}
-
       {todaysTasksCompleted > 0 && (
-        <Accordion
-          isOpen={false}
-          className="my-8"
-          title={`Finished (${todaysTasksCompleted})`}
-        >
+        <Accordion className="my-8" title={`Finished (${todaysTasksCompleted})`}>
           <>
             <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4">
               <p className="basis-3/4 text-neutral-200">Recycle completed tasks.</p>
