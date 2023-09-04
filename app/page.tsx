@@ -1,15 +1,8 @@
 /** @format */
 
-import {
-  RegisterLink,
-  LoginLink,
-  getKindeServerSession,
-} from "@kinde-oss/kinde-auth-nextjs/server"
+import { RegisterLink, LoginLink } from "@kinde-oss/kinde-auth-nextjs/server"
 
 export default function Home() {
-  const { isAuthenticated, getUser } = getKindeServerSession()
-  const user = getUser()
-
   return (
     <section className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="flex gap-4 items-center w-fit mx-auto">
