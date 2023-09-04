@@ -10,6 +10,7 @@ import { redirect } from "next/navigation"
 export default function Home() {
   const { getUser, isAuthenticated } = getKindeServerSession()
 
+  // redirecting to dashboard like this due to middleware bug on deployment 
   if (isAuthenticated()) redirect("/dashboard/today")
 
   return (

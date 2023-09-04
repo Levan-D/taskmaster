@@ -11,10 +11,16 @@ import { useTransition } from "react"
 type Props = {
   task: Task
   className?: string
+  expired: boolean
   addOptimisticTask: (action: Task[]) => void
 }
 
-export default function TaskUpdate({ task, className, addOptimisticTask }: Props) {
+export default function TaskUpdate({
+  task,
+  className,
+  addOptimisticTask,
+  expired,
+}: Props) {
   const [edit, setEdit] = useState(false)
   const [inputValue, setInputValue] = useState(task.title)
   const inputRef = useRef<HTMLInputElement | null>(null)
@@ -106,7 +112,7 @@ export default function TaskUpdate({ task, className, addOptimisticTask }: Props
   }
 
   return edit ? (
-    <div ref={containerRef} onBlur={handleBlur} className={`${className} mx-2`}>
+    <div ref={containerRef} onBlur={handleBlur} className={`${className}  mx-2`}>
       <form onSubmit={submitForm}>
         <div className="flex gap-2">
           <input
@@ -119,10 +125,13 @@ export default function TaskUpdate({ task, className, addOptimisticTask }: Props
             onChange={e => setInputValue(e.target.value)}
             required
           />
-          <div>
-            <DropdownMenu button={priorityButton} items={priorityItems} />
-          </div>
-          <button disabled={isPending} className="btnSecondary px-2.5 shrink-0 ">
+
+          <DropdownMenu  button={priorityButton} items={priorityItems} />
+
+          <button
+            disabled={isPending || expired}
+            className="btnSecondary px-2.5 shrink-0 "
+          >
             <Icon path={mdiNoteEditOutline} size={0.8} />
           </button>
         </div>
@@ -130,7 +139,7 @@ export default function TaskUpdate({ task, className, addOptimisticTask }: Props
     </div>
   ) : (
     <button
-      disabled={isPending}
+      disabled={isPending || expired}
       onDoubleClick={toggleEdit}
       className="block text-left text-lg  w-full mx-2   "
     >

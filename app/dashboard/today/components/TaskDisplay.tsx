@@ -14,12 +14,21 @@ type Props = {
   tasks: Task[]
 }
 
-const filterExpiredTasks = (tasks: Task[], today: DateTime) =>
-  tasks.filter((task: Task) => {
-    if (!task.due_date || task.complete) return false
-    const taskDueDate = DateTime.fromISO(task.due_date).startOf("day")
-    return taskDueDate.hasSame(today, "day") === false && taskDueDate < today
-  })
+const filterExpiredTasks = (tasks: Task[], today: DateTime) => {
+  const yesterday = today.minus({ days: 1 }).startOf("day")
+
+  return tasks
+    .filter((task: Task) => {
+      if (!task.due_date || task.complete) return false
+
+      const taskDueDate = DateTime.fromISO(task.due_date).startOf("day")
+      return taskDueDate.hasSame(yesterday, "day")
+    })
+    .map((task: Task) => ({
+      ...task,
+      steps: task.steps.filter((step: Step) => !step.deleted),
+    }))
+}
 
 const filterTodayTasks = (tasks: Task[], today: DateTime) =>
   tasks
@@ -59,8 +68,12 @@ export default function TaskDisplay({ tasks }: Props) {
   const totalExpiredTasks = expiredTasks.filter((task: Task) => !task.deleted).length
 
   const todayTasks = filterTodayTasks(optimisticTasks, today)
+  const todaysUnfinished = todayTasks.filter((task: Task) => !task.complete)
+  const todaysFinished = todayTasks.filter((task: Task) => task.complete)
+
   const totalTodaysTasks = todayTasks.length
-  const todaysTasksCompleted = todayTasks.filter((task: Task) => task.complete).length
+  const todaysTasksCompleted = todaysFinished.length
+  const todaysTasksNotCompleted = todaysUnfinished.length
 
   const todaysTasksRatio = `${totalTodaysTasks}/${todaysTasksCompleted}`
 
@@ -76,8 +89,8 @@ export default function TaskDisplay({ tasks }: Props) {
           <>
             <div className="mainContainer bg-neutral-700 my-4 flex items-center   py-2 px-4">
               <p className="basis-3/4 text-neutral-200">
-                Expired tasks will auto recycle in 7 days. Either revive, recycle, or
-                complete them.
+                Yesterday&lsquo;s expired tasks will be moved to missed section in a day
+                and will be recycled in a week.
               </p>
               <TasksRevive
                 addOptimisticTask={addOptimisticTask}
@@ -97,11 +110,11 @@ export default function TaskDisplay({ tasks }: Props) {
       )}
 
       {totalTodaysTasks > 0 && totalExpiredTasks > 0 && (
-        <Accordion className="my-8" title={`Today (${todaysTasksRatio})`}>
+        <Accordion className="my-8" title={`Pending (${todaysTasksNotCompleted})`}>
           <Tasks
             addOptimisticTask={addOptimisticTask}
             className={"my-8"}
-            tasks={todayTasks}
+            tasks={todaysUnfinished}
           />
         </Accordion>
       )}
@@ -130,9 +143,35 @@ export default function TaskDisplay({ tasks }: Props) {
           <Tasks
             addOptimisticTask={addOptimisticTask}
             className={"my-8"}
-            tasks={todayTasks}
+            tasks={todaysUnfinished}
           />
         </>
+      )}
+
+      {todaysTasksCompleted > 0 && (
+        <Accordion
+          isOpen={false}
+          className="my-8"
+          title={`Finished (${todaysTasksCompleted})`}
+        >
+          <>
+            <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4">
+              <p className="basis-3/4 text-neutral-200">Recycle completed tasks.</p>
+
+              <TasksRecycle
+                addOptimisticTask={addOptimisticTask}
+                tasks={todaysFinished}
+                className="shrink-0"
+              />
+            </div>
+
+            <Tasks
+              addOptimisticTask={addOptimisticTask}
+              className={"my-8"}
+              tasks={todaysFinished}
+            />
+          </>
+        </Accordion>
       )}
     </div>
   )

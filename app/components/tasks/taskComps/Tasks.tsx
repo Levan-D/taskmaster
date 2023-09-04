@@ -21,7 +21,7 @@ type TaskProps = {
 function Task({ task, expired, addOptimisticTask }: TaskProps) {
   return (
     <div
-      className={`   z-10 mainContainer  sm:hover:border-neutral-600 transition-colors duration-300`}
+      className={`mainContainer  sm:hover:border-neutral-600 transition-colors duration-300`}
     >
       <div className="flex items-center">
         <ToggleTaskComplete addOptimisticTask={addOptimisticTask} task={task} />
@@ -29,6 +29,7 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
         <TaskUpdate
           addOptimisticTask={addOptimisticTask}
           task={task}
+          expired={expired}
           className="grow truncate line-clamp-1"
         />
 
@@ -38,7 +39,7 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
           expired={expired}
         />
       </div>
-      <Steps addOptimisticTask={addOptimisticTask} task={task} />
+      <Steps expired={expired} addOptimisticTask={addOptimisticTask} task={task} />
     </div>
   )
 }

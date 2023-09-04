@@ -9,6 +9,8 @@ import { useTransition } from "react"
 type Props = {
   task: Task
   step: Step
+  expired: boolean
+
   addOptimisticTask: (action: Task[]) => void
   className?: string
 }
@@ -32,6 +34,7 @@ export default function StepUpdate({
   task,
   step,
   addOptimisticTask,
+  expired,
   className = "",
 }: Props) {
   const [edit, setEdit] = useState(false)
@@ -89,7 +92,7 @@ export default function StepUpdate({
             onChange={e => setInputValue(e.target.value)}
             required
           />
-          <button disabled={isPending} className="btnSecondary px-2.5 ">
+          <button disabled={isPending || expired} className="btnSecondary px-2.5 ">
             <Icon path={mdiNoteEditOutline} size={0.8} />
           </button>
         </div>
@@ -97,9 +100,9 @@ export default function StepUpdate({
     </div>
   ) : (
     <button
-      disabled={isPending}
+      disabled={isPending || expired}
       onDoubleClick={toggleEdit}
-      className={`${step.complete && "text-neutral-300 "}  block text-left w-full mx-2 `}
+      className={`${step.complete && "text-neutral-300 "}   block text-left w-full mx-2 `}
     >
       {step.title}
     </button>

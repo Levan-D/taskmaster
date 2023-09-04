@@ -4,6 +4,11 @@
 import { prisma } from "./db"
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import { revalidatePath } from "next/cache"
+import { DateTime } from "luxon"
+
+const today = DateTime.now().startOf("day") || undefined
+const yesterday = today.minus({ days: 1 }).toISO() || undefined
+const tomorrow = today.plus({ days: 1 }).toISO() || undefined
 
 const checkAuth = async () => {
   const { getUser, isAuthenticated } = getKindeServerSession()
@@ -127,7 +132,7 @@ export const reviveTask = async ({
   }
 }
 
-export const getTasks = async ({
+export const getTodaysTasks = async ({
   deleted,
 }: {
   deleted: boolean
@@ -137,7 +142,14 @@ export const getTasks = async ({
   try {
     if (userData && userData.id) {
       const tasks = await prisma.tasks.findMany({
-        where: { user_id: userData.id, deleted: deleted },
+        where: {
+          user_id: userData.id,
+          deleted: deleted,
+          due_date: {
+            gte: yesterday,
+            lt: tomorrow,
+          },
+        },
         include: {
           steps: {
             where: { deleted: deleted },

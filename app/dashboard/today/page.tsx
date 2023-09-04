@@ -1,10 +1,10 @@
 /** @format */
 
-import { getTasks } from "../../actions"
+import { getTodaysTasks } from "../../actions"
 import TaskDisplay from "./components/TaskDisplay"
 
 export default async function Today() {
-  const tasks = await getTasks({ deleted: false })
+  const tasks = await getTodaysTasks({ deleted: false })
 
   if (!tasks.success) return <span></span>
 

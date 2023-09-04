@@ -33,6 +33,7 @@ export default function RecycleStep({ task, step, addOptimisticTask }: Props) {
     const updatedStep = { ...step, deleted: true }
     const updatedTasks = updateStepInTask(task, updatedStep)
 
+    console.log(`opta`)
     addOptimisticTask([updatedTasks])
 
     await recycleStep({ stepId: step.id })

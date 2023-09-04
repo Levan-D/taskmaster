@@ -9,10 +9,11 @@ import { DateTime } from "luxon"
 
 type Props = {
   task: Task
+  expired: boolean
   addOptimisticTask: (action: Task[]) => void
 }
 
-export default function Steps({ task, addOptimisticTask }: Props) {
+export default function Steps({ task, addOptimisticTask, expired }: Props) {
   const [open, setOpen] = useState(task.steps.length > 0 && !task.complete ? true : false)
 
   const totalSteps = task.steps.length
@@ -61,18 +62,21 @@ export default function Steps({ task, addOptimisticTask }: Props) {
             )}
           </div>
 
-          <CreateStep
-            task={task}
-            addOptimisticTask={addOptimisticTask}
-            className="my-2"
-            totalSteps={totalSteps}
-          />
+          {!expired && (
+            <CreateStep
+              task={task}
+              addOptimisticTask={addOptimisticTask}
+              className="my-2"
+              totalSteps={totalSteps}
+            />
+          )}
 
           {task.steps.length > 0 && (
             <div className="innerContainer m-2 ">
               {task.steps.map(step => (
                 <Step
                   addOptimisticTask={addOptimisticTask}
+                  expired={expired}
                   key={step.id}
                   task={task}
                   step={step}
@@ -83,19 +87,25 @@ export default function Steps({ task, addOptimisticTask }: Props) {
         </div>
       </div>
       <button
+        disabled={expired && task.steps.length === 0}
         onClick={() => setOpen(x => !x)}
-        className={`w-full sm:hover:bg-neutral-500 px-2 
+        className={`w-full ${
+          (!expired || (expired && task.steps.length > 0)) && "sm:hover:bg-neutral-500"
+        } px-2 
     transition-color flex justify-between items-center duration-300 rounded-b-lg  mb-0`}
       >
         <div className="basis-1/3"></div>
-        <Icon
-          className={` ${
-            open && "rotate-180 "
-          } transition-transform basis-1/3 duration-300 mx-auto `}
-          path={mdiChevronDown}
-          size={1}
-        />
-        <div className="basis-1/3 text-xs text-neutral-300 text-end">
+        {(!expired || (expired && task.steps.length > 0)) && (
+          <Icon
+            className={` ${
+              open && "rotate-180 "
+            } transition-transform basis-1/3 duration-300 mx-auto `}
+            path={mdiChevronDown}
+            size={1}
+          />
+        )}
+
+        <div className="basis-1/3  py-1 text-xs text-neutral-300 text-end">
           {typeof task.due_date === "string" && formatDueDate(task.due_date)}
         </div>
       </button>

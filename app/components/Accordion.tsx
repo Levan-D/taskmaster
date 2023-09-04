@@ -9,10 +9,11 @@ type Props = {
   children: JSX.Element
   title: string
   className?: string
+  isOpen?: boolean
 }
 
-export default function Accordion({ children, title, className }: Props) {
-  const [open, setOpen] = useState(true)
+export default function Accordion({ children, title, className, isOpen = true }: Props) {
+  const [open, setOpen] = useState(isOpen)
 
   const toggleOpen = () => {
     setOpen(x => !x)

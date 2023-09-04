@@ -69,6 +69,7 @@ model Tasks {
   steps         Steps[]
 
   @@index([user_id])
+  @@index([due_date])
 }
 
 model Steps {
