@@ -74,6 +74,8 @@ export default function TaskDisplay({ tasks }: Props) {
     }
   )
 
+const optimisticTasksLength = optimisticTasks.filter((task: Task) => !task.deleted).length
+
   const expiredTasks = filterExpiredTasks(optimisticTasks, today)
   const totalExpiredTasks = expiredTasks.filter((task: Task) => !task.deleted).length
 
@@ -93,9 +95,9 @@ export default function TaskDisplay({ tasks }: Props) {
   return (
     <div className={` py-4 `}>
       <div
-        className={` ${optimisticTasks.length === 0 && "pt-[20vh]"} mt-0 duration-500 `}
+        className={` ${optimisticTasksLength === 0 && "pt-[20vh]"} mt-0 duration-500 `}
       >
-        {optimisticTasks.length === 0 &&
+        {optimisticTasksLength === 0 &&
           (lastOpBoolean ? (
             <div className={`mb-28 text-center`}>
               <h2 className="text-2xl font-semibold mb-2">Congratulations!</h2>
