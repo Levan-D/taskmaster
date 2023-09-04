@@ -93,7 +93,7 @@ export default function TaskDisplay({ tasks }: Props) {
   return (
     <div className={` py-4 `}>
       <div
-        className={` ${optimisticTasks.length === 0 && "pt-[26vh]"} mt-0 duration-500 `}
+        className={` ${optimisticTasks.length === 0 && "pt-[20vh]"} mt-0 duration-500 `}
       >
         {optimisticTasks.length === 0 &&
           (lastOpBoolean ? (
