@@ -44,9 +44,20 @@ const filterTodayTasks = (tasks: Task[], today: DateTime) =>
     }))
 
 export default function TaskDisplay({ tasks }: Props) {
+  const today = DateTime.now().startOf("day")
+
+  const lastOp = window ? localStorage.getItem("todaysLastOp") : ""
+  const lastOpConvertToDateTime = DateTime.fromISO(lastOp || "").startOf("day")
+  const lastOpBoolean = today.hasSame(lastOpConvertToDateTime, "day")
+
   const [optimisticTasks, addOptimisticTask] = useOptimistic(
     tasks,
     (state: Task[], updatedTasks: Task[]) => {
+      // set todays last operation
+      if (window) {
+        localStorage.setItem("todaysLastOp", today.toISO() || "")
+      }
+
       const oldTasks = [...state]
 
       updatedTasks.forEach(updatedTask => {
@@ -62,7 +73,6 @@ export default function TaskDisplay({ tasks }: Props) {
       return oldTasks
     }
   )
-  const today = DateTime.now().startOf("day")
 
   const expiredTasks = filterExpiredTasks(optimisticTasks, today)
   const totalExpiredTasks = expiredTasks.filter((task: Task) => !task.deleted).length
@@ -81,12 +91,28 @@ export default function TaskDisplay({ tasks }: Props) {
     totalTodaysTasks === todaysTasksCompleted && totalTodaysTasks > 0
 
   return (
-    <div
-      className={`${
-        optimisticTasks.length === 0 && "min-h-screen flex flex-col justify-center "
-      } py-4`}
-    >
-      <CreateTask addOptimisticTask={addOptimisticTask} totalTasks={totalTodaysTasks} />
+    <div className={` py-4 `}>
+      <div
+        className={` ${optimisticTasks.length === 0 && "pt-[26vh]"} mt-0 duration-500 `}
+      >
+        {optimisticTasks.length === 0 &&
+          (lastOpBoolean ? (
+            <div className={`mb-28 text-center`}>
+              <h2 className="text-2xl font-semibold mb-2">Congratulations!</h2>
+              <p className="text-neutral-300">You&apos;ve completed all your tasks</p>
+              <p className="text-neutral-300">Kick back and enjoy the rest of your day</p>
+            </div>
+          ) : (
+            <div className={`mb-28 text-center`}>
+              <h2 className="text-2xl font-semibold mb-2">Hello there</h2>
+              <p className="text-neutral-300">
+                Add tasks below and start your day organized!
+              </p>
+            </div>
+          ))}
+
+        <CreateTask addOptimisticTask={addOptimisticTask} totalTasks={totalTodaysTasks} />
+      </div>
 
       {totalExpiredTasks > 0 && (
         <Accordion className="my-8" title={`Expired (${totalExpiredTasks})`}>

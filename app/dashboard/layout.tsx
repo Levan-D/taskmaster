@@ -10,7 +10,7 @@ export default async function layout({ children }: { children: React.ReactNode }
   // await checkUserExists() <--  fix this
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex ">
       <Sidebar LogoutBtn={<LogoutBtn />} UserInfo={<UserInfo />} />
 
       <div className="grow mx-4">{children}</div>
