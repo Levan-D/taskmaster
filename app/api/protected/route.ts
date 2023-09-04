@@ -13,6 +13,4 @@ export async function GET() {
   // const data = { message: "Hello User", id: user.id }
 
   // return NextResponse.json({ data })
-
-  return 'ja'
 }
