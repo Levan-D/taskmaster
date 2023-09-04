@@ -74,7 +74,9 @@ export default function TaskDisplay({ tasks }: Props) {
     }
   )
 
-const optimisticTasksLength = optimisticTasks.filter((task: Task) => !task.deleted).length
+  const optimisticTasksLength = optimisticTasks.filter(
+    (task: Task) => !task.deleted
+  ).length
 
   const expiredTasks = filterExpiredTasks(optimisticTasks, today)
   const totalExpiredTasks = expiredTasks.filter((task: Task) => !task.deleted).length
