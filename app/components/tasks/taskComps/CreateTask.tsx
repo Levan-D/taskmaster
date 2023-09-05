@@ -15,11 +15,21 @@ import { toast } from "react-toastify"
 import { DateTime } from "luxon"
 import { useTransition } from "react"
 
-type Props = { totalTasks: number; addOptimisticTask: (action: Task[]) => void }
+type Props = {
+  totalTasks: number
+  addOptimisticTask: (action: Task[]) => void
+  defaultPriority: TaskPriority
+  defaultDate: Calendar
+}
 
-export default function CreateTask({ totalTasks, addOptimisticTask }: Props) {
-  const [priority, setPriority] = useState<TaskPriority>("LOW")
-  const [calendar, setCalendar] = useState<Calendar>("Today")
+export default function CreateTask({
+  totalTasks,
+  addOptimisticTask,
+  defaultDate,
+  defaultPriority,
+}: Props) {
+  const [priority, setPriority] = useState<TaskPriority>(defaultPriority)
+  const [calendar, setCalendar] = useState<Calendar>(defaultDate)
 
   const [isPending, startTransition] = useTransition()
   const [title, setTitle] = useState("")
@@ -46,10 +56,10 @@ export default function CreateTask({ totalTasks, addOptimisticTask }: Props) {
     <div
       className={`${
         calendar === "Today"
-          ? "text-rose-400"
+          ? "text-fuchsia-400"
           : calendar === "Tomorrow"
-          ? "text-amber-400"
-          : "text-sky-400"
+          ? "text-lime-400"
+          : "text-teal-400"
       } btnSecondary`}
     >
       <Icon
@@ -86,19 +96,21 @@ export default function CreateTask({ totalTasks, addOptimisticTask }: Props) {
   const calendarItems: DropDownItemType = [
     {
       title: "Today",
-      icon: <Icon className="text-rose-400" path={mdiCalendarTodayOutline} size={0.7} />,
+      icon: (
+        <Icon className="text-fuchsia-400" path={mdiCalendarTodayOutline} size={0.7} />
+      ),
       action: () => setCalendar("Today"),
     },
     {
       title: "Tomorrow",
       icon: (
-        <Icon className="text-amber-400" path={mdiCalendarWeekBeginOutline} size={0.7} />
+        <Icon className="text-lime-400" path={mdiCalendarWeekBeginOutline} size={0.7} />
       ),
       action: () => setCalendar("Tomorrow"),
     },
     {
       title: "Next Week",
-      icon: <Icon className="text-sky-400" path={mdiCalendarWeekOutline} size={0.7} />,
+      icon: <Icon className="text-teal-400" path={mdiCalendarWeekOutline} size={0.7} />,
       action: () => setCalendar("Next week"),
     },
   ]
@@ -138,8 +150,8 @@ export default function CreateTask({ totalTasks, addOptimisticTask }: Props) {
     addOptimisticTask([newTask])
     startTransition(handleCreateTask)
     setTitle("")
-    setPriority("LOW")
-    setCalendar("Today")
+    setPriority(defaultPriority)
+    setCalendar(defaultDate)
   }
 
   return (

@@ -9,6 +9,7 @@ import { DateTime } from "luxon"
 const today = DateTime.now().startOf("day")
 const yesterday = today.minus({ days: 1 }).toISO() || ""
 const tomorrow = today.plus({ days: 1 }).toISO() || ""
+const week = today.plus({ days: 8 }).toISO() || ""
 const todayISO = today.toISO() || ""
 
 const checkAuth = async () => {
@@ -169,6 +170,53 @@ export const getTodaysTasks = async ({
           },
         },
         orderBy: [
+          {
+            creation_date: "desc",
+          },
+        ],
+      })
+      return { success: true, data: tasks }
+    } else {
+      throw new Error("Bad Request: Missing user data")
+    }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const getFutureTasks = async ({
+  deleted,
+}: {
+  deleted: boolean
+}): Promise<ApiResponse<Task[]>> => {
+  const userData = await checkAuth()
+
+  try {
+    if (userData && userData.id) {
+      const tasks = await prisma.tasks.findMany({
+        where: {
+          user_id: userData.id,
+          deleted: deleted,
+          due_date: {
+            gte: tomorrow,
+            lt: week,
+          },
+        },
+
+        include: {
+          steps: {
+            where: { deleted: deleted },
+            orderBy: [
+              {
+                creation_date: "desc",
+              },
+            ],
+          },
+        },
+        orderBy: [
+          {
+            due_date: "asc",
+          },
           {
             creation_date: "desc",
           },

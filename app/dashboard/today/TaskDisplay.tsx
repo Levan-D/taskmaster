@@ -46,7 +46,7 @@ const filterTodayTasks = (tasks: Task[], today: DateTime) =>
 export default function TaskDisplay({ tasks }: Props) {
   const today = DateTime.now().startOf("day")
 
-  const lastOp = window ? localStorage.getItem("todaysLastOp") : ""
+  const lastOp = typeof window !== "undefined" ? localStorage.getItem("todaysLastOp") : ""
   const lastOpConvertToDateTime = DateTime.fromISO(lastOp || "").startOf("day")
   const lastOpBoolean = today.hasSame(lastOpConvertToDateTime, "day")
 
@@ -54,7 +54,7 @@ export default function TaskDisplay({ tasks }: Props) {
     tasks,
     (state: Task[], updatedTasks: Task[]) => {
       // set todays last operation
-      if (window) {
+      if (typeof window !== "undefined") {
         localStorage.setItem("todaysLastOp", today.toISO() || "")
       }
 
@@ -115,7 +115,12 @@ export default function TaskDisplay({ tasks }: Props) {
             </div>
           ))}
 
-        <CreateTask addOptimisticTask={addOptimisticTask} totalTasks={totalTodaysTasks} />
+        <CreateTask
+          defaultDate="Today"
+          defaultPriority="LOW"
+          addOptimisticTask={addOptimisticTask}
+          totalTasks={totalTodaysTasks}
+        />
       </div>
 
       {totalExpiredTasks > 0 && (
@@ -142,7 +147,7 @@ export default function TaskDisplay({ tasks }: Props) {
           </>
         </Accordion>
       )}
-      {totalTodaysTasks > 0 && totalExpiredTasks > 0 && (
+      {totalTodaysTasks > 0 && totalExpiredTasks > 0 && todaysTasksNotCompleted > 0 && (
         <Accordion className="my-8" title={`Pending (${todaysTasksNotCompleted})`}>
           <Tasks
             addOptimisticTask={addOptimisticTask}
@@ -151,33 +156,35 @@ export default function TaskDisplay({ tasks }: Props) {
           />
         </Accordion>
       )}
+
       {totalTodaysTasks > 0 && totalExpiredTasks === 0 && (
-        <>
-          <div className="flex items-center select-none mt-10 mb-12">
-            <hr
-              className={` ${
-                allATodaysTasksCompleted ? "  border-lime-400" : "  border-neutral-500"
-              } mx-4  block grow border-t-[1px]  border-opacity-75`}
-            />
-            <div
-              className={`${
-                allATodaysTasksCompleted ? "text-lime-400 " : "text-neutral-500 "
-              }  p-1.5 text-sm  shrink-0 `}
-            >
-              {todaysTasksRatio}
-            </div>
-            <hr
-              className={` ${
-                allATodaysTasksCompleted ? "  border-lime-400" : "  border-neutral-500"
-              } mx-4    block grow border-t-[1px]  border-opacity-75`}
-            />
-          </div>
-          <Tasks
-            addOptimisticTask={addOptimisticTask}
-            className={"my-8"}
-            tasks={todaysUnfinished}
+        <div className="flex items-center select-none mt-10 mb-12">
+          <hr
+            className={` ${
+              allATodaysTasksCompleted ? "  border-lime-400" : "  border-neutral-500"
+            } mx-4  block grow border-t-[1px]  border-opacity-75`}
           />
-        </>
+          <div
+            className={`${
+              allATodaysTasksCompleted ? "text-lime-400 " : "text-neutral-500 "
+            }  p-1.5 text-sm  shrink-0 `}
+          >
+            {todaysTasksRatio}
+          </div>
+          <hr
+            className={` ${
+              allATodaysTasksCompleted ? "  border-lime-400" : "  border-neutral-500"
+            } mx-4    block grow border-t-[1px]  border-opacity-75`}
+          />
+        </div>
+      )}
+
+      {todaysTasksNotCompleted > 0 && totalExpiredTasks === 0 && (
+        <Tasks
+          addOptimisticTask={addOptimisticTask}
+          className={"my-8"}
+          tasks={todaysUnfinished}
+        />
       )}
       {todaysTasksCompleted > 0 && (
         <Accordion className="my-8" title={`Finished (${todaysTasksCompleted})`}>

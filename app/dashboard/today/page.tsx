@@ -1,7 +1,7 @@
 /** @format */
 
 import { getTodaysTasks } from "../../actions"
-import TaskDisplay from "./components/TaskDisplay"
+import TaskDisplay from "./TaskDisplay"
 
 export default async function Today() {
   const tasks = await getTodaysTasks({ deleted: false })

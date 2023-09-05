@@ -50,7 +50,7 @@ type Task = {
   deleted: boolean
   complete: boolean
   creation_date: Date
-  due_date: string | null
+  due_date: string
   priority: TaskPriority
   user_id: string
   steps: Step[] | []

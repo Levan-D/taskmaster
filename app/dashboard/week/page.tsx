@@ -1,7 +1,16 @@
-import React from 'react'
+/** @format */
 
-export default function Week() {
+import { getFutureTasks } from "../../actions"
+import TaskDisplay from "./TaskDisplay"
+
+export default async function Week() {
+  const tasks = await getFutureTasks({ deleted: false })
+
+  if (!tasks.success) return <span></span>
+
   return (
-    <div>Week</div>
+    <section className="  max-w-3xl mx-auto ">
+      {tasks.data !== undefined && <TaskDisplay tasks={tasks.data} />}
+    </section>
   )
 }
