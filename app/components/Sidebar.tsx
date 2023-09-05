@@ -5,12 +5,12 @@ import { useState } from "react"
 import Icon from "@mdi/react"
 import {
   mdiChevronRight,
-  mdiOrderBoolAscendingVariant,
   mdiSync,
   mdiTrashCanOutline,
-  mdiViewWeekOutline,
   mdiCheckCircleOutline,
   mdiClockAlertOutline,
+  mdiCalendarWeekOutline,
+  mdiCalendarTodayOutline,
 } from "@mdi/js"
 import Tooltip from "@/app/components/Tooltip"
 import DropdownMenu from "@/app/components/DropdownMenu"
@@ -39,12 +39,12 @@ const taskPages: TaskPageType[] = [
     path: "/dashboard/habits",
   },
   {
-    icon: mdiOrderBoolAscendingVariant,
+    icon: mdiCalendarTodayOutline,
     title: "Today",
     path: "/dashboard/today",
   },
   {
-    icon: mdiViewWeekOutline,
+    icon: mdiCalendarWeekOutline,
     title: "Week",
     path: "/dashboard/week",
   },
