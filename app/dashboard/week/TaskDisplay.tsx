@@ -94,12 +94,24 @@ export default function TaskDisplay({ tasks }: Props) {
   const futuresFinished = futureTasks.filter((task: Task) => task.complete)
 
   const futureTasksCompleted = futuresFinished.length
-  const futureTasksNotCompleted = futuresUnfinished.length
 
   const futureTasksRatio = `${totalfutureTasks}/${futureTasksCompleted}`
 
   const allAfutureTasksCompleted =
     totalfutureTasks === futureTasksCompleted && totalfutureTasks > 0
+
+  const tasksGroupedByDate = futuresUnfinished.reduce(
+    (acc: { [key: string]: Task[] }, task) => {
+      const dueDate = DateTime.fromISO(task.due_date).toFormat("yyyy-MM-dd")
+      if (!acc[dueDate]) {
+        acc[dueDate] = []
+      }
+      acc[dueDate].push(task)
+      return acc
+    },
+    {}
+  )
+  const sortedDates = Object.keys(tasksGroupedByDate).sort()
 
   return (
     <div className={` py-4 `}>
@@ -152,12 +164,34 @@ export default function TaskDisplay({ tasks }: Props) {
         </div>
       )}
 
-      {totalfutureTasks > 0 && futureTasksNotCompleted > 0 && (
+      {sortedDates.length === 1 ? (
         <Tasks
           addOptimisticTask={addOptimisticTask}
           className={"my-8"}
-          tasks={futuresUnfinished}
+          tasks={tasksGroupedByDate[sortedDates[0]]}
         />
+      ) : (
+        sortedDates.map((date, i) => {
+          const tasksForTheDay = tasksGroupedByDate[date]
+          const numTasksForTheDay = tasksForTheDay.length
+
+          return (
+            <Accordion
+              key={i}
+              className="my-8"
+              title={`${DateTime.fromISO(date).toFormat("EEEE, dd/MM/yy")} (${numTasksForTheDay})`}
+            >
+              <>
+                {/* Add any additional logic or elements here for each Accordion */}
+                <Tasks
+                  addOptimisticTask={addOptimisticTask}
+                  className={"my-8"}
+                  tasks={tasksForTheDay}
+                />
+              </>
+            </Accordion>
+          )
+        })
       )}
 
       {futureTasksCompleted > 0 && (
