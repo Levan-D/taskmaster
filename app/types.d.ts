@@ -33,6 +33,7 @@ type UserType = {
 }
 
 type TaskPriority = "LOW" | "MEDIUM" | "HIGH"
+type Calendar = "Today" | "Tomorrow" | "Next week"
 
 type Step = {
   id: string

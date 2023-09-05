@@ -3,9 +3,14 @@
 import { useState } from "react"
 import { createTask } from "../../../actions"
 import Icon from "@mdi/react"
-import { mdiPlus, mdiTimerAlertOutline, mdiCalendarClockOutline } from "@mdi/js"
+import {
+  mdiPlus,
+  mdiTimerAlertOutline,
+  mdiCalendarTodayOutline,
+  mdiCalendarWeekBeginOutline,
+  mdiCalendarWeekOutline,
+} from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
-import Tooltip from "../../Tooltip"
 import { toast } from "react-toastify"
 import { DateTime } from "luxon"
 import { useTransition } from "react"
@@ -14,25 +19,50 @@ type Props = { totalTasks: number; addOptimisticTask: (action: Task[]) => void }
 
 export default function CreateTask({ totalTasks, addOptimisticTask }: Props) {
   const [priority, setPriority] = useState<TaskPriority>("LOW")
+  const [calendar, setCalendar] = useState<Calendar>("Today")
+
   const [isPending, startTransition] = useTransition()
   const [title, setTitle] = useState("")
 
   const today = DateTime.now().toISO() ?? ""
+  const tomorrow = DateTime.now().plus({ day: 1 }).toISO() ?? ""
+  const nextWeek = DateTime.now().plus({ day: 7 }).toISO() ?? ""
 
   const priorityButton = (
-    <Tooltip text="Task priority" position="bot" className="delay-1000">
-      <div
-        className={`${
-          priority === "LOW"
-            ? "text-sky-400"
-            : priority === "MEDIUM"
-            ? "text-amber-400"
-            : "text-rose-400"
-        } btnSecondary`}
-      >
-        <Icon path={mdiTimerAlertOutline} size={1} />
-      </div>
-    </Tooltip>
+    <div
+      className={`${
+        priority === "LOW"
+          ? "text-sky-400"
+          : priority === "MEDIUM"
+          ? "text-amber-400"
+          : "text-rose-400"
+      } btnSecondary`}
+    >
+      <Icon path={mdiTimerAlertOutline} size={1} />
+    </div>
+  )
+
+  const calendarButton = (
+    <div
+      className={`${
+        calendar === "Today"
+          ? "text-rose-400"
+          : calendar === "Tomorrow"
+          ? "text-amber-400"
+          : "text-sky-400"
+      } btnSecondary`}
+    >
+      <Icon
+        path={
+          calendar === "Today"
+            ? mdiCalendarTodayOutline
+            : calendar === "Tomorrow"
+            ? mdiCalendarWeekBeginOutline
+            : mdiCalendarWeekOutline
+        }
+        size={1}
+      />
+    </div>
   )
 
   const priorityItems: DropDownItemType = [
@@ -53,11 +83,34 @@ export default function CreateTask({ totalTasks, addOptimisticTask }: Props) {
     },
   ]
 
+  const calendarItems: DropDownItemType = [
+    {
+      title: "Today",
+      icon: <Icon className="text-rose-400" path={mdiCalendarTodayOutline} size={0.7} />,
+      action: () => setCalendar("Today"),
+    },
+    {
+      title: "Tomorrow",
+      icon: (
+        <Icon className="text-amber-400" path={mdiCalendarWeekBeginOutline} size={0.7} />
+      ),
+      action: () => setCalendar("Tomorrow"),
+    },
+    {
+      title: "Next Week",
+      icon: <Icon className="text-sky-400" path={mdiCalendarWeekOutline} size={0.7} />,
+      action: () => setCalendar("Next week"),
+    },
+  ]
+
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    const dueDate =
+      calendar === "Today" ? today : calendar === "Tomorrow" ? tomorrow : nextWeek
+
     const handleCreateTask = async () => {
-      await createTask({ title: title, priority: priority, today: today })
+      await createTask({ title: title, priority: priority, dueDate: dueDate })
     }
 
     if (totalTasks > 19) {
@@ -76,7 +129,7 @@ export default function CreateTask({ totalTasks, addOptimisticTask }: Props) {
       deleted: false,
       complete: false,
       creation_date: DateTime.now().toJSDate(),
-      due_date: today,
+      due_date: dueDate,
       priority: priority,
       user_id: "optimistic",
       steps: [],
@@ -86,6 +139,7 @@ export default function CreateTask({ totalTasks, addOptimisticTask }: Props) {
     startTransition(handleCreateTask)
     setTitle("")
     setPriority("LOW")
+    setCalendar("Today")
   }
 
   return (
@@ -102,18 +156,16 @@ export default function CreateTask({ totalTasks, addOptimisticTask }: Props) {
             required
           />
           <div className="flex flex-col gap-2">
-            <div className="btnSecondary">
-              <Icon path={mdiCalendarClockOutline} size={1} />
-            </div>
+            <DropdownMenu button={calendarButton} items={calendarItems} />
 
             <DropdownMenu button={priorityButton} items={priorityItems} />
           </div>
 
-          <Tooltip text="Create new task" position="bot" className="delay-1000">
+          <div>
             <button className="btnPrimary px-5 h-full">
               <Icon path={mdiPlus} size={1.4} />
             </button>
-          </Tooltip>
+          </div>
         </div>
       </form>
     </div>

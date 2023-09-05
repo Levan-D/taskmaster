@@ -56,11 +56,11 @@ export const checkUserExists = async () => {
 export const createTask = async ({
   title,
   priority,
-  today,
+  dueDate,
 }: {
   title: string
   priority: TaskPriority
-  today: string
+  dueDate: string
 }): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
 
@@ -71,7 +71,7 @@ export const createTask = async ({
           title: title,
           user_id: userData.id,
           priority: priority,
-          due_date: today,
+          due_date: dueDate,
         },
       })
       revalidatePath("/dashboard/today")
