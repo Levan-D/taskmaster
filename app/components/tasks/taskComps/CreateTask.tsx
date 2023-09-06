@@ -16,14 +16,14 @@ import { DateTime } from "luxon"
 import { useTransition } from "react"
 
 type Props = {
-  totalTasks: number
+  taskLimit: number
   addOptimisticTask: (action: Task[]) => void
   defaultPriority: TaskPriority
   defaultDate: Calendar
 }
 
 export default function CreateTask({
-  totalTasks,
+  taskLimit,
   addOptimisticTask,
   defaultDate,
   defaultPriority,
@@ -125,7 +125,7 @@ export default function CreateTask({
       await createTask({ title: title, priority: priority, dueDate: dueDate })
     }
 
-    if (totalTasks > 19) {
+    if (taskLimit > 19) {
       return toast.warning(
         <div className="text-neutral-950">
           Complete some of your current tasks before adding new ones

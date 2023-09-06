@@ -105,7 +105,7 @@ export default function TaskDisplay({ tasks }: Props) {
 
   if (optimisticTasksLength === 0 && todaysOps === undefined)
     return (
-      <div className="w-fit mx-auto min-h-screen flex flex-col justify-center overflow-hidden ">
+      <div className="w-fit mx-auto min-h-screen flex flex-col justify-center   ">
         <div className="loader"></div>
       </div>
     )
@@ -138,7 +138,7 @@ export default function TaskDisplay({ tasks }: Props) {
           defaultDate="Today"
           defaultPriority="LOW"
           addOptimisticTask={addOptimisticTask}
-          totalTasks={totalTodaysTasks}
+          taskLimit={19}
         />
       </div>
 
