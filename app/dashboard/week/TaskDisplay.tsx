@@ -123,11 +123,16 @@ export default function TaskDisplay({ tasks }: Props) {
   )
   const sortedDates = Object.keys(tasksGroupedByDate).sort()
 
-  if (totalfutureTasks === 0 && weeksOps === undefined) return <div>loadingu</div>
+  if (totalfutureTasks === 0 && weeksOps === undefined)
+    return (
+      <div className="w-fit mx-auto min-h-screen flex flex-col justify-center overflow-hidden ">
+        <div className="loader"></div>
+      </div>
+    )
 
   return (
     <div className={` py-4 `}>
-      <div className={` ${totalfutureTasks === 0 && "pt-[20vh]"} mt-0 duration-500 `}>
+      <div className={` ${totalfutureTasks === 0 && "pt-[20vh]"} mt-0 transition-[padding]   duration-500 `}>
         {totalfutureTasks === 0 &&
           (weeksOps ? (
             <div className={`mb-28 text-center`}>

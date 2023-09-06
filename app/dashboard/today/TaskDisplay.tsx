@@ -103,12 +103,19 @@ export default function TaskDisplay({ tasks }: Props) {
   const allATodaysTasksCompleted =
     totalTodaysTasks === todaysTasksCompleted && totalTodaysTasks > 0
 
-  if (optimisticTasksLength === 0 && todaysOps === undefined) return <div>loadingu</div>
+  if (optimisticTasksLength === 0 && todaysOps === undefined)
+    return (
+      <div className="w-fit mx-auto min-h-screen flex flex-col justify-center overflow-hidden ">
+        <div className="loader"></div>
+      </div>
+    )
 
   return (
     <div className={` py-4 `}>
       <div
-        className={` ${optimisticTasksLength === 0 && "pt-[20vh]"} mt-0 duration-500 `}
+        className={` ${
+          optimisticTasksLength === 0 && "pt-[20vh]"
+        } mt-0 transition-[padding] duration-500 `}
       >
         {optimisticTasksLength === 0 &&
           (todaysOps ? (
