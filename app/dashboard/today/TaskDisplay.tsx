@@ -9,6 +9,8 @@ import { experimental_useOptimistic as useOptimistic } from "react"
 import Accordion from "@/app/components/Accordion"
 import TasksRevive from "@/app/components/tasks/taskComps/TasksRevive"
 import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
+import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
+import { setTodaysOps } from "@/lib/redux/slices/globalSlice"
 
 type Props = {
   tasks: Task[]
@@ -44,20 +46,27 @@ const filterTodayTasks = (tasks: Task[], today: DateTime) =>
     }))
 
 export default function TaskDisplay({ tasks }: Props) {
+  const { todaysOps } = useAppSelector(state => state.global)
+  const dispatch = useAppDispatch()
+
   const today = DateTime.now().startOf("day")
 
-  const lastOp = typeof window !== "undefined" ? localStorage.getItem("todaysLastOp") : ""
-  const lastOpConvertToDateTime = DateTime.fromISO(lastOp || "").startOf("day")
-  const lastOpBoolean = today.hasSame(lastOpConvertToDateTime, "day")
+  const setTodaysOp = () => {
+    const isoString = today.toISO()
+    if (isoString) {
+      const lastOpConvertToDateTime = DateTime.fromISO(isoString).startOf("day")
+      dispatch(setTodaysOps(today.hasSame(lastOpConvertToDateTime, "day")))
+      localStorage.setItem("todaysLastOp", isoString)
+    }
+  }
 
   const [optimisticTasks, addOptimisticTask] = useOptimistic(
     tasks,
     (state: Task[], updatedTasks: Task[]) => {
       // set todays last operation
       if (typeof window !== "undefined") {
-        localStorage.setItem("todaysLastOp", today.toISO() || "")
+        setTodaysOp()
       }
-
       const oldTasks = [...state]
 
       updatedTasks.forEach(updatedTask => {
@@ -94,24 +103,27 @@ export default function TaskDisplay({ tasks }: Props) {
   const allATodaysTasksCompleted =
     totalTodaysTasks === todaysTasksCompleted && totalTodaysTasks > 0
 
+  if (optimisticTasksLength === 0 && todaysOps === undefined) return <div>loadingu</div>
+
   return (
     <div className={` py-4 `}>
       <div
         className={` ${optimisticTasksLength === 0 && "pt-[20vh]"} mt-0 duration-500 `}
       >
         {optimisticTasksLength === 0 &&
-          (lastOpBoolean ? (
-            <div className={`mb-28 text-center`}>
+          (todaysOps ? (
+            <div className={`  mb-28 text-center`}>
               <h2 className="text-2xl font-semibold mb-2">Congratulations!</h2>
               <p className="text-neutral-300">You&apos;ve completed all your tasks</p>
               <p className="text-neutral-300">Kick back and enjoy the rest of your day</p>
             </div>
           ) : (
-            <div className={`mb-28 text-center`}>
+            <div className={`  mb-28 text-center`}>
               <h2 className="text-2xl font-semibold mb-2">Hello there</h2>
               <p className="text-neutral-300">
                 Add tasks below and start your day organized!
               </p>
+              <br />
             </div>
           ))}
 

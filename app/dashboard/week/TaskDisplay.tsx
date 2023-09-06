@@ -8,6 +8,8 @@ import { DateTime } from "luxon"
 import { experimental_useOptimistic as useOptimistic } from "react"
 import Accordion from "@/app/components/Accordion"
 import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
+import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
+import { setWeeksOps } from "@/lib/redux/slices/globalSlice"
 
 type Props = {
   tasks: Task[]
@@ -56,18 +58,26 @@ const filterAndSortFutureTasks = (tasks: Task[], today: DateTime) => {
 }
 
 export default function TaskDisplay({ tasks }: Props) {
+  const { weeksOps } = useAppSelector(state => state.global)
+  const dispatch = useAppDispatch()
+
   const today = DateTime.now().startOf("day")
 
-  const lastOp = typeof window !== "undefined" ? localStorage.getItem("weeksLastOp") : ""
-  const lastOpConvertToDateTime = DateTime.fromISO(lastOp || "").startOf("day")
-  const lastOpBoolean = today.hasSame(lastOpConvertToDateTime, "day")
+  const setWeeksOp = () => {
+    const isoString = today.toISO()
+    if (isoString) {
+      const lastOpConvertToDateTime = DateTime.fromISO(isoString).startOf("day")
+      dispatch(setWeeksOps(today.hasSame(lastOpConvertToDateTime, "day")))
+      localStorage.setItem("weeksLastOp", isoString)
+    }
+  }
 
   const [optimisticTasks, addOptimisticTask] = useOptimistic(
     tasks,
     (state: Task[], updatedTasks: Task[]) => {
       // set futures last operation
       if (typeof window !== "undefined") {
-        localStorage.setItem("weeksLastOp", today.toISO() || "")
+        setWeeksOp()
       }
 
       const oldTasks = [...state]
@@ -113,11 +123,13 @@ export default function TaskDisplay({ tasks }: Props) {
   )
   const sortedDates = Object.keys(tasksGroupedByDate).sort()
 
+  if (totalfutureTasks === 0 && weeksOps === undefined) return <div>loadingu</div>
+
   return (
     <div className={` py-4 `}>
       <div className={` ${totalfutureTasks === 0 && "pt-[20vh]"} mt-0 duration-500 `}>
         {totalfutureTasks === 0 &&
-          (lastOpBoolean ? (
+          (weeksOps ? (
             <div className={`mb-28 text-center`}>
               <h2 className="text-2xl font-semibold mb-2">Congratulations!</h2>
               <p className="text-neutral-300">
@@ -128,9 +140,10 @@ export default function TaskDisplay({ tasks }: Props) {
               </p>
             </div>
           ) : (
-            <div className={`mb-28 text-center`}>
+            <div className={` mb-28 text-center`}>
               <h2 className="text-2xl font-semibold mb-2">Hello there</h2>
               <p className="text-neutral-300">Add tasks below and organize your week</p>
+              <br />
             </div>
           ))}
 
@@ -179,7 +192,9 @@ export default function TaskDisplay({ tasks }: Props) {
             <Accordion
               key={i}
               className="my-8"
-              title={`${DateTime.fromISO(date).toFormat("EEEE, dd/MM/yy")} (${numTasksForTheDay})`}
+              title={`${DateTime.fromISO(date).toFormat(
+                "EEEE, dd/MM/yy"
+              )} (${numTasksForTheDay})`}
             >
               <>
                 {/* Add any additional logic or elements here for each Accordion */}

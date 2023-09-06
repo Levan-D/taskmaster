@@ -4,13 +4,13 @@ import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 
 interface initialStateType {
-  user: {
-    user_id: string
-  } | null
+  todaysOps: undefined | boolean
+  weeksOps: undefined | boolean
 }
 
 const initialState: initialStateType = {
-  user: null,
+  todaysOps: undefined,
+  weeksOps: undefined,
 }
 
 const globalSlice = createSlice({
@@ -18,11 +18,14 @@ const globalSlice = createSlice({
   initialState,
   reducers: {
     resetGlobalState: () => initialState,
-    setUser: (state, action: PayloadAction<initialStateType["user"]>) => {
-      state.user = action.payload
+    setTodaysOps: (state, action: PayloadAction<initialStateType["todaysOps"]>) => {
+      state.todaysOps = action.payload
+    },
+    setWeeksOps: (state, action: PayloadAction<initialStateType["weeksOps"]>) => {
+      state.weeksOps = action.payload
     },
   },
 })
 
-export const { resetGlobalState, setUser } = globalSlice.actions
+export const { setTodaysOps, setWeeksOps } = globalSlice.actions
 export default globalSlice.reducer
