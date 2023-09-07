@@ -3,7 +3,7 @@
 import Icon from "@mdi/react"
 import { mdiDotsVertical, mdiTrashCanOutline, mdiHeartOutline } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
-import { recycleTask, reviveTask } from "../../../actions"
+import { recycleTask, reviveTask } from "../../../actions/taskActions"
 import { useTransition } from "react"
 import { DateTime } from "luxon"
 

@@ -1,6 +1,6 @@
 /** @format */
 
-import { createStep } from "../../../actions"
+import { createStep } from "../../../actions/stepActions"
 import { useState } from "react"
 import Icon from "@mdi/react"
 import { mdiPlus } from "@mdi/js"

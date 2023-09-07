@@ -1,7 +1,7 @@
 /** @format */
 
 import { useState } from "react"
-import { createTask } from "../../../actions"
+import { createTask } from "../../../actions/taskActions"
 import Icon from "@mdi/react"
 import {
   mdiPlus,

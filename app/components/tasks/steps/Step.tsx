@@ -1,6 +1,5 @@
 /** @format */
 
-import React, { useEffect } from "react"
 import ToggleStepComplete from "./ToggleStepComplete"
 import RecycleStep from "./RecycleStep"
 import StepUpdate from "./StepUpdate"

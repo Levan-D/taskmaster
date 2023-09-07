@@ -1,10 +1,9 @@
 /** @format */
 
-
 import React from "react"
 import { useTransition } from "react"
 import { DateTime } from "luxon"
-import { reviveTasks } from "@/app/actions"
+import { reviveTasks } from "@/app/actions/taskActions"
 
 type Props = {
   className?: string

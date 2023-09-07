@@ -1,6 +1,6 @@
 /** @format */
 
-import { toggleStepComplete } from "@/app/actions"
+import { toggleStepComplete } from "@/app/actions/stepActions"
 import { useTransition } from "react"
 import Icon from "@mdi/react"
 import { mdiCheckBold } from "@mdi/js"

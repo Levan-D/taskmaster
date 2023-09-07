@@ -1,6 +1,6 @@
 /** @format */
 
-import { getTodaysTasks } from "../../actions"
+import { getTodaysTasks } from "../../actions/taskActions"
 import TaskDisplay from "./TaskDisplay"
 
 export default async function Today() {

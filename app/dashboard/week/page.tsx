@@ -1,6 +1,6 @@
 /** @format */
 
-import { getFutureTasks } from "../../actions"
+import { getFutureTasks } from "../../actions/taskActions"
 import TaskDisplay from "./TaskDisplay"
 
 export default async function Week() {

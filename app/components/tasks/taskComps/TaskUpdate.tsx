@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import Icon from "@mdi/react"
 import { mdiNoteEditOutline, mdiTimerAlertOutline } from "@mdi/js"
-import { updateTask } from "@/app/actions"
+import { updateTask } from "@/app/actions/taskActions"
 import Tooltip from "../../Tooltip"
 import DropdownMenu from "../../DropdownMenu"
 import { useTransition } from "react"
@@ -105,7 +105,7 @@ export default function TaskUpdate({
     toggleEdit()
 
     if (inputValue !== task.title || priority !== task.priority) {
-      addOptimisticTask([{ ...task, title: inputValue }])
+      addOptimisticTask([{ ...task, title: inputValue, priority: priority }])
 
       startTransition(handleUpdateTask)
     }
@@ -126,7 +126,7 @@ export default function TaskUpdate({
             required
           />
 
-          <DropdownMenu  button={priorityButton} items={priorityItems} />
+          <DropdownMenu button={priorityButton} items={priorityItems} />
 
           <button
             disabled={isPending || expired}

@@ -1,9 +1,8 @@
 /** @format */
 
-
 import React from "react"
 import { useTransition } from "react"
-import { recycleTasks } from "@/app/actions"
+import { recycleTasks } from "@/app/actions/taskActions"
 
 type Props = {
   className?: string

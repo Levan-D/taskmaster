@@ -1,7 +1,6 @@
 /** @format */
 
-
-import { toggleTaskComplete } from "@/app/actions"
+import { toggleTaskComplete } from "@/app/actions/taskActions"
 import { useTransition } from "react"
 import Icon from "@mdi/react"
 import { mdiCheckBold } from "@mdi/js"

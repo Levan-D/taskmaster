@@ -55,3 +55,5 @@ type Task = {
   user_id: string
   steps: Step[] | []
 }
+
+type ApiResponse<T> = { success: boolean; data?: T; error?: any }

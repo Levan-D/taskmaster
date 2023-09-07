@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import Icon from "@mdi/react"
 import { mdiNoteEditOutline } from "@mdi/js"
-import { updateStep } from "@/app/actions"
+import { updateStep } from "@/app/actions/stepActions"
 import { useTransition } from "react"
 
 type Props = {

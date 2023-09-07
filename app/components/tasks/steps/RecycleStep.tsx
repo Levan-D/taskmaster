@@ -1,6 +1,6 @@
 /** @format */
 
-import { recycleStep } from "../../../actions"
+import { recycleStep } from "../../../actions/stepActions"
 import { useTransition } from "react"
 import Icon from "@mdi/react"
 import { mdiTrashCanOutline } from "@mdi/js"
