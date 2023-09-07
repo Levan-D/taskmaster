@@ -222,7 +222,7 @@ export default function TaskDisplay({ tasks }: Props) {
         <Accordion className="my-8" title={`Finished (${futureTasksCompleted})`}>
           <>
             <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4">
-              <p className="basis-3/4 text-neutral-200">Recycle completed tasks.</p>
+              <p className="basis-3/4 text-neutral-200">Recycle completed tasks for the week.</p>
 
               <TasksRecycle
                 addOptimisticTask={addOptimisticTask}

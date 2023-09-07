@@ -3,52 +3,42 @@
 import React from "react"
 import Icon from "@mdi/react"
 import { mdiChevronLeft, mdiChevronRight } from "@mdi/js"
+import { usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 type Props = {
-  totalCount: number
-  take: number
-  skip: number
-  setSkip: React.Dispatch<React.SetStateAction<number>>
-  disabled: boolean
-  className: string
+  pageCount: number
+  currentPage: number
+  className?: string
 }
 
-export default function Pagination({
-  totalCount,
-  take,
-  skip,
-  setSkip,
-  disabled,
-  className,
-}: Props) {
-  const totalPages = Math.ceil(totalCount / take)
+export default function Pagination({ pageCount, currentPage, className }: Props) {
+  const pathname = usePathname()
+  const router = useRouter()
 
-  const buttons = [...Array(totalPages)].map((element, i) => {
-    const currentPage = Math.floor(skip / take)
-
+  const buttons = [...Array(pageCount)].map((element, i) => {
     return (
       <button
         className={` ${
-          currentPage === i && "!bg-neutral-500"
+          currentPage - 1 === i && "!bg-neutral-500"
         } mainContainer hover:bg-neutral-700 duration-300 px-2`}
-        onClick={() => setSkip(take * i)}
-        disabled={disabled}
+        onClick={() => router.push(`${pathname}/?page=${i + 1}`)}
         key={i}
       >
         {i + 1}
       </button>
     )
   })
-  if (totalPages < 2) return <span></span>
+  if (pageCount < 2) return <span></span>
 
   return (
-    <div className={`${className} flex gap-2`}>
+    <div className={`${className} flex gap-2 select-none`}>
       <button
         className={` ${
-          skip === 0 ? "opacity-50" : "hover:bg-neutral-700"
+          currentPage <= 1 ? "opacity-50" : "hover:bg-neutral-700"
         } mainContainer  duration-300 px-2`}
-        onClick={() => setSkip(prevSkip => prevSkip - take)}
-        disabled={skip === 0 || disabled}
+        onClick={() => router.push(`${pathname}/?page=${currentPage - 1}`)}
+        disabled={currentPage <= 1}
       >
         <Icon path={mdiChevronLeft} size={1} />
       </button>
@@ -56,10 +46,10 @@ export default function Pagination({
       {buttons}
       <button
         className={` ${
-          skip + take >= totalCount ? "opacity-50" : "hover:bg-neutral-700"
+          currentPage >= pageCount ? "opacity-50" : "hover:bg-neutral-700"
         } mainContainer    duration-300 px-2`}
-        onClick={() => setSkip(prevSkip => prevSkip + take)}
-        disabled={totalCount ? skip + take >= totalCount : false || disabled}
+        onClick={() => router.push(`${pathname}/?page=${currentPage + 1}`)}
+        disabled={currentPage >= pageCount}
       >
         <Icon path={mdiChevronRight} size={1} />
       </button>
