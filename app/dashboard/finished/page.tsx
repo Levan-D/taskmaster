@@ -8,7 +8,7 @@ type Props = {
 }
 
 export default async function Finished({ searchParams }: Props) {
-  const take: number = 2
+  const take: number = 20
   const currentPage: number = Number(searchParams["page"]) || 0
   const skip = Math.max(0, (currentPage - 1) * take) || 0
 
