@@ -33,6 +33,7 @@ export default function TaskDropDown({ task, expired, addOptimisticTask }: Props
   const items: DropDownItemType = [
     {
       title: "Recycle",
+      invisible: task.deleted,
       icon: <Icon path={mdiTrashCanOutline} size={0.7} />,
       action: () => {
         startTransition(handleRecycleTask)
@@ -42,7 +43,7 @@ export default function TaskDropDown({ task, expired, addOptimisticTask }: Props
   const button = (
     <div
       className={`${
-        expired || task.complete
+        expired || (task.complete && !task.deleted)
           ? "bg-neutral-600 shadow-sm sm:hover:bg-neutral-500"
           : "rounded-bl-lg"
       } hover:bg-neutral-600 rounded-tr-lg p-2 duration-300`}
@@ -63,7 +64,7 @@ export default function TaskDropDown({ task, expired, addOptimisticTask }: Props
           <Icon path={mdiHeartOutline} size={1} />
         </button>
       )}
-      {task.complete && (
+      {task.complete && !task.deleted && (
         <button
           disabled={isPending}
           onClick={() => {

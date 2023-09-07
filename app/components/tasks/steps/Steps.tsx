@@ -13,30 +13,32 @@ type Props = {
   addOptimisticTask: (action: Task[]) => void
 }
 
+function formatDueDate(due_date: string) {
+  const dueDate = DateTime.fromISO(due_date).startOf("day");
+  const now = DateTime.now().startOf("day");
+  const diffInDays = dueDate.diff(now, "days").days;
+
+  if (dueDate.hasSame(now, "day")) {
+    return "Today";
+  } else if (dueDate.plus({ days: 1 }).hasSame(now, "day")) {
+    return "Yesterday";
+  } else if (diffInDays >= 0 && diffInDays <= 6) {
+    return dueDate.toFormat("cccc");
+  } else if (diffInDays > 6 && diffInDays <= 13) {
+    return "Next " + dueDate.toFormat("cccc");
+  } else {
+    return dueDate.toFormat("dd/MM/yy");
+  }
+}
+
+
+
 export default function Steps({ task, addOptimisticTask, expired }: Props) {
   const [open, setOpen] = useState(task.steps.length > 0 && !task.complete ? true : false)
 
   const totalSteps = task.steps.length
   const stepsCompleted = task.steps.filter(step => step.complete).length
   const allStepsCompleted = totalSteps === stepsCompleted && totalSteps > 0
-
-  function formatDueDate(due_date: string) {
-    const dueDate = DateTime.fromISO(due_date).startOf("day")
-    const now = DateTime.now().startOf("day")
-
-    if (dueDate.hasSame(now, "day")) {
-      return "Today"
-    } else if (dueDate.plus({ days: 1 }).hasSame(now, "day")) {
-      return "Yesterday"
-    } else if (
-      dueDate.diff(now, "days").days <= 6 &&
-      dueDate.diff(now, "days").days >= -6
-    ) {
-      return dueDate.toFormat("cccc")
-    } else {
-      return dueDate.toFormat("dd/MM/yy")
-    }
-  }
 
   return (
     <div>

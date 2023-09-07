@@ -12,7 +12,7 @@ export default async function Finished({ searchParams }: Props) {
   const currentPage: number = Number(searchParams["page"]) || 0
   const skip = Math.max(0, (currentPage - 1) * take) || 0
 
-  const tasks = await getCompletedTasks({ deleted: false, skip: skip, take: take })
+  const tasks = await getCompletedTasks({ skip: skip, take: take })
 
   if (!tasks.success) return <span></span>
 

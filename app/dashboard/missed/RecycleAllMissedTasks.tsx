@@ -2,14 +2,14 @@
 
 import React from "react"
 import { useTransition } from "react"
-import { recycleAllTasks } from "@/app/actions/taskActions"
+import { recycleAllMissedTasks } from "@/app/actions/taskActions"
 
 type Props = {
   className?: string
   addOptimisticTask: (action: Task[]) => void
 }
 
-export default function RecycleAllCompletedTasks({
+export default function RecycleAllMissedTasks({
   className,
 
   addOptimisticTask,
@@ -19,7 +19,7 @@ export default function RecycleAllCompletedTasks({
   const handleRecycleTasks = async () => {
     addOptimisticTask([])
 
-    await recycleAllTasks()
+    await recycleAllMissedTasks()
   }
 
   return (

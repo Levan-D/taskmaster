@@ -4,7 +4,7 @@ import { getTodaysTasks } from "../../actions/taskActions"
 import TaskDisplay from "./TaskDisplay"
 
 export default async function Today() {
-  const tasks = await getTodaysTasks({ deleted: false })
+  const tasks = await getTodaysTasks()
 
   if (!tasks.success) return <span></span>
 

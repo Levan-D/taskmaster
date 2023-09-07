@@ -8,12 +8,12 @@ type Props = {
 }
 
 export default async function Missed({ searchParams }: Props) {
-  const take: number = 2
+  const take: number = 20
   const currentPage: number = Number(searchParams["page"]) || 0
   const skip = Math.max(0, (currentPage - 1) * take) || 0
 
-  const tasks = await getMissedTasks({ deleted: false, skip: skip, take: take })
-  console.log(tasks)
+  const tasks = await getMissedTasks({ skip: skip, take: take })
+
   if (!tasks.success) return <span></span>
 
   const pageCount = (tasks.totalCount && Math.ceil(tasks?.totalCount / take)) || 0

@@ -100,11 +100,7 @@ export const reviveTask = async ({
   }
 }
 
-export const getTodaysTasks = async ({
-  deleted,
-}: {
-  deleted: boolean
-}): Promise<ApiResponse<Task[]>> => {
+export const getTodaysTasks = async (): Promise<ApiResponse<Task[]>> => {
   const userData = await checkAuth()
 
   try {
@@ -112,7 +108,7 @@ export const getTodaysTasks = async ({
       const tasks = await prisma.tasks.findMany({
         where: {
           user_id: userData.id,
-          deleted: deleted,
+          deleted: false,
           due_date: {
             gte: yesterday,
             lt: tomorrow,
@@ -127,7 +123,7 @@ export const getTodaysTasks = async ({
 
         include: {
           steps: {
-            where: { deleted: deleted },
+            where: { deleted: false },
             orderBy: [
               {
                 creation_date: "desc",
@@ -153,11 +149,7 @@ export const getTodaysTasks = async ({
   }
 }
 
-export const getFutureTasks = async ({
-  deleted,
-}: {
-  deleted: boolean
-}): Promise<ApiResponse<Task[]>> => {
+export const getFutureTasks = async (): Promise<ApiResponse<Task[]>> => {
   const userData = await checkAuth()
 
   try {
@@ -165,7 +157,7 @@ export const getFutureTasks = async ({
       const tasks = await prisma.tasks.findMany({
         where: {
           user_id: userData.id,
-          deleted: deleted,
+          deleted: false,
           due_date: {
             gte: tomorrow,
             lt: week,
@@ -174,7 +166,7 @@ export const getFutureTasks = async ({
 
         include: {
           steps: {
-            where: { deleted: deleted },
+            where: { deleted: false },
             orderBy: [
               {
                 creation_date: "desc",
@@ -201,11 +193,9 @@ export const getFutureTasks = async ({
 }
 
 export const getMissedTasks = async ({
-  deleted,
   skip,
   take,
 }: {
-  deleted: boolean
   skip: number
   take: number
 }): Promise<ApiResponse<Task[]> & { totalCount?: number }> => {
@@ -216,7 +206,8 @@ export const getMissedTasks = async ({
       const totalCount = await prisma.tasks.count({
         where: {
           user_id: userData.id,
-          deleted: deleted,
+          deleted: false,
+          complete: false,
           due_date: {
             lt: todayISO,
           },
@@ -225,16 +216,16 @@ export const getMissedTasks = async ({
 
       const pageCount = Math.ceil(totalCount / take)
 
-      const currentPage = skip / take + 1 // Calculating current page based on the skip value
+      const currentPage = skip / take + 1
 
-      if (currentPage > pageCount) {
+      if (pageCount !== 0 && currentPage > pageCount) {
         throw new Error("Page number out of range")
       }
 
       const tasks = await prisma.tasks.findMany({
         where: {
           user_id: userData.id,
-          deleted: deleted,
+          deleted: false,
           due_date: {
             lt: todayISO,
           },
@@ -243,7 +234,7 @@ export const getMissedTasks = async ({
         skip: skip,
         include: {
           steps: {
-            where: { deleted: deleted },
+            where: { deleted: false },
             orderBy: [
               {
                 creation_date: "desc",
@@ -271,11 +262,9 @@ export const getMissedTasks = async ({
 }
 
 export const getCompletedTasks = async ({
-  deleted,
   skip,
   take,
 }: {
-  deleted: boolean
   skip: number
   take: number
 }): Promise<ApiResponse<Task[]> & { totalCount?: number }> => {
@@ -283,42 +272,112 @@ export const getCompletedTasks = async ({
 
   try {
     if (userData && userData.id) {
-      const [tasks, totalCount] = await Promise.all([
-        prisma.tasks.findMany({
-          where: {
-            user_id: userData.id,
-            deleted: deleted,
-            complete: true,
+      const totalCount = await prisma.tasks.count({
+        where: {
+          user_id: userData.id,
+          deleted: false,
+          complete: true,
+        },
+      })
+
+      const pageCount = Math.ceil(totalCount / take)
+
+      const currentPage = skip / take + 1
+
+      if (pageCount !== 0 && currentPage > pageCount) {
+        throw new Error("Page number out of range")
+      }
+
+      const tasks = await prisma.tasks.findMany({
+        where: {
+          user_id: userData.id,
+          deleted: false,
+          complete: true,
+        },
+        take: take,
+        skip: skip,
+        include: {
+          steps: {
+            where: { deleted: false },
+            orderBy: [
+              {
+                creation_date: "desc",
+              },
+            ],
           },
-          take: take,
-          skip: skip,
-          include: {
-            steps: {
-              where: { deleted: deleted },
-              orderBy: [
-                {
-                  creation_date: "desc",
-                },
-              ],
-            },
+        },
+        orderBy: [
+          {
+            due_date: "desc",
           },
-          orderBy: [
-            {
-              due_date: "desc",
-            },
-            {
-              creation_date: "desc",
-            },
-          ],
-        }),
-        prisma.tasks.count({
-          where: {
-            user_id: userData.id,
-            deleted: deleted,
-            complete: true,
+          {
+            creation_date: "desc",
           },
-        }),
-      ])
+        ],
+      })
+
+      return { success: true, data: tasks, totalCount: totalCount }
+    } else {
+      throw new Error("Bad Request: Missing user data")
+    }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const getRecycledTasks = async ({
+  skip,
+  take,
+}: {
+  skip: number
+  take: number
+}): Promise<ApiResponse<Task[]> & { totalCount?: number }> => {
+  const userData = await checkAuth()
+
+  try {
+    if (userData && userData.id) {
+      const totalCount = await prisma.tasks.count({
+        where: {
+          user_id: userData.id,
+          deleted: true,
+        },
+      })
+
+      const pageCount = Math.ceil(totalCount / take)
+
+      const currentPage = skip / take + 1
+
+      if (pageCount !== 0 && currentPage > pageCount) {
+        throw new Error("Page number out of range")
+      }
+
+      const tasks = await prisma.tasks.findMany({
+        where: {
+          user_id: userData.id,
+          deleted: true,
+        },
+        take: take,
+        skip: skip,
+        include: {
+          steps: {
+            where: { deleted: false },
+            orderBy: [
+              {
+                creation_date: "desc",
+              },
+            ],
+          },
+        },
+        orderBy: [
+          {
+            due_date: "desc",
+          },
+          {
+            creation_date: "desc",
+          },
+        ],
+      })
+
       return { success: true, data: tasks, totalCount: totalCount }
     } else {
       throw new Error("Bad Request: Missing user data")
@@ -368,7 +427,7 @@ export const recycleTasks = async ({
   }
 }
 
-export const recycleAllTasks = async (): Promise<ApiResponse<void>> => {
+export const recycleAllCompletedTasks = async (): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
 
   if (!userData.id) return handleApiError("invalid user id")
@@ -377,6 +436,78 @@ export const recycleAllTasks = async (): Promise<ApiResponse<void>> => {
     await prisma.tasks.updateMany({
       where: { complete: true, user_id: userData.id },
       data: { deleted: true },
+    })
+    revalidatePath("/dashboard")
+    return { success: true }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const recycleAllMissedTasks = async (): Promise<ApiResponse<void>> => {
+  const userData = await checkAuth()
+
+  if (!userData.id) return handleApiError("invalid user id")
+
+  try {
+    await prisma.tasks.updateMany({
+      where: {
+        due_date: {
+          lt: todayISO,
+        },
+        user_id: userData.id,
+        complete: false,
+      },
+      data: { deleted: true },
+    })
+    revalidatePath("/dashboard")
+    return { success: true }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const deleteAllTasks = async (): Promise<ApiResponse<void>> => {
+  const userData = await checkAuth()
+  if (!userData.id) return handleApiError("user data unavailable")
+
+  try {
+    await prisma.steps.deleteMany({
+      where: {
+        task: {
+          user_id: userData.id,
+          deleted: true,
+        },
+      },
+    })
+
+    await prisma.tasks.deleteMany({
+      where: { user_id: userData.id, deleted: true },
+    })
+
+    revalidatePath("/dashboard")
+    return { success: true }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const reviveAllMissedTasks = async (): Promise<ApiResponse<void>> => {
+  const userData = await checkAuth()
+
+  if (!userData.id) return handleApiError("invalid user id")
+
+  try {
+    await prisma.tasks.updateMany({
+      where: {
+        due_date: {
+          lt: todayISO,
+        },
+        complete: false,
+        deleted: false,
+        user_id: userData.id,
+      },
+      data: { due_date: todayISO },
     })
     revalidatePath("/dashboard")
     return { success: true }

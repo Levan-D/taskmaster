@@ -4,7 +4,7 @@ import { getFutureTasks } from "../../actions/taskActions"
 import TaskDisplay from "./TaskDisplay"
 
 export default async function Week() {
-  const tasks = await getFutureTasks({ deleted: false })
+  const tasks = await getFutureTasks()
 
   if (!tasks.success) return <span></span>
 

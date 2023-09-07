@@ -4,7 +4,8 @@
 
 import Tasks from "@/app/components/tasks/taskComps/Tasks"
 import { experimental_useOptimistic as useOptimistic } from "react"
-import RecycleAllCompletedTasks from "./RecycleAllCompletedTasks"
+import DeleteAllTasks from "./DeleteAllTasks"
+
 import Pagination from "@/app/components/Pagination"
 
 type Props = {
@@ -16,8 +17,7 @@ type Props = {
 const filterCompletedTasks = (tasks: Task[]) => {
   const filteredTasks = tasks
     .filter((task: Task) => {
-      if (task.deleted) return false
-      if (!task.due_date) return false
+      if (!task.deleted) return false
 
       return task
     })
@@ -63,12 +63,8 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
           } mt-0 transition-[padding]   duration-500 `}
         >
           <div className={`mb-28 text-center`}>
-            <h2 className="text-2xl font-semibold mb-2">
-              You currently don&apos;t have any finished tasks
-            </h2>
-            <p className="text-neutral-300">
-              Navigate to today ,week , or habbit section to get started
-            </p>
+            <h2 className="text-2xl font-semibold mb-2">Recycle bin&apos;s empty</h2>
+            <p className="text-neutral-300">Your recycled tasks will appear here</p>
           </div>
         </div>
       ) : (
@@ -76,13 +72,8 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
           <div className="grow">
             <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4">
               <p className="basis-3/4 text-neutral-200">Recycle all completed tasks.</p>
-
-              <RecycleAllCompletedTasks
-                addOptimisticTask={addOptimisticTask}
-                className="shrink-0"
-              />
+              <DeleteAllTasks addOptimisticTask={addOptimisticTask} />
             </div>
-
             <Tasks
               addOptimisticTask={addOptimisticTask}
               className={"my-8"}

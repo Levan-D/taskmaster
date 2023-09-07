@@ -4,7 +4,8 @@
 
 import Tasks from "@/app/components/tasks/taskComps/Tasks"
 import { experimental_useOptimistic as useOptimistic } from "react"
-import RecycleAllCompletedTasks from "./RecycleAllCompletedTasks"
+import RecycleAllMissedTasks from "./RecycleAllMissedTasks"
+import ReviveAllMissedTasks from "./ReviveAllMissedTasks"
 import Pagination from "@/app/components/Pagination"
 
 type Props = {
@@ -55,7 +56,7 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
   const totalCompletedTasks = filteredCompletedTasks.length
 
   return (
-    <div className={` py-4 `}>
+    <div className={` py-4   `}>
       {totalCompletedTasks === 0 ? (
         <div
           className={` ${
@@ -64,32 +65,42 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
         >
           <div className={`mb-28 text-center`}>
             <h2 className="text-2xl font-semibold mb-2">
-              You currently don&apos;t have any finished tasks
+              You currently don&apos;t have any missed tasks
             </h2>
-            <p className="text-neutral-300">
-              Navigate to today ,week , or habbit section to get started
-            </p>
+            <p className="text-neutral-300">Yay, you&apos;re on point</p>
           </div>
         </div>
       ) : (
-        <>
-          <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4">
-            <p className="basis-3/4 text-neutral-200">Recycle all completed tasks.</p>
+        <div className="flex flex-col min-h-screen">
+          <div className="grow">
+            <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4">
+              <p className="basis-3/4 text-neutral-200">
+                Recycle or revive all missed tasks.
+              </p>
 
-            <RecycleAllCompletedTasks
+              <ReviveAllMissedTasks
+                addOptimisticTask={addOptimisticTask}
+                className="shrink-0 mx-4 "
+              />
+              <RecycleAllMissedTasks
+                addOptimisticTask={addOptimisticTask}
+                className="shrink-0"
+              />
+            </div>
+
+            <Tasks
               addOptimisticTask={addOptimisticTask}
-              className="shrink-0"
+              className={"my-8"}
+              tasks={filteredCompletedTasks}
             />
           </div>
 
-          <Tasks
-            addOptimisticTask={addOptimisticTask}
-            className={"my-8"}
-            tasks={filteredCompletedTasks}
+          <Pagination
+            className="w-fit mx-auto my-16"
+            pageCount={pageCount}
+            currentPage={currentPage}
           />
-
-          <Pagination pageCount={pageCount} currentPage={currentPage} />
-        </>
+        </div>
       )}
     </div>
   )
