@@ -26,7 +26,7 @@ type TaskPageType =
   | {
       icon: string
       title: string
-      path: string
+      path: string | { pathname: string; query: { [index: string]: any } }
     }
   | {
       break: boolean
@@ -54,12 +54,12 @@ const taskPages: TaskPageType[] = [
   {
     icon: mdiCheckCircleOutline,
     title: "Finished",
-    path: "/dashboard/finished",
+    path: { pathname: "/dashboard/finished", query: { page: 1 } },
   },
   {
     icon: mdiClockAlertOutline,
     title: "Missed",
-    path: "/dashboard/missed",
+    path: { pathname: "/dashboard/missed", query: { page: 1 } },
   },
   {
     break: true,
@@ -127,7 +127,9 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
                   key={i}
                   href={page.path}
                   className={`${!isOpen && "justify-center w-10"} ${
-                    pathname.includes(page.path) && "!bg-neutral-800"
+                    pathname.includes(
+                      typeof page.path === "string" ? page.path : page.path.pathname
+                    ) && "!bg-neutral-800"
                   } px-2 mx-2 flex gap-2 btnIcon h-10 items-center text-sm`}
                 >
                   <div>
@@ -145,7 +147,9 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
                   <Link
                     href={page.path}
                     className={`${!isOpen && "justify-center w-10"}  ${
-                      pathname.includes(page.path) && "!bg-neutral-800"
+                      pathname.includes(
+                        typeof page.path === "string" ? page.path : page.path.pathname
+                      ) && "!bg-neutral-800"
                     } px-2 mx-2 flex gap-2 btnIcon h-10 items-center text-sm`}
                   >
                     <div>
