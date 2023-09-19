@@ -10,7 +10,7 @@ export default async function Today() {
   if (!tasks.success) return <span></span>
   const today = DateTime.now()
 
-  const todayISO = today.toString() || ""
+  const todayISO = today.toFormat("yyyy-MM-dd HH:mm:ss") || ""
 
   return (
     <section className="  max-w-3xl mx-auto w-full  ">
