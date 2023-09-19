@@ -34,7 +34,7 @@ export default function CreateTask({
   const [isPending, startTransition] = useTransition()
   const [title, setTitle] = useState("")
 
-  const today = DateTime.now().minus({ day:0 }).toISO() ?? ""
+  const today = DateTime.now().minus({ day: 0 }).toISO() ?? ""
   const tomorrow = DateTime.now().plus({ day: 1 }).toISO() ?? ""
   const nextWeek = DateTime.now().plus({ day: 7 }).toISO() ?? ""
 
@@ -157,7 +157,7 @@ export default function CreateTask({
   return (
     <div className="   p-2 mainContainer  sm:hover:border-neutral-600 transition-colors duration-300">
       <form onSubmit={submitForm}>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           <input
             placeholder="Create a task"
             className="input p-4  w-full grow  text-sm sm:text-lg"
@@ -167,16 +167,26 @@ export default function CreateTask({
             type="text"
             required
           />
-          <div className="flex flex-col gap-2">
-            <DropdownMenu menuClassName="-translate-x-28  lg:-translate-x-0 " button={calendarButton} items={calendarItems} />
+          <div className="flex flex-row  gap-2">
+            <div className="flex flex-row sm:flex-col gap-2">
+              <DropdownMenu
+                menuClassName="-translate-x-28  lg:-translate-x-0 "
+                button={calendarButton}
+                items={calendarItems}
+              />
 
-            <DropdownMenu menuClassName="-translate-x-24  lg:-translate-x-0 " button={priorityButton} items={priorityItems} />
-          </div>
+              <DropdownMenu
+                menuClassName="-translate-x-24  lg:-translate-x-0 "
+                button={priorityButton}
+                items={priorityItems}
+              />
+            </div>
 
-          <div>
-            <button className="btnPrimary px-5 h-full">
-              <Icon path={mdiPlus} size={1.4} />
-            </button>
+            <div className="grow ">
+              <button className="btnPrimary px-6 h-full w-full">
+                <Icon path={mdiPlus} className="mx-auto  sm:scale-125" size={1} />
+              </button>
+            </div>
           </div>
         </div>
       </form>
