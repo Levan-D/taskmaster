@@ -8,9 +8,9 @@ export default async function Today() {
   const tasks = await getTodaysTasks()
 
   if (!tasks.success) return <span></span>
-  const today = DateTime.now().startOf("day")
+  const today = DateTime.now()
 
-  const todayISO = today.toISO() || ""
+  const todayISO = today.toString() || ""
 
   return (
     <section className="  max-w-3xl mx-auto w-full  ">
