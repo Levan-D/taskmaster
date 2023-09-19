@@ -168,9 +168,9 @@ export default function CreateTask({
             required
           />
           <div className="flex flex-col gap-2">
-            <DropdownMenu button={calendarButton} items={calendarItems} />
+            <DropdownMenu menuClassName="-translate-x-28  lg:-translate-x-0 " button={calendarButton} items={calendarItems} />
 
-            <DropdownMenu button={priorityButton} items={priorityItems} />
+            <DropdownMenu menuClassName="-translate-x-24  lg:-translate-x-0 " button={priorityButton} items={priorityItems} />
           </div>
 
           <div>

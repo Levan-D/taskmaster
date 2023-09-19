@@ -112,13 +112,17 @@ export default function TaskUpdate({
   }
 
   return edit ? (
-    <div ref={containerRef} onBlur={handleBlur} className={`${className}  mx-2`}>
+    <div
+      ref={containerRef}
+      onBlur={handleBlur}
+      className={`${className} !line-clamp-1    mx-2  `}
+    >
       <form onSubmit={submitForm}>
         <div className="flex gap-2">
           <input
             ref={inputRef}
             placeholder="Add a step"
-            className="input text-lg   py-1 grow"
+            className="input text-lg w-full  py-1 grow"
             name="title"
             type="text"
             value={inputValue}
@@ -141,9 +145,9 @@ export default function TaskUpdate({
     <button
       disabled={isPending || expired}
       onDoubleClick={toggleEdit}
-      className="block text-left text-lg  w-full mx-2   "
+      className="block text-left mx-2 w-full"
     >
-      {task.title}
+      <p className=" break-all line-clamp-1 ">{task.title}</p>
     </button>
   )
 }

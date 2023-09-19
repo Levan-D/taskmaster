@@ -18,7 +18,7 @@ export default function Step({ task, step, addOptimisticTask, expired }: Props) 
     >
       <ToggleStepComplete addOptimisticTask={addOptimisticTask} task={task} step={step} />
       <StepUpdate
-        className="grow truncate line-clamp-1"
+        className="grow truncate  "
         addOptimisticTask={addOptimisticTask}
         expired={expired}
         task={task}

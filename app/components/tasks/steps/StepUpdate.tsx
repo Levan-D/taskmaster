@@ -47,7 +47,6 @@ export default function StepUpdate({
     setInputValue(step.title)
     setEdit(x => !x)
   }
-
   const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
     if (containerRef.current && !containerRef.current.contains(e.relatedTarget as Node)) {
       toggleEdit()
@@ -85,7 +84,7 @@ export default function StepUpdate({
           <input
             ref={inputRef}
             placeholder="Add a step"
-            className="input    py-1 grow"
+            className="input w-full   py-1 grow"
             name="title"
             type="text"
             value={inputValue}
@@ -102,9 +101,9 @@ export default function StepUpdate({
     <button
       disabled={isPending || expired}
       onDoubleClick={toggleEdit}
-      className={`${step.complete && "text-neutral-300 "}   block text-left w-full mx-2 `}
+      className={`${step.complete && "text-neutral-300 "}  block text-left w-full mx-2 `}
     >
-      {step.title}
+      <p className=" break-all line-clamp-1 ">{task.title}</p>
     </button>
   )
 }

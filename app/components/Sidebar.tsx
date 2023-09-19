@@ -167,6 +167,7 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
     const handleResize = () => {
       setWidth(window.innerWidth)
     }
+    handleResize()
     window.addEventListener("resize", handleResize)
     return () => {
       window.removeEventListener("resize", handleResize)

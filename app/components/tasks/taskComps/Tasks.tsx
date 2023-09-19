@@ -30,7 +30,7 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
           addOptimisticTask={addOptimisticTask}
           task={task}
           expired={expired}
-          className="grow truncate line-clamp-1"
+          className=" grow    "
         />
 
         <TaskDropDown
