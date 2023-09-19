@@ -13,7 +13,7 @@ export default async function layout({ children }: { children: React.ReactNode }
     <div className="flex ">
       <Sidebar LogoutBtn={<LogoutBtn />} UserInfo={<UserInfo />} />
 
-      <div className="grow mx-4 sm:mt-0 mt-16 ">{children}</div>
+      <div className="grow mx-4 sm:mt-0 mt-12 ">{children}</div>
     </div>
   )
 }

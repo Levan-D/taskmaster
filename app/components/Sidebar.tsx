@@ -159,7 +159,7 @@ function Links({
 }
 
 export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
   const [width, setWidth] = useState(0)
   const pathname = usePathname()
 
