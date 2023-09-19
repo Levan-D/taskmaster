@@ -33,7 +33,7 @@
   }
 }
 
-button:focus {
+body:focus {
   -webkit-tap-highlight-color: transparent;
   outline: none;
   -ms-touch-action: manipulation;
