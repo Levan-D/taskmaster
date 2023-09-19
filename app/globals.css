@@ -34,10 +34,10 @@
 }
 
 *:focus {
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
-  -ms-touch-action: manipulation;
-  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent !important;
+  outline: none !important;
+  -ms-touch-action: manipulation !important;
+  touch-action: manipulation !important;
 }
 
 /* scrollbar */
