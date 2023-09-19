@@ -59,7 +59,7 @@ export default function CreateStep({
         <div className="flex gap-2">
           <input
             placeholder="Add a step"
-            className="input grow placeholder-neutral-300"
+            className="input w-full grow placeholder-neutral-300"
             name="title"
             value={title}
             onChange={e => setTitle(e.target.value)}
