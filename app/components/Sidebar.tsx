@@ -1,7 +1,7 @@
 /** @format */
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Icon from "@mdi/react"
 import {
   mdiChevronRight,
@@ -39,6 +39,9 @@ const taskPages: TaskPageType[] = [
     path: "/dashboard/habits",
   },
   {
+    break: true,
+  },
+  {
     icon: mdiCalendarTodayOutline,
     title: "Today",
     path: "/dashboard/today",
@@ -71,7 +74,7 @@ const taskPages: TaskPageType[] = [
   },
 ]
 
-export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
+function Desktop({ UserInfo, LogoutBtn }: Props) {
   const [isOpen, setIsOpen] = useState(true)
   const pathname = usePathname()
 
@@ -181,5 +184,123 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
         </footer>
       </nav>
     </div>
+  )
+}
+
+function Mobile({ UserInfo, LogoutBtn }: Props) {
+  const [isOpen, setIsOpen] = useState(true)
+  const pathname = usePathname()
+
+  const toggleNav = () => {
+    setIsOpen(x => !x)
+  }
+
+  const items: DropDownItemType = [
+    {
+      title: "test",
+      action: () => console.log(`alo`),
+    },
+    {
+      break: true,
+    },
+    {
+      JSX: LogoutBtn,
+    },
+  ]
+
+  return (
+    <>
+      <div
+        className={` ${
+          isOpen ? "visible opacity-40" : "collapse opacity-0"
+        }  fixed top-0 right-0 bottom-0 left-0 z-30 bg-neutral-950 duration-300`}
+        onMouseDown={toggleNav}
+      ></div>
+      <nav
+        className={` ${
+          isOpen ? "w-[300px]  bg-neutral-950" : "w-[56px]"
+        }   z-50  h-screen fixed  duration-300   flex flex-col  justify-between select-none `}
+      >
+        <div className={`${isOpen && "flex gap-1"}`}>
+          <div className="grow">
+            {isOpen && (
+              <DropdownMenu
+                menuClassName="translate-x-12"
+                items={items}
+                className={"  grow  btnIcon  m-2 w-full"}
+                button={UserInfo}
+              />
+            )}
+          </div>
+          <button onClick={toggleNav} className="  w-10 h-10 m-2 btnIcon ">
+            <Icon
+              path={mdiChevronRight}
+              className={`  ${isOpen && "rotate-180 "} duration-300 mx-auto`}
+              size={1}
+            />
+          </button>
+        </div>
+
+        <div>
+          {taskPages.map((page, i) => {
+            if ("icon" in page) {
+              return (
+                isOpen && (
+                  <Link
+                    key={i}
+                    onClick={toggleNav}
+                    href={page.path}
+                    className={`${!isOpen && "justify-center w-10"} ${
+                      pathname.includes(
+                        typeof page.path === "string" ? page.path : page.path.pathname
+                      ) && "!bg-neutral-800"
+                    } px-2 mx-2 flex gap-2 btnIcon h-10 items-center text-sm`}
+                  >
+                    <div>
+                      <Icon path={page.icon} size={0.8} />
+                    </div>
+                    <p>{page.title}</p>
+                  </Link>
+                )
+              )
+            }
+
+            if ("break" in page) {
+              return (
+                <hr key={i} className="mx-4 my-1 border-t-[1px] border-neutral-800" />
+              )
+            }
+          })}
+        </div>
+
+        <div></div>
+
+        <footer className={`text-xs p-2 text-center `}>
+          {isOpen && "© 2023 Levan Dolidze. All Rights Reserved."}
+        </footer>
+      </nav>
+    </>
+  )
+}
+
+export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
+  const [isOpen, setIsOpen] = useState(true)
+  const [width, setWidth] = useState(0)
+  const pathname = usePathname()
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth)
+    }
+    window.addEventListener("resize", handleResize)
+    return () => {
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [])
+
+  return width >= 640 ? (
+    <Desktop UserInfo={UserInfo} LogoutBtn={LogoutBtn} />
+  ) : (
+    <Mobile UserInfo={UserInfo} LogoutBtn={LogoutBtn} />
   )
 }
