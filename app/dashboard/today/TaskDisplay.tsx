@@ -14,6 +14,7 @@ import { setTodaysOps } from "@/lib/redux/slices/globalSlice"
 
 type Props = {
   tasks: Task[]
+  todayISO:string
 }
 
 const filterExpiredTasks = (tasks: Task[], today: DateTime) => {
@@ -45,10 +46,10 @@ const filterTodayTasks = (tasks: Task[], today: DateTime) =>
       steps: task.steps.filter((step: Step) => !step.deleted),
     }))
 
-export default function TaskDisplay({ tasks }: Props) {
+export default function TaskDisplay({ tasks,todayISO }: Props) {
   const { todaysOps } = useAppSelector(state => state.global)
   const dispatch = useAppDispatch()
-
+  console.log(todayISO)
   const today = DateTime.now().startOf("day")
 
   const setTodaysOp = () => {
