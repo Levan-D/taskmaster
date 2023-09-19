@@ -14,7 +14,7 @@ export default async function Today() {
 
   return (
     <section className="  max-w-3xl mx-auto w-full  ">
-      {tasks.data !== undefined && <TaskDisplay tasks={tasks.data} todayISO />}
+      {tasks.data !== undefined && <TaskDisplay tasks={tasks.data} todayISO={todayISO} />}
     </section>
   )
 }
