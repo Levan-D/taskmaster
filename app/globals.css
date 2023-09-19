@@ -31,9 +31,13 @@
   .innerContainer {
     @apply bg-neutral-700 rounded-lg border-[2px] shadow-sm shadow-neutral-950 border-opacity-60 border-neutral-600;
   }
-  button {
-    @apply outline-none sm:outline;
-  }
+}
+
+button:focus {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
 }
 
 /* scrollbar */
