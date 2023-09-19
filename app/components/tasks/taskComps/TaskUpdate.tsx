@@ -122,7 +122,7 @@ export default function TaskUpdate({
           <input
             ref={inputRef}
             placeholder="Add a step"
-            className="input text-lg w-full  py-1 grow"
+            className="input w-full text-sm sm:text-lg py-1 grow"
             name="title"
             type="text"
             value={inputValue}

@@ -33,7 +33,7 @@
   }
 }
 
-*:focus {
+body *:focus {
   -webkit-tap-highlight-color: transparent !important;
   outline: none !important;
   -ms-touch-action: manipulation !important;

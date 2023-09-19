@@ -91,6 +91,7 @@ export default function TaskDisplay({ tasks }: Props) {
   const totalExpiredTasks = expiredTasks.filter((task: Task) => !task.deleted).length
 
   const todayTasks = filterTodayTasks(optimisticTasks, today)
+  console.log(todayTasks)
   const todaysUnfinished = todayTasks.filter((task: Task) => !task.complete)
   const todaysFinished = todayTasks.filter((task: Task) => task.complete)
 

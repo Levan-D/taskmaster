@@ -84,7 +84,7 @@ export default function StepUpdate({
           <input
             ref={inputRef}
             placeholder="Add a step"
-            className="input w-full   py-1 grow"
+            className="input w-full text-sm sm:text-base  py-1 grow"
             name="title"
             type="text"
             value={inputValue}
