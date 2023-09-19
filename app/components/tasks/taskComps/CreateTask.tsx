@@ -155,12 +155,12 @@ export default function CreateTask({
   }
 
   return (
-    <div className="   p-2 mainContainer w-full sm:hover:border-neutral-600 transition-colors duration-300">
+    <div className="   p-2 mainContainer  sm:hover:border-neutral-600 transition-colors duration-300">
       <form onSubmit={submitForm}>
         <div className="flex gap-2">
           <input
             placeholder="Create a task"
-            className="input p-4 text-lg grow"
+            className="input p-4 text-lg w-full grow"
             name="title"
             value={title}
             onChange={e => setTitle(e.target.value)}
