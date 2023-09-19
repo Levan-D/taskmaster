@@ -218,7 +218,7 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
               />
             )}
           </div>
-          <button onClick={toggleNav} className="  w-10 h-10 m-2 btnIcon ">
+          <button onClick={toggleNav} className=" bg-neutral-950 w-10 h-10 m-2 btnIcon ">
             <Icon
               path={mdiChevronRight}
               className={`  ${isOpen && "rotate-180 "} duration-300 mx-auto`}
