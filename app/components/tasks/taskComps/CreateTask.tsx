@@ -160,7 +160,7 @@ export default function CreateTask({
         <div className="flex gap-2">
           <input
             placeholder="Create a task"
-            className="input p-4 text-lg w-full grow"
+            className="input p-4  w-full grow  text-sm sm:text-lg"
             name="title"
             value={title}
             onChange={e => setTitle(e.target.value)}

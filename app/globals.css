@@ -6,13 +6,13 @@
 
 @layer components {
   .btnPrimary {
-    @apply select-none block bg-sky-600 shadow-sm sm:hover:bg-sky-500  p-1 shadow-neutral-950  rounded-md duration-300 transition-colors;
+    @apply  text-sm sm:text-base select-none block bg-sky-600 shadow-sm sm:hover:bg-sky-500  p-1 shadow-neutral-950  rounded-md duration-300 transition-colors;
   }
   .btnSecondary {
-    @apply select-none block bg-neutral-600 shadow-sm sm:hover:bg-neutral-500  p-1 shadow-neutral-950  rounded-md duration-300 transition-colors;
+    @apply   text-sm sm:text-base  select-none block bg-neutral-600 shadow-sm sm:hover:bg-neutral-500  p-1 shadow-neutral-950  rounded-md duration-300 transition-colors;
   }
   .btnError {
-    @apply select-none block bg-rose-600 shadow-sm sm:hover:bg-rose-500  p-1 shadow-neutral-950    duration-300 transition-colors rounded-md;
+    @apply  text-sm sm:text-base  select-none block bg-rose-600 shadow-sm sm:hover:bg-rose-500  p-1 shadow-neutral-950    duration-300 transition-colors rounded-md;
   }
 
   .btnIcon {

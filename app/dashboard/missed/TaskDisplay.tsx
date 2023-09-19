@@ -63,8 +63,8 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
             totalCompletedTasks === 0 && "pt-[20vh]"
           } mt-0 transition-[padding]   duration-500 `}
         >
-          <div className={`mb-28 text-center`}>
-            <h2 className="text-2xl font-semibold mb-2">
+          <div className={`mb-28 text-center text-sm sm:text-base`}>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-2">
               You currently don&apos;t have any missed tasks
             </h2>
             <p className="text-neutral-300">Yay, you&apos;re on point</p>
@@ -74,18 +74,20 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
         <div className="flex flex-col min-h-screen">
           <div className="grow">
             <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4">
-              <p className="basis-3/4 text-neutral-200">
+              <p className="basis-3/4 text-neutral-200 text-sm sm:text-base">
                 Recycle or revive all missed tasks.
               </p>
 
-              <ReviveAllMissedTasks
-                addOptimisticTask={addOptimisticTask}
-                className="shrink-0 mx-4 "
-              />
-              <RecycleAllMissedTasks
-                addOptimisticTask={addOptimisticTask}
-                className="shrink-0"
-              />
+              <div  className="flex gap-4 flex-col  sm:flex-row shrink-0 " >
+                <ReviveAllMissedTasks
+                  addOptimisticTask={addOptimisticTask}
+                  className="shrink-0 "
+                />
+                <RecycleAllMissedTasks
+                  addOptimisticTask={addOptimisticTask}
+                  className="shrink-0 "
+                />
+              </div>
             </div>
 
             <Tasks

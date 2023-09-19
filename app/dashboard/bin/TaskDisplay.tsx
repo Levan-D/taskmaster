@@ -60,18 +60,22 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
         <div
           className={` ${
             totalCompletedTasks === 0 && "pt-[20vh]"
-          } mt-0 transition-[padding]   duration-500 `}
+          } mt-0 transition-[padding]   duration-500  `}
         >
-          <div className={`mb-28 text-center`}>
-            <h2 className="text-2xl font-semibold mb-2">Recycle bin&apos;s empty</h2>
-            <p className="text-neutral-300">Your recycled tasks will appear here</p>
+          <div className={`mb-28 text-center  text-sm sm:text-base`}>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-2">
+              Recycle bin&apos;s empty
+            </h2>
+            <p className="text-neutral-300  ">Your recycled tasks will appear here</p>
           </div>
         </div>
       ) : (
         <div className="flex flex-col min-h-screen">
           <div className="grow">
             <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4">
-              <p className="basis-3/4 text-neutral-200">Recycle all completed tasks.</p>
+              <p className="basis-3/4 text-neutral-200 text-sm sm:text-base">
+                Recycle all completed tasks.
+              </p>
               <DeleteAllTasks addOptimisticTask={addOptimisticTask} />
             </div>
             <Tasks

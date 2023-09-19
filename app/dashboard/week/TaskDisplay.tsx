@@ -139,8 +139,8 @@ export default function TaskDisplay({ tasks }: Props) {
       >
         {totalfutureTasks === 0 &&
           (weeksOps ? (
-            <div className={`mb-28 text-center`}>
-              <h2 className="text-2xl font-semibold mb-2">Congratulations!</h2>
+            <div className={`mb-28 text-center text-sm sm:text-base`}>
+              <h2 className="text-xl sm:text-2xl font-semibold mb-2">Congratulations!</h2>
               <p className="text-neutral-300">
                 You&apos;ve completed all your weekly tasks
               </p>
@@ -149,8 +149,8 @@ export default function TaskDisplay({ tasks }: Props) {
               </p>
             </div>
           ) : (
-            <div className={` mb-28 text-center`}>
-              <h2 className="text-2xl font-semibold mb-2">Hello there</h2>
+            <div className={` mb-28 text-center text-sm sm:text-base`}>
+              <h2 className="text-xl sm:text-2xl font-semibold mb-2">Hello there</h2>
               <p className="text-neutral-300">Add tasks below and organize your week</p>
               <br />
             </div>
@@ -200,7 +200,7 @@ export default function TaskDisplay({ tasks }: Props) {
           return (
             <Accordion
               key={i}
-              className="my-8"
+              className="my-8 text-sm sm:text-base"
               title={`${DateTime.fromISO(date).toFormat(
                 "EEEE, dd/MM/yy"
               )} (${numTasksForTheDay})`}
@@ -219,10 +219,15 @@ export default function TaskDisplay({ tasks }: Props) {
       )}
 
       {futureTasksCompleted > 0 && (
-        <Accordion className="my-8" title={`Finished (${futureTasksCompleted})`}>
+        <Accordion
+          className="my-8 text-sm sm:text-base"
+          title={`Finished (${futureTasksCompleted})`}
+        >
           <>
             <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4">
-              <p className="basis-3/4 text-neutral-200">Recycle completed tasks for the week.</p>
+              <p className="basis-3/4 text-neutral-200  text-sm sm:text-base">
+                Recycle completed tasks for the week.
+              </p>
 
               <TasksRecycle
                 addOptimisticTask={addOptimisticTask}

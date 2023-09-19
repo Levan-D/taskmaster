@@ -103,7 +103,7 @@ export default function StepUpdate({
       onDoubleClick={toggleEdit}
       className={`${step.complete && "text-neutral-300 "}  block text-left w-full mx-2 `}
     >
-      <p className=" break-all line-clamp-1 ">{task.title}</p>
+      <p className=" break-all line-clamp-1 text-sm sm:text-base ">{task.title}</p>
     </button>
   )
 }

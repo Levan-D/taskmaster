@@ -147,7 +147,7 @@ export default function TaskUpdate({
       onDoubleClick={toggleEdit}
       className="block text-left mx-2 w-full"
     >
-      <p className=" break-all line-clamp-1 ">{task.title}</p>
+      <p className=" break-all line-clamp-1 text-sm sm:text-base ">{task.title}</p>
     </button>
   )
 }
