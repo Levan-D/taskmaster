@@ -133,7 +133,7 @@ export const getTodaysTasks = async (): Promise<ApiResponse<Task[]>> => {
         },
         orderBy: [
           {
-            due_date: "asc",
+            due_date: "desc",
           },
           {
             creation_date: "desc",
