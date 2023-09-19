@@ -204,8 +204,8 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
 
       <nav
         className={` ${
-          isOpen ? "w-[200px] bg-neutral-950" : "w-[56px]"
-        }    h-screen fixed sm:bg-neutral-950  duration-300   z-50  flex flex-col  justify-between select-none `}
+          isOpen ? "w-[200px] bg-neutral-950 h-screen" : "w-[56px]"
+        }    sm:h-screen fixed sm:bg-neutral-950  duration-300   z-50  flex flex-col  justify-between select-none `}
       >
         <div className={`${isOpen && "flex gap-1"}`}>
           <div className="grow">
