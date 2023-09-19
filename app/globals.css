@@ -6,20 +6,20 @@
 
 @layer components {
   .btnPrimary {
-    @apply outline-none sm:outline  text-sm sm:text-base select-none block bg-sky-600 shadow-sm sm:hover:bg-sky-500  p-1 shadow-neutral-950  rounded-md duration-300 transition-colors;
+    @apply text-sm sm:text-base select-none block bg-sky-600 shadow-sm sm:hover:bg-sky-500  p-1 shadow-neutral-950  rounded-md duration-300 transition-colors;
   }
   .btnSecondary {
-    @apply outline-none sm:outline text-sm sm:text-base  select-none block bg-neutral-600 shadow-sm sm:hover:bg-neutral-500  p-1 shadow-neutral-950  rounded-md duration-300 transition-colors;
+    @apply text-sm sm:text-base  select-none block bg-neutral-600 shadow-sm sm:hover:bg-neutral-500  p-1 shadow-neutral-950  rounded-md duration-300 transition-colors;
   }
   .btnError {
-    @apply outline-none sm:outline text-sm sm:text-base  select-none block bg-rose-600 shadow-sm sm:hover:bg-rose-500  p-1 shadow-neutral-950    duration-300 transition-colors rounded-md;
+    @apply text-sm sm:text-base  select-none block bg-rose-600 shadow-sm sm:hover:bg-rose-500  p-1 shadow-neutral-950    duration-300 transition-colors rounded-md;
   }
 
   .btnIcon {
-    @apply outline-none sm:outline select-none block sm:hover:bg-neutral-700 rounded-md duration-300 transition-colors;
+    @apply select-none block sm:hover:bg-neutral-700 rounded-md duration-300 transition-colors;
   }
   .btnText {
-    @apply outline-none sm:outline select-none block hover:text-neutral-300 duration-300 transition-colors;
+    @apply select-none block hover:text-neutral-300 duration-300 transition-colors;
   }
   .input {
     @apply px-4 py-2 border-opacity-60 border-neutral-600 border-[2px] text-sky-400 shadow-neutral-950 shadow-sm rounded-md bg-neutral-700 placeholder-neutral-200;
@@ -30,6 +30,9 @@
   }
   .innerContainer {
     @apply bg-neutral-700 rounded-lg border-[2px] shadow-sm shadow-neutral-950 border-opacity-60 border-neutral-600;
+  }
+  button {
+    @apply outline-none sm:outline;
   }
 }
 
