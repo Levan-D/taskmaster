@@ -2,6 +2,7 @@
 
 "use client"
 
+import { useState, useEffect } from "react"
 import CreateTask from "@/app/components/tasks/taskComps/CreateTask"
 import Tasks from "@/app/components/tasks/taskComps/Tasks"
 import { DateTime } from "luxon"
@@ -47,8 +48,10 @@ const filterTodayTasks = (tasks: Task[], today: DateTime) =>
     }))
 
 export default function TaskDisplay({ tasks }: Props) {
+  const [message, setMessage] = useState<null | JSX.Element>(null)
   const { todaysOps } = useAppSelector(state => state.global)
   const dispatch = useAppDispatch()
+
   const today = DateTime.now().startOf("day")
 
   const setTodaysOp = () => {
@@ -103,7 +106,33 @@ export default function TaskDisplay({ tasks }: Props) {
   const allATodaysTasksCompleted =
     totalTodaysTasks === todaysTasksCompleted && totalTodaysTasks > 0
 
-  if (optimisticTasksLength === 0 && todaysOps === undefined) return <Loader />
+  useEffect(() => {
+    if (todaysOps) {
+      setMessage(
+        <div className={`  mb-28 text-center text-sm sm:text-base `}>
+          <h2 className="  text-xl sm:text-2xl font-semibold mb-2">Congratulations!</h2>
+          <p className="text-neutral-300">You&apos;ve completed all your tasks</p>
+          <p className="text-neutral-300">Kick back and enjoy the rest of your day</p>
+        </div>
+      )
+    } else
+      setMessage(
+        <div className={`  mb-28 text-center text-sm sm:text-base`}>
+          <h2 className="text-2xl font-semibold mb-2">Hello there</h2>
+          <p className="text-neutral-300">
+            Add tasks below and start your day organized!
+          </p>
+          <br />
+        </div>
+      )
+  }, [])
+
+  if (optimisticTasksLength === 0 && message === null)
+    return (
+      <div className="h-screen">
+        <Loader />
+      </div>
+    )
 
   return (
     <div className={` py-4 `}>
@@ -112,24 +141,7 @@ export default function TaskDisplay({ tasks }: Props) {
           optimisticTasksLength === 0 && "pt-[20vh]"
         } mt-0 transition-[padding] duration-500 `}
       >
-        {optimisticTasksLength === 0 &&
-          (todaysOps ? (
-            <div className={`  mb-28 text-center text-sm sm:text-base `}>
-              <h2 className="  text-xl sm:text-2xl font-semibold mb-2">
-                Congratulations!
-              </h2>
-              <p className="text-neutral-300">You&apos;ve completed all your tasks</p>
-              <p className="text-neutral-300">Kick back and enjoy the rest of your day</p>
-            </div>
-          ) : (
-            <div className={`  mb-28 text-center text-sm sm:text-base`}>
-              <h2 className="text-2xl font-semibold mb-2">Hello there</h2>
-              <p className="text-neutral-300">
-                Add tasks below and start your day organized!
-              </p>
-              <br />
-            </div>
-          ))}
+        {optimisticTasksLength === 0 && message}
 
         <CreateTask
           defaultDate="Today"
