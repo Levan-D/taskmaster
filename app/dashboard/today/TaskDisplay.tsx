@@ -11,10 +11,11 @@ import TasksRevive from "@/app/components/tasks/taskComps/TasksRevive"
 import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import { setTodaysOps } from "@/lib/redux/slices/globalSlice"
+import Loader from "@/app/components/Loader"
 
 type Props = {
   tasks: Task[]
-  todayISO:string
+  todayISO: string
 }
 
 const filterExpiredTasks = (tasks: Task[], today: DateTime) => {
@@ -46,10 +47,9 @@ const filterTodayTasks = (tasks: Task[], today: DateTime) =>
       steps: task.steps.filter((step: Step) => !step.deleted),
     }))
 
-export default function TaskDisplay({ tasks,todayISO }: Props) {
+export default function TaskDisplay({ tasks, todayISO }: Props) {
   const { todaysOps } = useAppSelector(state => state.global)
   const dispatch = useAppDispatch()
-  console.log(todayISO)
   const today = DateTime.now().startOf("day")
 
   const setTodaysOp = () => {
@@ -92,7 +92,6 @@ export default function TaskDisplay({ tasks,todayISO }: Props) {
   const totalExpiredTasks = expiredTasks.filter((task: Task) => !task.deleted).length
 
   const todayTasks = filterTodayTasks(optimisticTasks, today)
-  console.log(todayTasks)
   const todaysUnfinished = todayTasks.filter((task: Task) => !task.complete)
   const todaysFinished = todayTasks.filter((task: Task) => task.complete)
 
@@ -105,12 +104,7 @@ export default function TaskDisplay({ tasks,todayISO }: Props) {
   const allATodaysTasksCompleted =
     totalTodaysTasks === todaysTasksCompleted && totalTodaysTasks > 0
 
-  if (optimisticTasksLength === 0 && todaysOps === undefined)
-    return (
-      <div className="w-fit mx-auto min-h-screen flex flex-col justify-center   ">
-        <div className="loader"></div>
-      </div>
-    )
+  if (optimisticTasksLength === 0 && todaysOps === undefined) return <Loader />
 
   return (
     <div className={` py-4 `}>
@@ -122,7 +116,9 @@ export default function TaskDisplay({ tasks,todayISO }: Props) {
         {optimisticTasksLength === 0 &&
           (todaysOps ? (
             <div className={`  mb-28 text-center text-sm sm:text-base `}>
-              <h2 className="  text-xl sm:text-2xl font-semibold mb-2">Congratulations!</h2>
+              <h2 className="  text-xl sm:text-2xl font-semibold mb-2">
+                Congratulations!
+              </h2>
               <p className="text-neutral-300">You&apos;ve completed all your tasks</p>
               <p className="text-neutral-300">Kick back and enjoy the rest of your day</p>
             </div>
@@ -145,23 +141,29 @@ export default function TaskDisplay({ tasks,todayISO }: Props) {
       </div>
 
       {totalExpiredTasks > 0 && (
-        <Accordion className="my-8 text-sm sm:text-base" title={`Expired (${totalExpiredTasks})`}>
+        <Accordion
+          className="my-8 text-sm sm:text-base"
+          title={`Expired (${totalExpiredTasks})`}
+        >
           <>
-            <div className="mainContainer bg-neutral-700 my-4 flex items-center   py-2 px-4">
+            <div className="mainContainer bg-neutral-700 my-4   items-center   py-2 px-4 flex gap-4 flex-col  sm:flex-row text-center sm:text-left">
               <p className="basis-3/4 text-neutral-200">
                 Yesterday&lsquo;s expired tasks will be moved to missed section in a day
                 and will be recycled in a week.
               </p>
-              <TasksRevive
-                addOptimisticTask={addOptimisticTask}
-                tasks={expiredTasks}
-                className="shrink-0 mx-4 "
-              />
-              <TasksRecycle
-                addOptimisticTask={addOptimisticTask}
-                tasks={expiredTasks}
-                className="shrink-0"
-              />
+
+              <div className="flex gap-4     shrink-0 ">
+                <TasksRevive
+                  addOptimisticTask={addOptimisticTask}
+                  tasks={expiredTasks}
+                  className="shrink-0   "
+                />
+                <TasksRecycle
+                  addOptimisticTask={addOptimisticTask}
+                  tasks={expiredTasks}
+                  className="shrink-0"
+                />
+              </div>
             </div>
 
             <Tasks addOptimisticTask={addOptimisticTask} expired tasks={expiredTasks} />
@@ -169,7 +171,10 @@ export default function TaskDisplay({ tasks,todayISO }: Props) {
         </Accordion>
       )}
       {totalTodaysTasks > 0 && totalExpiredTasks > 0 && todaysTasksNotCompleted > 0 && (
-        <Accordion className="my-8 text-sm sm:text-base" title={`Pending (${todaysTasksNotCompleted})`}>
+        <Accordion
+          className="my-8 text-sm sm:text-base"
+          title={`Pending (${todaysTasksNotCompleted})`}
+        >
           <Tasks
             addOptimisticTask={addOptimisticTask}
             className={"my-8"}
@@ -208,10 +213,15 @@ export default function TaskDisplay({ tasks,todayISO }: Props) {
         />
       )}
       {todaysTasksCompleted > 0 && (
-        <Accordion className="my-8 text-sm sm:text-base " title={`Finished (${todaysTasksCompleted})`}>
+        <Accordion
+          className="my-8 text-sm sm:text-base "
+          title={`Finished (${todaysTasksCompleted})`}
+        >
           <>
-            <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4">
-              <p className="basis-3/4 text-neutral-200 text-sm sm:text-base">Recycle completed tasks for today.</p>
+            <div className="mainContainer bg-neutral-700 my-4    justify-between items-center   py-2 px-4 flex gap-4 flex-col  sm:flex-row text-center sm:text-left">
+              <p className="basis-3/4 text-neutral-200 text-sm sm:text-base">
+                Recycle completed tasks for today.
+              </p>
 
               <TasksRecycle
                 addOptimisticTask={addOptimisticTask}

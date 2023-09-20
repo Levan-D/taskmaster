@@ -73,12 +73,12 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
       ) : (
         <div className="flex flex-col min-h-screen">
           <div className="grow">
-            <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4">
+            <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4   gap-4 flex-col  sm:flex-row text-center sm:text-left">
               <p className="basis-3/4 text-neutral-200 text-sm sm:text-base">
                 Recycle or revive all missed tasks.
               </p>
 
-              <div  className="flex gap-4 flex-col  sm:flex-row shrink-0 " >
+              <div className="flex gap-4     shrink-0 ">
                 <ReviveAllMissedTasks
                   addOptimisticTask={addOptimisticTask}
                   className="shrink-0 "

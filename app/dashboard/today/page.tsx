@@ -3,10 +3,14 @@
 import { getTodaysTasks } from "../../actions/taskActions"
 import TaskDisplay from "./TaskDisplay"
 import { DateTime } from "luxon"
+import { cookies } from "next/headers"
+import Loader from "@/app/components/Loader"
 
 export default async function Today() {
-  const tasks = await getTodaysTasks()
+  if (cookies().get("user_time")?.value === undefined) return <Loader />
 
+  const tasks = await getTodaysTasks()
+  tasks
   if (!tasks.success) return <span></span>
   const today = DateTime.now()
 

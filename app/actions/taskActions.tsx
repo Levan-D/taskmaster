@@ -5,12 +5,7 @@ import { prisma } from "../db"
 import { revalidatePath } from "next/cache"
 import { DateTime } from "luxon"
 import { checkAuth, handleApiError } from "./userActions"
-
-const today = DateTime.now().startOf("day")
-const yesterday = today.minus({ days: 1 }).toISO() || ""
-const tomorrow = today.plus({ days: 1 }).toISO() || ""
-const week = today.plus({ days: 8 }).toISO() || ""
-const todayISO = today.toISO() || ""
+import { cookies } from "next/headers"
 
 export const createTask = async ({
   title,
@@ -103,6 +98,12 @@ export const reviveTask = async ({
 export const getTodaysTasks = async (): Promise<ApiResponse<Task[]>> => {
   const userData = await checkAuth()
 
+  const userTime = cookies().get("user_time")?.value
+  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
+  const yesterday = today.minus({ days: 1 }).toISO() || ""
+  const tomorrow = today.plus({ days: 1 }).toISO() || ""
+  const todayISO = today.toISO() || ""
+
   try {
     if (userData && userData.id) {
       const tasks = await prisma.tasks.findMany({
@@ -152,6 +153,11 @@ export const getTodaysTasks = async (): Promise<ApiResponse<Task[]>> => {
 export const getFutureTasks = async (): Promise<ApiResponse<Task[]>> => {
   const userData = await checkAuth()
 
+  const userTime = cookies().get("user_time")?.value
+  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
+  const tomorrow = today.plus({ days: 1 }).toISO() || ""
+  const week = today.plus({ days: 8 }).toISO() || ""
+
   try {
     if (userData && userData.id) {
       const tasks = await prisma.tasks.findMany({
@@ -200,6 +206,10 @@ export const getMissedTasks = async ({
   take: number
 }): Promise<ApiResponse<Task[]> & { totalCount?: number }> => {
   const userData = await checkAuth()
+
+  const userTime = cookies().get("user_time")?.value
+  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
+  const todayISO = today.toISO() || ""
 
   try {
     if (userData && userData.id) {
@@ -447,6 +457,10 @@ export const recycleAllCompletedTasks = async (): Promise<ApiResponse<void>> => 
 export const recycleAllMissedTasks = async (): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
 
+  const userTime = cookies().get("user_time")?.value
+  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
+  const todayISO = today.toISO() || ""
+
   if (!userData.id) return handleApiError("invalid user id")
 
   try {
@@ -494,6 +508,10 @@ export const deleteAllTasks = async (): Promise<ApiResponse<void>> => {
 
 export const reviveAllMissedTasks = async (): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
+
+  const userTime = cookies().get("user_time")?.value
+  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
+  const todayISO = today.toISO() || ""
 
   if (!userData.id) return handleApiError("invalid user id")
 

@@ -62,7 +62,7 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
             totalCompletedTasks === 0 && "pt-[20vh]"
           } mt-0 transition-[padding]   duration-500 `}
         >
-          <div className={`mb-28 text-center text-sm sm:text-base`}>
+          <div className={`mb-28 text-center text-sm sm:text-base `}>
             <h2 className="text-xl sm:text-2xl font-semibold mb-2  ">
               You currently don&apos;t have any finished tasks
             </h2>
@@ -74,7 +74,7 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
       ) : (
         <div className="flex flex-col min-h-screen">
           <div className="grow">
-            <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4">
+            <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4 flex gap-4 flex-col  sm:flex-row text-center sm:text-left">
               <p className="basis-3/4 text-neutral-200 text-sm sm:text-base">
                 Recycle all completed tasks.
               </p>

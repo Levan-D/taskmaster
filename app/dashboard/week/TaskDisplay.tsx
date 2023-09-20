@@ -10,6 +10,7 @@ import Accordion from "@/app/components/Accordion"
 import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import { setWeeksOps } from "@/lib/redux/slices/globalSlice"
+import Loader from "@/app/components/Loader"
 
 type Props = {
   tasks: Task[]
@@ -123,12 +124,7 @@ export default function TaskDisplay({ tasks }: Props) {
   )
   const sortedDates = Object.keys(tasksGroupedByDate).sort()
 
-  if (totalfutureTasks === 0 && weeksOps === undefined)
-    return (
-      <div className="w-fit mx-auto min-h-screen flex flex-col justify-center   ">
-        <div className="loader"></div>
-      </div>
-    )
+  if (totalfutureTasks === 0 && weeksOps === undefined) return <Loader />
 
   return (
     <div className={` py-4 `}>
@@ -224,8 +220,8 @@ export default function TaskDisplay({ tasks }: Props) {
           title={`Finished (${futureTasksCompleted})`}
         >
           <>
-            <div className="mainContainer bg-neutral-700 my-4 flex justify-between items-center   py-2 px-4">
-              <p className="basis-3/4 text-neutral-200  text-sm sm:text-base">
+            <div className="mainContainer bg-neutral-700 my-4   justify-between items-center flex gap-4 flex-col  sm:flex-row text-center sm:text-left   py-2 px-4">
+              <p className="basis-3/4 text-neutral-200  text-sm sm:text-base  ">
                 Recycle completed tasks for the week.
               </p>
 
