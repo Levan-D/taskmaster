@@ -36,8 +36,8 @@
 body {
   -webkit-tap-highlight-color: transparent !important;
 }
-body:focus {
-  @apply outline-sky-600;
+body *:focus {
+  @apply !outline-white -outline-offset-2;
 }
 
 /* scrollbar */
