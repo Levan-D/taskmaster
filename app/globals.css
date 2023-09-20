@@ -34,8 +34,7 @@
 }
 
 body *:focus {
-  -webkit-tap-highlight-color: transparent !important;
-  outline: none !important;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important;
   -ms-touch-action: manipulation !important;
   touch-action: manipulation !important;
 }
