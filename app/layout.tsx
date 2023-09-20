@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           className={`${inter.className}  text-white bg-neutral-900 flex flex-col min-h-screen `}
         >
           <HooksWrapper>
-            <main className="grow">
+            <main className="grow min-h-screen">
               {children}
               <ToastContainer
                 position="top-right"

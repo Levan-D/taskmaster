@@ -13,7 +13,7 @@ export default async function Today() {
   if (!tasks.success) return <span></span>
 
   return (
-    <section className="  max-w-3xl mx-auto w-full  ">
+    <section className="  max-w-3xl mx-auto    ">
       {tasks.data !== undefined && <TaskDisplay tasks={tasks.data} />}
     </section>
   )
