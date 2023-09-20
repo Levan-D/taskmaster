@@ -2,8 +2,12 @@
 
 import { getFutureTasks } from "../../actions/taskActions"
 import TaskDisplay from "./TaskDisplay"
+import { cookies } from "next/headers"
+import Loader from "@/app/components/Loader"
 
 export default async function Week() {
+  if (cookies().get("user_time")?.value === undefined) return <Loader />
+
   const tasks = await getFutureTasks()
 
   if (!tasks.success) return <span></span>
