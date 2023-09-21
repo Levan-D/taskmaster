@@ -39,7 +39,7 @@ export default function ToggleTaskComplete({ task, addOptimisticTask }: Props) {
             : task.priority === "MEDIUM"
             ? "text-amber-400"
             : "text-rose-400"
-        }  scale-75 sm:Scale-100`}
+        }  scale-75 sm:scale-100`}
         size={1}
       />
     </button>

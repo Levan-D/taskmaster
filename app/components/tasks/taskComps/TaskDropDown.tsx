@@ -48,7 +48,7 @@ export default function TaskDropDown({ task, expired, addOptimisticTask }: Props
           : "rounded-bl-lg"
       } hover:bg-neutral-600 rounded-tr-lg p-1 sm:p-2 duration-300`}
     >
-      <Icon path={mdiDotsVertical} size={1} className="  scale-75 sm:Scale-100 " />
+      <Icon path={mdiDotsVertical} size={1} className="  scale-75 sm:scale-100 " />
     </div>
   )
   return (
@@ -61,7 +61,7 @@ export default function TaskDropDown({ task, expired, addOptimisticTask }: Props
           }}
           className="p-1 sm:p-2 block bg-lime-600 shadow-sm sm:hover:bg-lime-500    rounded-bl-lg   duration-300"
         >
-          <Icon className="  scale-75 sm:Scale-100 " path={mdiHeartOutline} size={1} />
+          <Icon className="  scale-75 sm:scale-100 " path={mdiHeartOutline} size={1} />
         </button>
       )}
       {task.complete && !task.deleted && (
@@ -72,7 +72,7 @@ export default function TaskDropDown({ task, expired, addOptimisticTask }: Props
           }}
           className={`block bg-neutral-600 shadow-sm sm:hover:bg-neutral-500 border-r-[2px]  border-neutral-700    rounded-bl-lg p-1 sm:p-2 duration-300 `}
         >
-          <Icon className="  scale-75 sm:Scale-100 " path={mdiTrashCanOutline} size={1} />
+          <Icon className="  scale-75 sm:scale-100 " path={mdiTrashCanOutline} size={1} />
         </button>
       )}
       <div>
