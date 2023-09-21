@@ -46,9 +46,9 @@ export default function TaskDropDown({ task, expired, addOptimisticTask }: Props
         expired || (task.complete && !task.deleted)
           ? "bg-neutral-600 shadow-sm sm:hover:bg-neutral-500"
           : "rounded-bl-lg"
-      } hover:bg-neutral-600 rounded-tr-lg p-2 duration-300`}
+      } hover:bg-neutral-600 rounded-tr-lg p-1 sm:p-2 duration-300`}
     >
-      <Icon path={mdiDotsVertical} size={1} />
+      <Icon path={mdiDotsVertical} size={1} className="  scale-75 sm:Scale-100 " />
     </div>
   )
   return (
@@ -59,9 +59,9 @@ export default function TaskDropDown({ task, expired, addOptimisticTask }: Props
           onClick={() => {
             startTransition(handleReviveTask)
           }}
-          className=" block bg-lime-600 shadow-sm sm:hover:bg-lime-500    rounded-bl-lg p-2 duration-300"
+          className="p-1 sm:p-2 block bg-lime-600 shadow-sm sm:hover:bg-lime-500    rounded-bl-lg   duration-300"
         >
-          <Icon path={mdiHeartOutline} size={1} />
+          <Icon className="  scale-75 sm:Scale-100 " path={mdiHeartOutline} size={1} />
         </button>
       )}
       {task.complete && !task.deleted && (
@@ -70,13 +70,13 @@ export default function TaskDropDown({ task, expired, addOptimisticTask }: Props
           onClick={() => {
             startTransition(handleRecycleTask)
           }}
-          className={`block bg-neutral-600 shadow-sm sm:hover:bg-neutral-500 border-r-[2px]  border-neutral-700    rounded-bl-lg p-2 duration-300 `}
+          className={`block bg-neutral-600 shadow-sm sm:hover:bg-neutral-500 border-r-[2px]  border-neutral-700    rounded-bl-lg p-1 sm:p-2 duration-300 `}
         >
-          <Icon path={mdiTrashCanOutline} size={1} />
+          <Icon className="  scale-75 sm:Scale-100 " path={mdiTrashCanOutline} size={1} />
         </button>
       )}
       <div>
-        <DropdownMenu menuClassName="-translate-x-24" button={button} items={items} />
+        <DropdownMenu menuClassName="-translate-x-24 " button={button} items={items} />
       </div>
     </div>
   )

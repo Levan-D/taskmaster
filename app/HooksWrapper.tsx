@@ -14,10 +14,13 @@ export const HooksWrapper = (props: React.PropsWithChildren) => {
   const today = DateTime.local().startOf("day").toISO()
 
   useEffect(() => {
-    const timeZone = DateTime.local().zoneName
-    const cookieZone = DateTime.fromISO(getCookie("user_time") || "").zoneName
+    const userTime = getCookie("user_time")
+    const userTimeFormatted = userTime
+      ? DateTime.fromISO(userTime).toISO()
+      : DateTime.now().startOf("day").toISO()
+    const today = DateTime.now().startOf("day").toISO() ?? ""
 
-    if (timeZone !== cookieZone) {
+    if (today !== userTimeFormatted) {
       setCookie("user_time", today)
       router.refresh()
     }

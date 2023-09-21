@@ -19,6 +19,7 @@ type TaskProps = {
 }
 
 function Task({ task, expired, addOptimisticTask }: TaskProps) {
+  console.log(task)
   return (
     <div
       className={`mainContainer  sm:hover:border-neutral-600 transition-colors duration-300`}
