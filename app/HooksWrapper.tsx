@@ -11,7 +11,6 @@ import { useEffect } from "react"
 
 export const HooksWrapper = (props: React.PropsWithChildren) => {
   const router = useRouter()
-  const today = DateTime.local().startOf("day").toISO()
 
   useEffect(() => {
     const userTime = getCookie("user_time")
@@ -19,7 +18,7 @@ export const HooksWrapper = (props: React.PropsWithChildren) => {
       ? DateTime.fromISO(userTime).toISO()
       : DateTime.now().startOf("day").toISO()
     const today = DateTime.now().startOf("day").toISO() ?? ""
-
+    console.log(today, userTimeFormatted)
     if (today !== userTimeFormatted) {
       setCookie("user_time", today)
       router.refresh()
