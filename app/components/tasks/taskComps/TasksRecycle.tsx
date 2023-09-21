@@ -38,7 +38,7 @@ export default function TasksRecycle({
       onClick={() => {
         startTransition(handleRecycleTasks)
       }}
-      className={`${className} btnError   px-4  `}
+      className={`${className} btnSecondary   px-4  `}
     >
       Recycle All
     </button>

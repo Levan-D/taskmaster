@@ -41,7 +41,7 @@ export default function RecycleStep({ task, step, addOptimisticTask }: Props) {
   return (
     <button
       disabled={isPending}
-      className="btnError"
+      className="btnSecondary"
       onClick={() => {
         startTransition(handleRecycleStep)
       }}
