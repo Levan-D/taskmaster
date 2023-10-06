@@ -16,7 +16,7 @@ export const HooksWrapper = (props: React.PropsWithChildren) => {
     const userTime = getCookie("user_time")
     const userTimeFormatted = userTime ? DateTime.fromISO(userTime).toISO() : undefined
     const today = DateTime.now().startOf("day").toISO() ?? ""
-    console.log(today, userTimeFormatted)
+
     if (today !== userTimeFormatted) {
       setCookie("user_time", today)
       router.refresh()

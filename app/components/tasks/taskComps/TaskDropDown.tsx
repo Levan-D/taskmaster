@@ -15,7 +15,6 @@ type Props = {
 
 export default function TaskDropDown({ task, expired, addOptimisticTask }: Props) {
   const [isPending, startTransition] = useTransition()
-  console.log(expired)
   const today = DateTime.now().toISO() ?? ""
 
   const handleRecycleTask = async () => {
