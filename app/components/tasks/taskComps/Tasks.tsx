@@ -24,7 +24,11 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
       className={`mainContainer  sm:hover:border-neutral-600 transition-colors duration-300`}
     >
       <div className="flex items-center">
-        <ToggleTaskComplete addOptimisticTask={addOptimisticTask} task={task} />
+        <ToggleTaskComplete
+          expired={expired}
+          addOptimisticTask={addOptimisticTask}
+          task={task}
+        />
 
         <TaskUpdate
           addOptimisticTask={addOptimisticTask}

@@ -52,7 +52,7 @@ export default function TaskDropDown({ task, expired, addOptimisticTask }: Props
   )
   return (
     <div className="flex z-20 ">
-      {expired && (
+      {expired && !task.complete && (
         <button
           disabled={isPending}
           onClick={() => {
@@ -74,9 +74,7 @@ export default function TaskDropDown({ task, expired, addOptimisticTask }: Props
           <Icon className="  scale-75 sm:scale-100 " path={mdiTrashCanOutline} size={1} />
         </button>
       )}
-      <div>
-        <DropdownMenu menuClassName="-translate-x-24 " button={button} items={items} />
-      </div>
+      <DropdownMenu menuClassName="-translate-x-24 " button={button} items={items} />
     </div>
   )
 }

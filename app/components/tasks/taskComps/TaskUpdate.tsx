@@ -144,7 +144,7 @@ export default function TaskUpdate({
     </div>
   ) : (
     <button
-      disabled={isPending || expired}
+      disabled={isPending || expired || task.deleted}
       onDoubleClick={toggleEdit}
       className="block text-left mx-2 w-full"
     >

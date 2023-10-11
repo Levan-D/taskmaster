@@ -86,6 +86,7 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
             </div>
 
             <Tasks
+              expired={true}
               addOptimisticTask={addOptimisticTask}
               className={"my-8"}
               tasks={filteredCompletedTasks}

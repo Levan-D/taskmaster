@@ -26,7 +26,9 @@ export default function Step({ task, step, addOptimisticTask, expired }: Props) 
       />
 
       <div className={`group-hover:visible sm:invisible `}>
-        <RecycleStep addOptimisticTask={addOptimisticTask} task={task} step={step} />
+        {!task.deleted && (
+          <RecycleStep addOptimisticTask={addOptimisticTask} task={task} step={step} />
+        )}
       </div>
     </div>
   )

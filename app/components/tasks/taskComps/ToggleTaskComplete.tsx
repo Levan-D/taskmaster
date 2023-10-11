@@ -8,9 +8,10 @@ import { mdiCheckBold } from "@mdi/js"
 type Props = {
   task: Task
   addOptimisticTask: (action: Task[]) => void
+  expired: boolean
 }
 
-export default function ToggleTaskComplete({ task, addOptimisticTask }: Props) {
+export default function ToggleTaskComplete({ task, addOptimisticTask, expired }: Props) {
   const [isPending, startTransition] = useTransition()
 
   const handleToggleTaskComplete = async () => {
@@ -21,7 +22,7 @@ export default function ToggleTaskComplete({ task, addOptimisticTask }: Props) {
 
   return (
     <button
-      disabled={isPending}
+      disabled={isPending || task.deleted || expired}
       className={` ${
         task.complete
           ? "bg-lime-600 md:hover:bg-lime-500"

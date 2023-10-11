@@ -100,7 +100,7 @@ export default function StepUpdate({
     </div>
   ) : (
     <button
-      disabled={isPending || expired}
+      disabled={isPending || expired || task.deleted}
       onDoubleClick={toggleEdit}
       className={`${step.complete && "text-neutral-300 "}  block text-left w-full mx-2 `}
     >

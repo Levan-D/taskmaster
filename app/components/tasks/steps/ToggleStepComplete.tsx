@@ -39,7 +39,7 @@ export default function ToggleStepComplete({ task, step, addOptimisticTask }: Pr
 
   return (
     <button
-      disabled={isPending}
+      disabled={isPending || task.deleted}
       className={` ${
         step.complete
           ? "bg-lime-600 md:hover:bg-lime-500"

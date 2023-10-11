@@ -14,27 +14,25 @@ type Props = {
 }
 
 function formatDueDate(due_date: string) {
-  const dueDate = DateTime.fromISO(due_date).startOf("day");
-  const now = DateTime.now().startOf("day");
-  const diffInDays = dueDate.diff(now, "days").days;
+  const dueDate = DateTime.fromISO(due_date).startOf("day")
+  const now = DateTime.now().startOf("day")
+  const diffInDays = dueDate.diff(now, "days").days
 
   if (dueDate.hasSame(now, "day")) {
-    return "Today";
+    return "Today"
   } else if (dueDate.plus({ days: 1 }).hasSame(now, "day")) {
-    return "Yesterday";
+    return "Yesterday"
   } else if (diffInDays >= 0 && diffInDays <= 6) {
-    return dueDate.toFormat("cccc");
+    return dueDate.toFormat("cccc")
   } else if (diffInDays > 6 && diffInDays <= 13) {
-    return "Next " + dueDate.toFormat("cccc");
+    return "Next " + dueDate.toFormat("cccc")
   } else {
-    return dueDate.toFormat("dd/MM/yy");
+    return dueDate.toFormat("dd/MM/yy")
   }
 }
 
-
-
 export default function Steps({ task, addOptimisticTask, expired }: Props) {
-  const [open, setOpen] = useState(task.steps.length > 0 && !task.complete ? true : false)
+  const [open, setOpen] = useState(false)
 
   const totalSteps = task.steps.length
   const stepsCompleted = task.steps.filter(step => step.complete).length
@@ -64,7 +62,7 @@ export default function Steps({ task, addOptimisticTask, expired }: Props) {
             )}
           </div>
 
-          {!expired && (
+          {!expired && !task.deleted && (
             <CreateStep
               task={task}
               addOptimisticTask={addOptimisticTask}
@@ -89,15 +87,24 @@ export default function Steps({ task, addOptimisticTask, expired }: Props) {
         </div>
       </div>
       <button
-        disabled={expired && task.steps.length === 0}
+        disabled={
+          ((expired || task.deleted) && task.steps.length === 0) ||
+          (!expired && task.deleted && task.steps.length === 0)
+        }
         onClick={() => setOpen(x => !x)}
         className={`w-full ${
-          (!expired || (expired && task.steps.length > 0)) && "sm:hover:bg-neutral-500"
+          (!expired && !task.deleted) ||
+          (expired && task.steps.length > 0) ||
+          (task.deleted && task.steps.length > 0)
+            ? "sm:hover:bg-neutral-500"
+            : ""
         } px-2 
-    transition-color flex justify-between items-center duration-300 rounded-b-lg  mb-0`}
+        transition-color flex justify-between items-center duration-300 rounded-b-lg  mb-0`}
       >
         <div className="basis-1/3"></div>
-        {(!expired || (expired && task.steps.length > 0)) && (
+        {((!expired && !task.deleted) ||
+          (expired && task.steps.length > 0) ||
+          (task.deleted && task.steps.length > 0)) && (
           <Icon
             className={` ${
               open && "rotate-180 "
