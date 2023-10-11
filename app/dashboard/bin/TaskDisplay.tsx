@@ -35,7 +35,7 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
       return oldTasks
     }
   )
-
+  const deletedTasks = optimisticTasks.filter(task => task.deleted === true)
   const totalCompletedTasks = optimisticTasks.length
 
   return (
@@ -65,7 +65,7 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
             <Tasks
               addOptimisticTask={addOptimisticTask}
               className={"my-8"}
-              tasks={optimisticTasks}
+              tasks={deletedTasks}
             />
           </div>
 

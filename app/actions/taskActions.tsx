@@ -86,6 +86,7 @@ export const reviveTask = async ({
       },
       data: {
         due_date: dueDate,
+        deleted: false,
       },
     })
     revalidatePath("/dashboard")

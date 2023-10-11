@@ -24,7 +24,7 @@ export default function TaskDropDown({ task, expired, addOptimisticTask }: Props
   }
 
   const handleReviveTask = async () => {
-    addOptimisticTask([{ ...task, due_date: today }])
+    addOptimisticTask([{ ...task, due_date: today, deleted: false }])
 
     await reviveTask({ taskId: task.id, dueDate: today })
   }
@@ -52,17 +52,18 @@ export default function TaskDropDown({ task, expired, addOptimisticTask }: Props
   )
   return (
     <div className="flex z-20 ">
-      {expired && !task.complete && (
+      {((expired && !task.complete) || task.deleted) && (
         <button
           disabled={isPending}
           onClick={() => {
             startTransition(handleReviveTask)
           }}
-          className="p-1 sm:p-2 block bg-lime-600 shadow-sm sm:hover:bg-lime-500    rounded-bl-lg   duration-300"
+          className="p-1 sm:p-2 block bg-lime-600 shadow-sm sm:hover:bg-lime-500 rounded-bl-lg duration-300"
         >
           <Icon className="  scale-75 sm:scale-100 " path={mdiHeartOutline} size={1} />
         </button>
       )}
+
       {task.complete && !task.deleted && (
         <button
           disabled={isPending}
