@@ -182,7 +182,7 @@ export const getFutureTasks = async (): Promise<ApiResponse<Task[]>> => {
         },
         orderBy: [
           {
-            due_date: "asc",
+            due_date: "desc",
           },
           {
             creation_date: "desc",
@@ -236,6 +236,7 @@ export const getMissedTasks = async ({
         where: {
           user_id: userData.id,
           deleted: false,
+          complete: false,
           due_date: {
             lt: todayISO,
           },
@@ -370,7 +371,6 @@ export const getRecycledTasks = async ({
         skip: skip,
         include: {
           steps: {
-            where: { deleted: false },
             orderBy: [
               {
                 creation_date: "desc",

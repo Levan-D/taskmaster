@@ -14,21 +14,6 @@ type Props = {
   currentPage: number
 }
 
-const filterCompletedTasks = (tasks: Task[]) => {
-  const filteredTasks = tasks
-    .filter((task: Task) => {
-      if (!task.deleted) return false
-
-      return task
-    })
-    .map((task: Task) => ({
-      ...task,
-      steps: task.steps.filter((step: Step) => !step.deleted),
-    }))
-
-  return filteredTasks
-}
-
 export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
   const [optimisticTasks, addOptimisticTask] = useOptimistic(
     tasks,
@@ -51,8 +36,7 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
     }
   )
 
-  const filteredCompletedTasks = filterCompletedTasks(optimisticTasks)
-  const totalCompletedTasks = filteredCompletedTasks.length
+  const totalCompletedTasks = optimisticTasks.length
 
   return (
     <div className={` py-4 `}>
@@ -81,7 +65,7 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
             <Tasks
               addOptimisticTask={addOptimisticTask}
               className={"my-8"}
-              tasks={filteredCompletedTasks}
+              tasks={optimisticTasks}
             />
           </div>
 

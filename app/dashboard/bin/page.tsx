@@ -13,7 +13,6 @@ export default async function Bin({ searchParams }: Props) {
   const skip = Math.max(0, (currentPage - 1) * take) || 0
 
   const tasks = await getRecycledTasks({ skip: skip, take: take })
-
   if (!tasks.success) return <span></span>
 
   const pageCount = (tasks.totalCount && Math.ceil(tasks?.totalCount / take)) || 0

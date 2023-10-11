@@ -13,7 +13,6 @@ export default async function Missed({ searchParams }: Props) {
   const skip = Math.max(0, (currentPage - 1) * take) || 0
 
   const tasks = await getMissedTasks({ skip: skip, take: take })
-
   if (!tasks.success) return <span></span>
 
   const pageCount = (tasks.totalCount && Math.ceil(tasks?.totalCount / take)) || 0

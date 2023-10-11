@@ -9,7 +9,6 @@ export default async function Today() {
   if (cookies().get("user_time")?.value === undefined) return <Loader />
 
   const tasks = await getTodaysTasks()
-
   if (!tasks.success) return <span></span>
   return (
     <section className="  max-w-3xl mx-auto    ">
