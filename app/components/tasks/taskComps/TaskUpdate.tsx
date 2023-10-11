@@ -124,6 +124,7 @@ export default function TaskUpdate({
             placeholder="Add a step"
             className="input w-full text-sm sm:text-lg py-1 grow"
             name="title"
+            maxLength={190}
             type="text"
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}

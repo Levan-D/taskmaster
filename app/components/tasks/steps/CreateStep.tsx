@@ -22,6 +22,9 @@ export default function CreateStep({
   addOptimisticTask,
 }: Props) {
   const [title, setTitle] = useState("")
+  const [charCount, setCharCount] = useState(0)
+  const [focus, setFocus] = useState(false)
+
   const [isPending, startTransition] = useTransition()
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -51,21 +54,36 @@ export default function CreateStep({
     addOptimisticTask([updatedTasks])
     startTransition(handleCreateStep)
     setTitle("")
+    setCharCount(0)
   }
 
   return (
     <div className={`${className}  px-2 pt-2  w-full`}>
       <form onSubmit={submitForm}>
-        <div className="flex gap-2">
+        <div className="flex gap-2 relative">
           <input
+            onFocus={() => setFocus(true)}
+            onBlur={() => setFocus(false)}
             placeholder="Add a step"
             className="input w-full grow placeholder-neutral-300 text-sm sm:text-base"
             name="title"
             value={title}
-            onChange={e => setTitle(e.target.value)}
+            maxLength={190}
+            onChange={e => {
+              setCharCount(e.target.value.length)
+              setTitle(e.target.value)
+            }}
             type="text"
             required
           />
+          <p
+            className={`${
+              charCount === 190 && "!text-neutral-200"
+            } text-xs text-neutral-400 absolute  right-14 top-6   z-30`}
+          >
+            {focus && `${charCount}/190`}
+          </p>
+
           <button className="btnSecondary px-2.5 ">
             <Icon path={mdiPlus} size={1} />
           </button>

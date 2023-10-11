@@ -87,6 +87,7 @@ export default function StepUpdate({
             className="input w-full text-sm sm:text-base  py-1 grow"
             name="title"
             type="text"
+            maxLength={190}
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
             required

@@ -30,6 +30,8 @@ export default function CreateTask({
 }: Props) {
   const [priority, setPriority] = useState<TaskPriority>(defaultPriority)
   const [calendar, setCalendar] = useState<Calendar>(defaultDate)
+  const [charCount, setCharCount] = useState(0)
+  const [focus, setFocus] = useState(false)
 
   const [isPending, startTransition] = useTransition()
   const [title, setTitle] = useState("")
@@ -152,21 +154,36 @@ export default function CreateTask({
     setTitle("")
     setPriority(defaultPriority)
     setCalendar(defaultDate)
+    setCharCount(0)
   }
 
   return (
     <div className="   p-2 mainContainer  sm:hover:border-neutral-600 transition-colors duration-300">
-      <form onSubmit={submitForm}>
+      <form onSubmit={submitForm} className="relative">
         <div className="flex flex-col sm:flex-row gap-2">
           <input
             placeholder="Create a task"
             className="input p-4  w-full grow  text-sm sm:text-lg"
             name="title"
+            onFocus={() => setFocus(true)}
+            onBlur={() => setFocus(false)}
             value={title}
-            onChange={e => setTitle(e.target.value)}
+            maxLength={190}
+            onChange={e => {
+              setCharCount(e.target.value.length)
+              setTitle(e.target.value)
+            }}
             type="text"
             required
           />
+          <p
+            className={`${
+              charCount === 190 && "!text-neutral-200"
+            } text-xs text-neutral-400 absolute right-2 top-9 sm:right-32 sm:top-[50px] z-30`}
+          >
+            {focus && `${charCount}/190`}
+          </p>
+
           <div className="flex flex-row  gap-2">
             <div className="flex flex-row sm:flex-col gap-2">
               <DropdownMenu
