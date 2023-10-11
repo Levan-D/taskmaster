@@ -3,6 +3,8 @@
 import React from "react"
 import { useTransition } from "react"
 import { deleteAllTasks } from "@/app/actions/taskActions"
+import Icon from "@mdi/react"
+import { mdiSkullOutline } from "@mdi/js"
 
 type Props = {
   className?: string
@@ -28,9 +30,10 @@ export default function DeleteAllTasks({
       onClick={() => {
         startTransition(handleDeleteTasks)
       }}
-      className={`${className} btnError   px-4`}
+      className={`${className} btnError flex gap-2 items-center  shrink-0 px-4`}
     >
-      Delete All
+      <Icon path={mdiSkullOutline} size={0.8} />
+      <p> Delete All</p>
     </button>
   )
 }
