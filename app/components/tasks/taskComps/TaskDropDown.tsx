@@ -36,7 +36,11 @@ export default function TaskDropDown({
 }: Props) {
   const { windowWidth } = useAppSelector(state => state.global)
   const [isPending, startTransition] = useTransition()
-  const today = DateTime.now().toISO() ?? ""
+
+  const today = DateTime.now().minus({ day: 0 }).toISO() ?? ""
+  const tomorrow = DateTime.now().plus({ day: 1 }).toISO() ?? ""
+  const nextWeek = DateTime.now().plus({ day: 7 }).toISO() ?? ""
+
   const dropdownRef = useRef<DropdownRefType | null>(null)
 
   const handleRecycleTask = async () => {
@@ -45,10 +49,10 @@ export default function TaskDropDown({
     await recycleTask({ taskId: task.id })
   }
 
-  const handleReviveTask = async () => {
-    addOptimisticTask([{ ...task, due_date: today, deleted: false }])
+  const handleReviveTask = async ({ date = today }: { date?: string }) => {
+    addOptimisticTask([{ ...task, due_date: date, deleted: false }])
 
-    await reviveTask({ taskId: task.id, dueDate: today })
+    await reviveTask({ taskId: task.id, dueDate: date })
   }
 
   const handleChangeTaskPriority = async (priority: TaskPriority) => {
@@ -61,11 +65,12 @@ export default function TaskDropDown({
     {
       JSX: (
         <div className="px-4 py-1.5 text-sm">
-          <p className="text-neutral-200  text-xs">Date</p>
+          <p className="text-neutral-200  text-xs">{task.deleted ? "Revive" : "Date"}</p>
           <div className="flex  ">
             <Tooltip className="delay-500" text="Today">
               <button
                 onClick={() => {
+                  handleReviveTask({})
                   if (dropdownRef.current) dropdownRef.current.closeDropdown()
                 }}
                 className="btnIcon p-1.5"
@@ -80,7 +85,7 @@ export default function TaskDropDown({
             <Tooltip className="delay-500" text="Tomorrow">
               <button
                 onClick={() => {
-
+                  handleReviveTask({ date: tomorrow })
                   if (dropdownRef.current) dropdownRef.current.closeDropdown()
                 }}
                 className="btnIcon p-1.5"
@@ -95,6 +100,7 @@ export default function TaskDropDown({
             <Tooltip className="delay-500" text="Week">
               <button
                 onClick={() => {
+                  handleReviveTask({ date: nextWeek })
                   if (dropdownRef.current) dropdownRef.current.closeDropdown()
                 }}
                 className="btnIcon p-1.5"
@@ -121,7 +127,10 @@ export default function TaskDropDown({
                   }
                   minDate={new Date()}
                   onChange={date => {
-                    // if (date) setStartDate(date)
+                    if (date)
+                      handleReviveTask({
+                        date: DateTime.fromJSDate(date).toISO() || "",
+                      })
                     if (dropdownRef.current) dropdownRef.current.closeDropdown()
                   }}
                 />
@@ -131,8 +140,9 @@ export default function TaskDropDown({
         </div>
       ),
     },
-    { break: true },
+    { break: task.deleted ? false : true },
     {
+      invisible: expired || task.deleted ? true : false,
       JSX: (
         <div className="px-4 py-1.5 text-sm">
           <p className="text-neutral-200  text-xs">Priority</p>
@@ -177,7 +187,9 @@ export default function TaskDropDown({
         </div>
       ),
     },
-    { break: true },
+    {
+      break: expired || task.deleted ? false : true,
+    },
     {
       title: "Recycle",
       invisible: task.deleted,
@@ -206,7 +218,7 @@ export default function TaskDropDown({
             <button
               disabled={isPending}
               onClick={() => {
-                startTransition(handleReviveTask)
+                startTransition(() => handleReviveTask({}))
               }}
               className="p-1 sm:p-2 block bg-lime-600 shadow-sm sm:hover:bg-lime-500 rounded-bl-lg duration-300"
             >
