@@ -9,11 +9,14 @@ import {
   mdiCalendarTodayOutline,
   mdiCalendarWeekBeginOutline,
   mdiCalendarWeekOutline,
+  mdiCalendarMonthOutline,
 } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
 import { toast } from "react-toastify"
 import { DateTime } from "luxon"
 import { useTransition } from "react"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 
 type Props = {
   taskLimit: number
@@ -32,6 +35,7 @@ export default function CreateTask({
   const [calendar, setCalendar] = useState<Calendar>(defaultDate)
   const [charCount, setCharCount] = useState(0)
   const [focus, setFocus] = useState(false)
+  const [startDate, setStartDate] = useState(new Date())
 
   const [isPending, startTransition] = useTransition()
   const [title, setTitle] = useState("")
@@ -39,41 +43,57 @@ export default function CreateTask({
   const today = DateTime.now().minus({ day: 0 }).toISO() ?? ""
   const tomorrow = DateTime.now().plus({ day: 1 }).toISO() ?? ""
   const nextWeek = DateTime.now().plus({ day: 7 }).toISO() ?? ""
+  const customDate = DateTime.fromJSDate(startDate).toISO() ?? ""
+
+  let priorityClassName = ""
+  if (priority === "LOW") {
+    priorityClassName = "text-sky-400"
+  } else if (priority === "MEDIUM") {
+    priorityClassName = "text-amber-400"
+  } else {
+    priorityClassName = "text-rose-400"
+  }
 
   const priorityButton = (
-    <div
-      className={`${
-        priority === "LOW"
-          ? "text-sky-400"
-          : priority === "MEDIUM"
-          ? "text-amber-400"
-          : "text-rose-400"
-      } btnSecondary`}
-    >
+    <div className={`${priorityClassName} btnSecondary`}>
       <Icon path={mdiTimerAlertOutline} size={1} />
     </div>
   )
 
+  let calendarClassName = ""
+  let calendarIconPath = ""
+  if (calendar === "Today") {
+    calendarClassName = "text-fuchsia-400"
+    calendarIconPath = mdiCalendarTodayOutline
+  } else if (calendar === "Tomorrow") {
+    calendarClassName = "text-lime-400"
+    calendarIconPath = mdiCalendarWeekBeginOutline
+  } else if (calendar === "Next week") {
+    calendarClassName = "text-teal-400"
+    calendarIconPath = mdiCalendarWeekOutline
+  }
+  function getOrdinalSuffix(day: number) {
+    if (day % 10 === 1 && day !== 11) {
+      return `st`
+    } else if (day % 10 === 2 && day !== 12) {
+      return `nd`
+    } else if (day % 10 === 3 && day !== 13) {
+      return `rd`
+    } else {
+      return `th`
+    }
+  }
+
   const calendarButton = (
-    <div
-      className={`${
-        calendar === "Today"
-          ? "text-fuchsia-400"
-          : calendar === "Tomorrow"
-          ? "text-lime-400"
-          : "text-teal-400"
-      } btnSecondary`}
-    >
-      <Icon
-        path={
-          calendar === "Today"
-            ? mdiCalendarTodayOutline
-            : calendar === "Tomorrow"
-            ? mdiCalendarWeekBeginOutline
-            : mdiCalendarWeekOutline
-        }
-        size={1}
-      />
+    <div className={`${calendarClassName} btnSecondary`}>
+      {calendar !== "Custom date" ? (
+        <Icon path={calendarIconPath} size={1} />
+      ) : (
+        <div className="w-6 text-sm ">
+          {DateTime.fromJSDate(startDate).day}
+          <sup>{getOrdinalSuffix(DateTime.fromJSDate(startDate).day)}</sup>
+        </div>
+      )}
     </div>
   )
 
@@ -115,13 +135,41 @@ export default function CreateTask({
       icon: <Icon className="text-teal-400" path={mdiCalendarWeekOutline} size={0.7} />,
       action: () => setCalendar("Next week"),
     },
+    {
+      JSX: (
+        <DatePicker
+          className="custom-date-picker"
+          onInputClick={() => setCalendar("Custom date")}
+          customInput={
+            <div className="flex gap-2 hover:bg-neutral-600 text-sm pl-4 pr-8 items-center cursor-pointer py-1.5 whitespace-nowrap rounded-md  text active:bg-neutral-700 duration-300 text-left w-full">
+              <Icon className="text-blue-400" path={mdiCalendarMonthOutline} size={0.7} />
+              <p>Custom Date</p>
+            </div>
+          }
+          minDate={new Date()}
+          selected={startDate}
+          onChange={date => {
+            if (date) setStartDate(date)
+          }}
+        />
+      ),
+    },
   ]
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const dueDate =
-      calendar === "Today" ? today : calendar === "Tomorrow" ? tomorrow : nextWeek
+    let dueDate = ""
+
+    if (calendar === "Today") {
+      dueDate = today
+    } else if (calendar === "Tomorrow") {
+      dueDate = tomorrow
+    } else if (calendar === "Next week") {
+      dueDate = nextWeek
+    } else if (calendar === "Custom Date") {
+      dueDate = customDate
+    }
 
     const handleCreateTask = async () => {
       await createTask({ title: title, priority: priority, dueDate: dueDate })
