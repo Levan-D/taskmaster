@@ -167,7 +167,7 @@ export default function CreateTask({
       dueDate = tomorrow
     } else if (calendar === "Next week") {
       dueDate = nextWeek
-    } else if (calendar === "Custom Date") {
+    } else if (calendar === "Custom date") {
       dueDate = customDate
     }
 
