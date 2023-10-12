@@ -128,3 +128,13 @@ body *:focus {
 }
 
 /* loader */
+.react-datepicker {
+  background-color: r#e5e5e5ed !important;
+}
+
+.react-datepicker__header {
+  background-color: #a3a3a3 !important;
+}
+.react-datepicker__day--selected {
+  background-color: #0284c7 !important;
+}

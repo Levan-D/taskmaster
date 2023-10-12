@@ -1,6 +1,6 @@
 /** @format */
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { createTask } from "../../../actions/taskActions"
 import Icon from "@mdi/react"
 import {
@@ -24,6 +24,9 @@ type Props = {
   defaultPriority: TaskPriority
   defaultDate: Calendar
 }
+type DropdownRefType = {
+  closeDropdown: () => void
+}
 
 export default function CreateTask({
   taskLimit,
@@ -36,6 +39,7 @@ export default function CreateTask({
   const [charCount, setCharCount] = useState(0)
   const [focus, setFocus] = useState(false)
   const [startDate, setStartDate] = useState(new Date())
+  const dropdownRef = useRef<DropdownRefType | null>(null)
 
   const [isPending, startTransition] = useTransition()
   const [title, setTitle] = useState("")
@@ -138,8 +142,8 @@ export default function CreateTask({
     {
       JSX: (
         <DatePicker
-          className="custom-date-picker"
           onInputClick={() => setCalendar("Custom date")}
+          wrapperClassName="datePicker"
           customInput={
             <div className="flex gap-2 hover:bg-neutral-600 text-sm pl-4 pr-8 items-center cursor-pointer py-1.5 whitespace-nowrap rounded-md  text active:bg-neutral-700 duration-300 text-left w-full">
               <Icon className="text-blue-400" path={mdiCalendarMonthOutline} size={0.7} />
@@ -150,6 +154,7 @@ export default function CreateTask({
           selected={startDate}
           onChange={date => {
             if (date) setStartDate(date)
+            if (dropdownRef.current) dropdownRef.current.closeDropdown()
           }}
         />
       ),
@@ -238,6 +243,7 @@ export default function CreateTask({
                 menuClassName="sm:-translate-x-28  lg:-translate-x-0 "
                 button={calendarButton}
                 items={calendarItems}
+                ref={dropdownRef}
               />
 
               <DropdownMenu
