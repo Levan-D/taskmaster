@@ -1,5 +1,6 @@
 /** @format */
-
+"use client"
+import { useState } from "react"
 import ToggleTaskComplete from "./ToggleTaskComplete"
 import Steps from "../steps/Steps"
 import TaskDropDown from "./TaskDropDown"
@@ -19,8 +20,11 @@ type TaskProps = {
 }
 
 function Task({ task, expired, addOptimisticTask }: TaskProps) {
+  const [visible, setVisible] = useState(false)
   return (
     <div
+      onMouseEnter={() => setVisible(true)}
+      onMouseLeave={() => setVisible(false)}
       className={`mainContainer  sm:hover:border-neutral-600 transition-colors duration-300`}
     >
       <div className="flex items-center">
@@ -40,6 +44,7 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
         <TaskDropDown
           addOptimisticTask={addOptimisticTask}
           task={task}
+          visible={visible}
           expired={expired}
         />
       </div>

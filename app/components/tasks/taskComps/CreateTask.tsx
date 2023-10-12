@@ -17,6 +17,7 @@ import { DateTime } from "luxon"
 import { useTransition } from "react"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
+import { getOrdinalSuffix } from "@/app/utils/dates"
 
 type Props = {
   taskLimit: number
@@ -24,9 +25,7 @@ type Props = {
   defaultPriority: TaskPriority
   defaultDate: Calendar
 }
-type DropdownRefType = {
-  closeDropdown: () => void
-}
+
 
 export default function CreateTask({
   taskLimit,
@@ -75,17 +74,6 @@ export default function CreateTask({
   } else if (calendar === "Next week") {
     calendarClassName = "text-teal-400"
     calendarIconPath = mdiCalendarWeekOutline
-  }
-  function getOrdinalSuffix(day: number) {
-    if (day % 10 === 1 && day !== 11) {
-      return `st`
-    } else if (day % 10 === 2 && day !== 12) {
-      return `nd`
-    } else if (day % 10 === 3 && day !== 13) {
-      return `rd`
-    } else {
-      return `th`
-    }
   }
 
   const calendarButton = (

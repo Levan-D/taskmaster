@@ -2,6 +2,7 @@
 "use server"
 import { prisma } from "../db"
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
+import { redirect } from 'next/navigation'
 
 export const checkAuth = async () => {
   const { getUser, isAuthenticated } = getKindeServerSession()
@@ -9,7 +10,7 @@ export const checkAuth = async () => {
   const authStatus = isAuthenticated()
 
   if (!authStatus) {
-    throw new Error("Unauthorized")
+    redirect("/")
   }
 
   const user: UserType = getUser()

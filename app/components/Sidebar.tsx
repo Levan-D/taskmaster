@@ -1,7 +1,7 @@
 /** @format */
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Icon from "@mdi/react"
 import {
   mdiChevronRight,
@@ -16,6 +16,7 @@ import Tooltip from "@/app/components/Tooltip"
 import DropdownMenu from "@/app/components/DropdownMenu"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useAppSelector } from "@/lib/redux/hooks"
 
 type Props = {
   UserInfo: JSX.Element
@@ -159,21 +160,9 @@ function Links({
 }
 
 export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
+  const { windowWidth } = useAppSelector(state => state.global)
   const [isOpen, setIsOpen] = useState(false)
-  const [width, setWidth] = useState(0)
   const pathname = usePathname()
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWidth(window.innerWidth)
-    }
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    }
-  }, [])
-
   const toggleNav = () => {
     setIsOpen(x => !x)
   }
@@ -193,7 +182,7 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
 
   return (
     <div className={` ${isOpen ? "sm:w-[200px] " : "sm:w-[56px]"} w-0 shrink-0`}>
-      {width <= 640 && (
+      {windowWidth <= 640 && (
         <div
           className={` ${
             isOpen ? "visible opacity-40" : "collapse opacity-0"
@@ -227,11 +216,16 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
           </button>
         </div>
 
-        <Links width={width} isOpen={isOpen} pathname={pathname} toggleNav={toggleNav} />
+        <Links
+          width={windowWidth}
+          isOpen={isOpen}
+          pathname={pathname}
+          toggleNav={toggleNav}
+        />
 
         <div></div>
 
-        <Footer width={width} isOpen={isOpen} />
+        <Footer width={windowWidth} isOpen={isOpen} />
       </nav>
     </div>
   )

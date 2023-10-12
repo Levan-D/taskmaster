@@ -57,3 +57,7 @@ type Task = {
 }
 
 type ApiResponse<T> = { success: boolean; data?: T; error?: any }
+
+type DropdownRefType = {
+  closeDropdown: () => void
+}

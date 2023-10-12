@@ -5,7 +5,7 @@ import { useState } from "react"
 import CreateStep from "./CreateStep"
 import Icon from "@mdi/react"
 import { mdiChevronDown } from "@mdi/js"
-import { DateTime } from "luxon"
+import { getRelativeDateString } from "@/app/utils/dates"
 
 type Props = {
   task: Task
@@ -13,30 +13,12 @@ type Props = {
   addOptimisticTask: (action: Task[]) => void
 }
 
-function formatDueDate(due_date: string) {
-  const dueDate = DateTime.fromISO(due_date).startOf("day")
-  const now = DateTime.now().startOf("day")
-  const diffInDays = dueDate.diff(now, "days").days
-
-  if (dueDate.hasSame(now, "day")) {
-    return "Today"
-  } else if (dueDate.plus({ days: 1 }).hasSame(now, "day")) {
-    return "Yesterday"
-  } else if (diffInDays >= 0 && diffInDays <= 6) {
-    return dueDate.toFormat("cccc")
-  } else if (diffInDays > 6 && diffInDays <= 13) {
-    return "Next " + dueDate.toFormat("cccc")
-  } else {
-    return dueDate.toFormat("dd/MM/yy")
-  }
-}
-
 export default function Steps({ task, addOptimisticTask, expired }: Props) {
   const [open, setOpen] = useState(false)
 
   const totalSteps = task.steps.length
-  const stepsCompleted = task.steps.filter(step => step.complete).length
-  const allStepsCompleted = totalSteps === stepsCompleted && totalSteps > 0
+  const amountOfStepsCompleted = task.steps.filter(step => step.complete).length
+  const allStepsCompleted = totalSteps === amountOfStepsCompleted && totalSteps > 0
 
   return (
     <div>
@@ -52,7 +34,7 @@ export default function Steps({ task, addOptimisticTask, expired }: Props) {
                     allStepsCompleted ? "text-lime-400   " : "text-neutral-500   "
                   }  p-1.5 text-sm  shrink-0 `}
                 >
-                  {totalSteps}/{stepsCompleted}
+                  {totalSteps}/{amountOfStepsCompleted}
                 </div>
 
                 <hr className={`mx-4  grow  border-t-[1px] border-neutral-700`} />
@@ -115,7 +97,7 @@ export default function Steps({ task, addOptimisticTask, expired }: Props) {
         )}
 
         <div className="basis-1/3  py-1 text-xs text-neutral-300 text-end">
-          {typeof task.due_date === "string" && formatDueDate(task.due_date)}
+          {typeof task.due_date === "string" && getRelativeDateString(task.due_date)}
         </div>
       </button>
     </div>
