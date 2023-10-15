@@ -6,7 +6,7 @@ import Image from "next/image"
 export default function UserInfo() {
   const { getUser } = getKindeServerSession()
   const user = getUser()
-  console.log(user)
+  
   return (
     <div className="flex items-center gap-2 w-full  p-1 ">
       {user?.picture ? (
