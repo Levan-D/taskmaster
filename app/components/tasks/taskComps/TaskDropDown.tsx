@@ -19,7 +19,7 @@ import Tooltip from "../../Tooltip"
 import { useAppSelector } from "@/lib/redux/hooks"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
-import { useState, useRef } from "react"
+import { useRef } from "react"
 
 type Props = {
   task: Task
