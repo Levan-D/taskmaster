@@ -2,6 +2,7 @@
 
 "use client"
 
+import Accordion from "@/app/components/Accordion"
 import { useState, useEffect } from "react"
 import CreateTask from "@/app/components/tasks/taskComps/CreateTask"
 import Tasks from "@/app/components/tasks/taskComps/Tasks"
@@ -57,18 +58,18 @@ export default function TaskDisplay({ tasks }: Props) {
     (task: Task) => !task.deleted
   ).length
 
-  const todayTasks = filterFutureTasks(optimisticTasks)
-  const todaysUnfinished = todayTasks.filter((task: Task) => !task.complete)
-  const todaysFinished = todayTasks.filter((task: Task) => task.complete)
+  const futureTasks = filterFutureTasks(optimisticTasks)
+  const futuresUnfinished = futureTasks.filter((task: Task) => !task.complete)
+  const futuresFinished = futureTasks.filter((task: Task) => task.complete)
 
-  const totalTodaysTasks = todayTasks.length
-  const todaysTasksCompleted = todaysFinished.length
-  const todaysTasksNotCompleted = todaysUnfinished.length
+  const totalFuturesTasks = futureTasks.length
+  const futuresTasksCompleted = futuresFinished.length
+  const futuresTasksNotCompleted = futuresUnfinished.length
 
-  const todaysTasksRatio = `${totalTodaysTasks}/${todaysTasksCompleted}`
+  const todaysTasksRatio = `${totalFuturesTasks}/${futuresTasksCompleted}`
 
   const allATodaysTasksCompleted =
-    totalTodaysTasks === todaysTasksCompleted && totalTodaysTasks > 0
+    totalFuturesTasks === futuresTasksCompleted && totalFuturesTasks > 0
 
   useEffect(() => {
     setMessage(
@@ -110,7 +111,7 @@ export default function TaskDisplay({ tasks }: Props) {
         />
       </div>
 
-      {totalTodaysTasks > 0 && (
+      {totalFuturesTasks > 0 && (
         <div className="flex items-center select-none mt-10 mb-12">
           <hr
             className={` ${
@@ -132,12 +133,39 @@ export default function TaskDisplay({ tasks }: Props) {
         </div>
       )}
 
-      {todaysTasksNotCompleted > 0 && (
+      {futuresTasksNotCompleted > 0 && (
         <Tasks
           addOptimisticTask={addOptimisticTask}
           className={"my-8"}
-          tasks={todaysUnfinished}
+          tasks={futuresUnfinished}
         />
+      )}
+
+      {futuresTasksCompleted > 0 && (
+        <Accordion
+          className="my-8 text-sm sm:text-base"
+          title={`Finished (${futuresTasksCompleted})`}
+        >
+          <>
+            <div className="mainContainer bg-neutral-700 my-4   justify-between items-center flex gap-4 flex-col  sm:flex-row text-center sm:text-left   py-2 px-4">
+              <p className="basis-3/4 text-neutral-200  text-sm sm:text-base  ">
+                Recycle completed future tasks.
+              </p>
+
+              {/* <TasksRecycle
+                addOptimisticTask={addOptimisticTask}
+                tasks={futuresFinished}
+                className="shrink-0"
+              /> */}
+            </div>
+
+            <Tasks
+              addOptimisticTask={addOptimisticTask}
+              className={"my-8"}
+              tasks={futuresFinished}
+            />
+          </>
+        </Accordion>
       )}
     </div>
   )

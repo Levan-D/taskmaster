@@ -99,21 +99,21 @@ export default function TaskDisplay({ tasks }: Props) {
     }
   )
 
-  const futureTasks = filterAndSortFutureTasks(optimisticTasks, today)
+  const weeksTasks = filterAndSortFutureTasks(optimisticTasks, today)
 
-  const totalfutureTasks = futureTasks.length
+  const totalweeksTasks = weeksTasks.length
 
-  const futuresUnfinished = futureTasks.filter((task: Task) => !task.complete)
-  const futuresFinished = futureTasks.filter((task: Task) => task.complete)
+  const weeksUnfinished = weeksTasks.filter((task: Task) => !task.complete)
+  const weeksFinished = weeksTasks.filter((task: Task) => task.complete)
 
-  const futureTasksCompleted = futuresFinished.length
+  const weekTasksCompleted = weeksFinished.length
 
-  const futureTasksRatio = `${totalfutureTasks}/${futureTasksCompleted}`
+  const weekTasksRatio = `${totalweeksTasks}/${weekTasksCompleted}`
 
-  const allAfutureTasksCompleted =
-    totalfutureTasks === futureTasksCompleted && totalfutureTasks > 0
+  const allWeeksTasksCompleted =
+    totalweeksTasks === weekTasksCompleted && totalweeksTasks > 0
 
-  const tasksGroupedByDate = futuresUnfinished.reduce(
+  const tasksGroupedByDate = weeksUnfinished.reduce(
     (acc: { [key: string]: Task[] }, task) => {
       const dueDate = DateTime.fromISO(task.due_date).toFormat("yyyy-MM-dd")
       if (!acc[dueDate]) {
@@ -146,7 +146,7 @@ export default function TaskDisplay({ tasks }: Props) {
 
   const sortedDates = Object.keys(tasksGroupedByDate).sort()
 
-  if (totalfutureTasks === 0 && message === null)
+  if (totalweeksTasks === 0 && message === null)
     return (
       <div className="h-screen">
         <Loader />
@@ -157,10 +157,10 @@ export default function TaskDisplay({ tasks }: Props) {
     <div className={` py-4 `}>
       <div
         className={` ${
-          totalfutureTasks === 0 && "pt-[20vh]"
+          totalweeksTasks === 0 && "pt-[20vh]"
         } mt-0 transition-[padding]   duration-500 `}
       >
-        {totalfutureTasks === 0 && message}
+        {totalweeksTasks === 0 && message}
 
         <CreateTask
           defaultDate="Tomorrow"
@@ -170,23 +170,23 @@ export default function TaskDisplay({ tasks }: Props) {
         />
       </div>
 
-      {totalfutureTasks > 0 && (
+      {totalweeksTasks > 0 && (
         <div className="flex items-center select-none mt-10 mb-12">
           <hr
             className={` ${
-              allAfutureTasksCompleted ? "  border-lime-400" : "  border-neutral-500"
+              allWeeksTasksCompleted ? "  border-lime-400" : "  border-neutral-500"
             } mx-4  block grow border-t-[1px]  border-opacity-75`}
           />
           <div
             className={`${
-              allAfutureTasksCompleted ? "text-lime-400 " : "text-neutral-500 "
+              allWeeksTasksCompleted ? "text-lime-400 " : "text-neutral-500 "
             }  p-1.5 text-sm  shrink-0 `}
           >
-            {futureTasksRatio}
+            {weekTasksRatio}
           </div>
           <hr
             className={` ${
-              allAfutureTasksCompleted ? "  border-lime-400" : "  border-neutral-500"
+              allWeeksTasksCompleted ? "  border-lime-400" : "  border-neutral-500"
             } mx-4    block grow border-t-[1px]  border-opacity-75`}
           />
         </div>
@@ -224,10 +224,10 @@ export default function TaskDisplay({ tasks }: Props) {
         })
       )}
 
-      {futureTasksCompleted > 0 && (
+      {weekTasksCompleted > 0 && (
         <Accordion
           className="my-8 text-sm sm:text-base"
-          title={`Finished (${futureTasksCompleted})`}
+          title={`Finished (${weekTasksCompleted})`}
         >
           <>
             <div className="mainContainer bg-neutral-700 my-4   justify-between items-center flex gap-4 flex-col  sm:flex-row text-center sm:text-left   py-2 px-4">
@@ -237,7 +237,7 @@ export default function TaskDisplay({ tasks }: Props) {
 
               <TasksRecycle
                 addOptimisticTask={addOptimisticTask}
-                tasks={futuresFinished}
+                tasks={weeksFinished}
                 className="shrink-0"
               />
             </div>
@@ -245,7 +245,7 @@ export default function TaskDisplay({ tasks }: Props) {
             <Tasks
               addOptimisticTask={addOptimisticTask}
               className={"my-8"}
-              tasks={futuresFinished}
+              tasks={weeksFinished}
             />
           </>
         </Accordion>
