@@ -43,13 +43,13 @@ body *:focus {
 /* create task animation */
 .optimisticStart {
   opacity: 0;
-  transform: translateY(-112px);
+  transform: translateX(-120px);
 }
 
 .optimisticEnd {
   opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.4s, transform 0.4s ease-out;
+  transform: translateX(0);
+  transition: opacity 0.8s, transform 0.4s ease-out;
 }
 
 /* create task animation */

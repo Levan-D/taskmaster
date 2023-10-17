@@ -1,8 +1,9 @@
 /** @format */
-
+"use client"
 import ToggleStepComplete from "./ToggleStepComplete"
 import RecycleStep from "./RecycleStep"
 import StepUpdate from "./StepUpdate"
+import { useState, useEffect } from "react"
 
 type Props = {
   task: Task
@@ -12,9 +13,27 @@ type Props = {
 }
 
 export default function Step({ task, step, addOptimisticTask, expired }: Props) {
+  const [animate, setAnimate] = useState(false)
+
+  const isOptimistic = step.id === "optimistic"
+
+  useEffect(() => {
+    if (isOptimistic) {
+      // Start the animation after the initial render
+      setTimeout(() => {
+        setAnimate(true)
+      }, 0)
+    }
+  }, [])
   return (
     <div
-      className={`  flex gap-2 items-center group sm:hover:bg-neutral-600 p-2  rounded-md`}
+      className={` ${
+        isOptimistic && !animate
+          ? "optimisticStart"
+          : isOptimistic && animate
+          ? "optimisticEnd"
+          : ""
+      }  flex gap-2 items-center group sm:hover:bg-neutral-600 p-2  rounded-md`}
     >
       <ToggleStepComplete addOptimisticTask={addOptimisticTask} task={task} step={step} />
       <StepUpdate

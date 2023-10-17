@@ -3,7 +3,7 @@
 import { createStep } from "../../../actions/stepActions"
 import { useState } from "react"
 import Icon from "@mdi/react"
-import { mdiPlus } from "@mdi/js"
+import { mdiPlus, mdiLoading } from "@mdi/js"
 import { toast } from "react-toastify"
 import { useTransition } from "react"
 import { DateTime } from "luxon"
@@ -37,7 +37,9 @@ export default function CreateStep({
     }
 
     const handleCreateStep = async () => {
-      await createStep({ title: title, taskId: task.id })
+      setTimeout(async () => {
+        await createStep({ title: title, taskId: task.id })
+      }, 300)
     }
 
     const newStep: Step = {
@@ -85,9 +87,12 @@ export default function CreateStep({
           </p>
 
           <button
-            className={`btnSecondary px-2.5 ${charCount === 0 && "cursor-not-allowed"}`}
+            disabled={isPending}
+            className={`${isPending && "opacity-75"} btnSecondary px-2.5 ${
+              charCount === 0 && "cursor-not-allowed"
+            }`}
           >
-            <Icon path={mdiPlus} size={1} />
+            <Icon path={isPending ? mdiLoading : mdiPlus} size={1} spin={isPending} />
           </button>
         </div>
       </form>
