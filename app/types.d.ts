@@ -43,7 +43,6 @@ type Step = {
   creation_date: Date
   taskId: string
   beingDeleted?: boolean
-  beingCompleted?: boolean
 }
 
 type Task = {

@@ -53,7 +53,17 @@ body *:focus {
 }
 
 /* create task/step animation */
-/* complete task/step animation */
+
+/* delete task/step animation */
+.deleteAnimation {
+  opacity: 0;
+  transform: translateX(300px);
+  transition: opacity 0.3s, transform 0.2s ease-in;
+}
+
+/* delete task/step animation */
+
+/* complete task animation */
 .completedDown {
   animation: completeDownAnimation 600ms forwards;
 }
@@ -96,7 +106,7 @@ body *:focus {
     display: none;
   }
 }
-/* complete task/step animation */
+/* complete task animation */
 
 /* scrollbar */
 /* width */

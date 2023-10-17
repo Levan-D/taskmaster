@@ -44,9 +44,14 @@ export default function TaskDropDown({
   const dropdownRef = useRef<DropdownRefType | null>(null)
 
   const handleRecycleTask = async () => {
-    addOptimisticTask([{ ...task, deleted: true, complete: false }])
+    addOptimisticTask([{ ...task, beingDeleted: true }])
 
-    await recycleTask({ taskId: task.id })
+    setTimeout(async () => {
+      addOptimisticTask([
+        { ...task, deleted: true, complete: false, beingDeleted: false },
+      ])
+      await recycleTask({ taskId: task.id })
+    }, 300)
   }
 
   const handleReviveTask = async ({ date = today }: { date?: string }) => {

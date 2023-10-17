@@ -30,12 +30,19 @@ export default function RecycleStep({ task, step, addOptimisticTask }: Props) {
   const [isPending, startTransition] = useTransition()
 
   const handleRecycleStep = async () => {
-    const updatedStep = { ...step, deleted: true }
+    const updatedStep = { ...step, beingDeleted: true }
     const updatedTasks = updateStepInTask(task, updatedStep)
 
     addOptimisticTask([updatedTasks])
 
-    await recycleStep({ stepId: step.id })
+    setTimeout(async () => {
+      const updatedStep = { ...step, deleted: true, beingDeleted: false }
+      const updatedTasks = updateStepInTask(task, updatedStep)
+
+      addOptimisticTask([updatedTasks])
+
+      await recycleStep({ stepId: step.id })
+    }, 300)
   }
 
   return (

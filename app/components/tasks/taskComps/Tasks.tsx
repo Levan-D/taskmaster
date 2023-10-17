@@ -48,6 +48,7 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
       ? "optimisticCreateEnd"
       : ""
   } 
+  ${isBeingDeleted && "deleteAnimation "}
   ${isBeingCompleted === "down" && "completedDown "}
   ${isBeingCompleted === "up" && "completedUp "}
    `}

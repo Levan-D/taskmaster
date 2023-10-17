@@ -16,6 +16,7 @@ export default function Step({ task, step, addOptimisticTask, expired }: Props) 
   const [animate, setAnimate] = useState(false)
 
   const isOptimistic = step.id === "optimistic"
+  const isBeingDeleted = step.beingDeleted
 
   useEffect(() => {
     if (isOptimistic) {
@@ -33,7 +34,9 @@ export default function Step({ task, step, addOptimisticTask, expired }: Props) 
           : isOptimistic && animate
           ? "optimisticCreateEnd"
           : ""
-      }  flex gap-2 items-center group sm:hover:bg-neutral-600 p-2  rounded-md`}
+      }  ${
+        isBeingDeleted && "deleteAnimation "
+      } flex gap-2 items-center group sm:hover:bg-neutral-600 p-2  rounded-md`}
     >
       <ToggleStepComplete addOptimisticTask={addOptimisticTask} task={task} step={step} />
       <StepUpdate
