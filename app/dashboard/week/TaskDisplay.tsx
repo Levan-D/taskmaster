@@ -41,9 +41,9 @@ const filterAndSortFutureTasks = (tasks: Task[], today: DateTime) => {
     const creationDateA = taskA.creation_date.getTime()
     const creationDateB = taskB.creation_date.getTime()
 
-    if (dueDateA.valueOf() < dueDateB.valueOf()) {
+    if (dueDateA.valueOf() > dueDateB.valueOf()) {
       return -1
-    } else if (dueDateA.valueOf() > dueDateB.valueOf()) {
+    } else if (dueDateA.valueOf() < dueDateB.valueOf()) {
       return 1
     } else {
       if (creationDateA > creationDateB) {
