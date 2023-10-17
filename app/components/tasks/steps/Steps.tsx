@@ -83,7 +83,13 @@ export default function Steps({ task, addOptimisticTask, expired }: Props) {
         } px-2 
         transition-color flex justify-between items-center duration-300 rounded-b-lg  mb-0`}
       >
-        <div className="basis-1/3"></div>
+        <div className="basis-1/3 text-left text-xs text-neutral-300">
+          {totalSteps > 0 && (
+            <p>
+              {totalSteps}/{amountOfStepsCompleted}
+            </p>
+          )}
+        </div>
         {((!expired && !task.deleted) ||
           (expired && task.steps.length > 0) ||
           (task.deleted && task.steps.length > 0)) && (
