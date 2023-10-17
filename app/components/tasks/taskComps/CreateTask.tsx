@@ -37,7 +37,7 @@ export default function CreateTask({
   const [calendar, setCalendar] = useState<Calendar>(defaultDate)
   const [charCount, setCharCount] = useState(0)
   const [focus, setFocus] = useState(false)
-  const [startDate, setStartDate] = useState(new Date())
+  const [startDate, setStartDate] = useState(DateTime.now().plus({ days: 8 }).toJSDate())
   const dropdownRef = useRef<DropdownRefType | null>(null)
 
   const [isPending, startTransition] = useTransition()
@@ -138,7 +138,7 @@ export default function CreateTask({
               <p>Custom Date</p>
             </div>
           }
-          minDate={new Date()}
+          minDate={DateTime.now().plus({ days: 8 }).toJSDate()}
           selected={startDate}
           onChange={date => {
             if (date) setStartDate(date)

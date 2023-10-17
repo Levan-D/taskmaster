@@ -105,7 +105,7 @@ export default function TaskDisplay({ tasks }: Props) {
         {optimisticTasksLength === 0 && message}
 
         <CreateTask
-          defaultDate="Today"
+          defaultDate="Custom date"
           defaultPriority="LOW"
           addOptimisticTask={addOptimisticTask}
           taskLimit={19}
