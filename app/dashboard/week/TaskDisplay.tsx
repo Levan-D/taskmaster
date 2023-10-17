@@ -98,7 +98,7 @@ export default function TaskDisplay({ tasks }: Props) {
       return oldTasks
     }
   )
-  // console.log(optimisticTasks)
+
   const futureTasks = filterAndSortFutureTasks(optimisticTasks, today)
 
   const totalfutureTasks = futureTasks.length

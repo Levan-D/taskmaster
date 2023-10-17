@@ -151,7 +151,7 @@ export const getTodaysTasks = async (): Promise<ApiResponse<Task[]>> => {
   }
 }
 
-export const getFutureTasks = async (): Promise<ApiResponse<Task[]>> => {
+export const getWeeksTasks = async (): Promise<ApiResponse<Task[]>> => {
   const userData = await checkAuth()
 
   const userTime = cookies().get("user_time")?.value
@@ -183,10 +183,50 @@ export const getFutureTasks = async (): Promise<ApiResponse<Task[]>> => {
         },
         orderBy: [
           {
-            due_date: "desc",
+            due_date: "asc",
           },
+        ],
+      })
+      return { success: true, data: tasks }
+    } else {
+      throw new Error("Bad Request: Missing user data")
+    }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export const getFutureTasks = async (): Promise<ApiResponse<Task[]>> => {
+  const userData = await checkAuth()
+
+  const userTime = cookies().get("user_time")?.value
+  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
+  const week = today.plus({ days: 8 }).toISO() || ""
+
+  try {
+    if (userData && userData.id) {
+      const tasks = await prisma.tasks.findMany({
+        where: {
+          user_id: userData.id,
+          deleted: false,
+          due_date: {
+            gte: week,
+          },
+        },
+
+        include: {
+          steps: {
+            where: { deleted: false },
+            orderBy: [
+              {
+                creation_date: "desc",
+              },
+            ],
+          },
+        },
+        orderBy: [
           {
-            creation_date: "desc",
+            due_date: "asc",
           },
         ],
       })

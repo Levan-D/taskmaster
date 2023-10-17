@@ -11,6 +11,7 @@ import {
   mdiClockAlertOutline,
   mdiCalendarWeekOutline,
   mdiCalendarTodayOutline,
+  mdiCalendarMonthOutline,
 } from "@mdi/js"
 import Tooltip from "@/app/components/Tooltip"
 import DropdownMenu from "@/app/components/DropdownMenu"
@@ -51,6 +52,11 @@ const taskPages: TaskPageType[] = [
     icon: mdiCalendarWeekOutline,
     title: "Week",
     path: "/dashboard/week",
+  },
+  {
+    icon: mdiCalendarMonthOutline,
+    title: "Future",
+    path: "/dashboard/future",
   },
   {
     break: true,
