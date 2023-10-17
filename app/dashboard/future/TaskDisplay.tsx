@@ -8,6 +8,7 @@ import CreateTask from "@/app/components/tasks/taskComps/CreateTask"
 import Tasks from "@/app/components/tasks/taskComps/Tasks"
 import { experimental_useOptimistic as useOptimistic } from "react"
 import { DateTime } from "luxon"
+import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
 import Loader from "@/app/components/Loader"
 
 type Props = {
@@ -152,11 +153,11 @@ export default function TaskDisplay({ tasks }: Props) {
                 Recycle completed future tasks.
               </p>
 
-              {/* <TasksRecycle
+              <TasksRecycle
                 addOptimisticTask={addOptimisticTask}
                 tasks={futuresFinished}
                 className="shrink-0"
-              /> */}
+              />
             </div>
 
             <Tasks
