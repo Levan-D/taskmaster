@@ -1,6 +1,6 @@
 /** @format */
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import ToggleTaskComplete from "./ToggleTaskComplete"
 import Steps from "../steps/Steps"
 import TaskDropDown from "./TaskDropDown"
@@ -21,11 +21,30 @@ type TaskProps = {
 
 function Task({ task, expired, addOptimisticTask }: TaskProps) {
   const [visible, setVisible] = useState(false)
+  const [animate, setAnimate] = useState(false)
+
+  const isOptimistic = task.id === "optimistic"
+
+  useEffect(() => {
+    if (isOptimistic) {
+      // Start the animation after the initial render
+      setTimeout(() => {
+        setAnimate(true)
+      }, 0)
+    }
+  }, [])
   return (
     <div
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
-      className={`mainContainer  sm:hover:border-neutral-600 transition-colors duration-300`}
+      className={`mainContainer sm:hover:border-neutral-600 transition-colors duration-300 
+      ${
+        isOptimistic && !animate
+          ? "optimisticStart"
+          : isOptimistic && animate
+          ? "optimisticEnd"
+          : ""
+      }`}
     >
       <div className="flex items-center">
         <ToggleTaskComplete

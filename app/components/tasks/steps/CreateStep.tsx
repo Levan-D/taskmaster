@@ -84,7 +84,9 @@ export default function CreateStep({
             {focus && `${charCount}/190`}
           </p>
 
-          <button className="btnSecondary px-2.5 ">
+          <button
+            className={`btnSecondary px-2.5 ${charCount === 0 && "cursor-not-allowed"}`}
+          >
             <Icon path={mdiPlus} size={1} />
           </button>
         </div>

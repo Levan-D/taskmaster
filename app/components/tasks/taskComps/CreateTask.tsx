@@ -10,6 +10,7 @@ import {
   mdiCalendarWeekBeginOutline,
   mdiCalendarWeekOutline,
   mdiCalendarMonthOutline,
+  mdiLoading,
 } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
 import { toast } from "react-toastify"
@@ -25,7 +26,6 @@ type Props = {
   defaultPriority: TaskPriority
   defaultDate: Calendar
 }
-
 
 export default function CreateTask({
   taskLimit,
@@ -165,7 +165,9 @@ export default function CreateTask({
     }
 
     const handleCreateTask = async () => {
-      await createTask({ title: title, priority: priority, dueDate: dueDate })
+      setTimeout(async () => {
+        await createTask({ title: title, priority: priority, dueDate: dueDate })
+      }, 300)
     }
 
     if (taskLimit > 19) {
@@ -242,8 +244,18 @@ export default function CreateTask({
             </div>
 
             <div className="grow ">
-              <button className="btnPrimary px-6 h-full w-full">
-                <Icon path={mdiPlus} className="mx-auto  sm:scale-125" size={1} />
+              <button
+                disabled={isPending}
+                className={`${isPending && "opacity-75"} btnPrimary px-6 h-full w-full  ${
+                  charCount === 0 && "cursor-not-allowed"
+                }`}
+              >
+                <Icon
+                  path={isPending ? mdiLoading : mdiPlus}
+                  className="mx-auto  sm:scale-125"
+                  size={1}
+                  spin={isPending}
+                />
               </button>
             </div>
           </div>

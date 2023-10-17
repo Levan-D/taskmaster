@@ -40,6 +40,20 @@ body *:focus {
   @apply !outline-white -outline-offset-2;
 }
 
+/* create task animation */
+.optimisticStart {
+  opacity: 0;
+  transform: translateY(-112px);
+}
+
+.optimisticEnd {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.4s, transform 0.4s ease-out;
+}
+
+/* create task animation */
+
 /* scrollbar */
 /* width */
 ::-webkit-scrollbar {
