@@ -165,9 +165,7 @@ export default function CreateTask({
     }
 
     const handleCreateTask = async () => {
-      setTimeout(async () => {
-        await createTask({ title: title, priority: priority, dueDate: dueDate })
-      }, 300)
+      await createTask({ title: title, priority: priority, dueDate: dueDate })
     }
 
     if (taskLimit > 19) {

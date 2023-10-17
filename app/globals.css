@@ -40,19 +40,63 @@ body *:focus {
   @apply !outline-white -outline-offset-2;
 }
 
-/* create task animation */
-.optimisticStart {
+/* create task/step animation */
+.optimisticCreateStart {
   opacity: 0;
   transform: translateX(-120px);
 }
 
-.optimisticEnd {
+.optimisticCreateEnd {
   opacity: 1;
   transform: translateX(0);
-  transition: opacity 0.8s, transform 0.4s ease-out;
+  transition: opacity 0.6s, transform 0.3s ease-out;
 }
 
-/* create task animation */
+/* create task/step animation */
+/* complete task/step animation */
+.completedDown {
+  animation: completeDownAnimation 600ms forwards;
+}
+.completedUp {
+  animation: completeUpAnimation 600ms forwards;
+}
+
+.taskWrapper {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+@keyframes completeDownAnimation {
+  10% {
+    transform: translateY(0);
+  }
+  80% {
+    transform: translateY(200px);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(200px);
+    grid-template-rows: 0fr;
+    display: none;
+  }
+}
+@keyframes completeUpAnimation {
+  10% {
+    transform: translateY(0);
+  }
+  80% {
+    transform: translateY(-200px);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-200px);
+    grid-template-rows: 0fr;
+    display: none;
+  }
+}
+/* complete task/step animation */
 
 /* scrollbar */
 /* width */

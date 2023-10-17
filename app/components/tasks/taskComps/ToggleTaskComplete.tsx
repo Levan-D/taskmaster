@@ -17,13 +17,17 @@ export default function ToggleTaskComplete({ task, addOptimisticTask, expired }:
   const [hovering, setHovering] = useState(false)
 
   const handleToggleTaskComplete = async () => {
-    addOptimisticTask([{ ...task, complete: !task.complete }])
+    if (!task.complete) addOptimisticTask([{ ...task, beingCompleted: "down" }])
+    if (task.complete) addOptimisticTask([{ ...task, beingCompleted: "up" }])
 
-    await toggleTaskComplete({ taskId: task.id, complete: !task.complete })
+    setTimeout(async () => {
+      addOptimisticTask([{ ...task, complete: !task.complete, beingCompleted: false }])
+      await toggleTaskComplete({ taskId: task.id, complete: !task.complete })
+    }, 400)
   }
 
   const getColor = () => {
-    if (task.complete) return "text-white"
+    if (task.complete || task.beingCompleted) return "text-white"
     switch (task.priority) {
       case "LOW":
         return "text-sky-400"
@@ -40,7 +44,7 @@ export default function ToggleTaskComplete({ task, addOptimisticTask, expired }:
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
       className={` ${
-        task.complete
+        task.complete || task.beingCompleted
           ? "bg-lime-600 md:hover:bg-lime-500"
           : "bg-neutral-950 md:hover:bg-neutral-900"
       } block  rounded-tl-lg rounded-br-lg p-1 sm:p-2 duration-300 transition-colors   `}

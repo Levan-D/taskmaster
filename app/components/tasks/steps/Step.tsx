@@ -29,9 +29,9 @@ export default function Step({ task, step, addOptimisticTask, expired }: Props) 
     <div
       className={` ${
         isOptimistic && !animate
-          ? "optimisticStart"
+          ? "optimisticCreateStart"
           : isOptimistic && animate
-          ? "optimisticEnd"
+          ? "optimisticCreateEnd"
           : ""
       }  flex gap-2 items-center group sm:hover:bg-neutral-600 p-2  rounded-md`}
     >

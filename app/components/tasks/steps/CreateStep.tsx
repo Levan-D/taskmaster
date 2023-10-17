@@ -37,9 +37,7 @@ export default function CreateStep({
     }
 
     const handleCreateStep = async () => {
-      setTimeout(async () => {
-        await createStep({ title: title, taskId: task.id })
-      }, 300)
+      await createStep({ title: title, taskId: task.id })
     }
 
     const newStep: Step = {

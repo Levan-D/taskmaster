@@ -42,6 +42,8 @@ type Step = {
   complete: boolean
   creation_date: Date
   taskId: string
+  beingDeleted?: boolean
+  beingCompleted?: boolean
 }
 
 type Task = {
@@ -53,6 +55,8 @@ type Task = {
   due_date: string
   priority: TaskPriority
   user_id: string
+  beingDeleted?: boolean
+  beingCompleted?: false | "up" | "down"
   steps: Step[] | []
 }
 

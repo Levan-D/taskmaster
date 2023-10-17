@@ -24,6 +24,8 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
   const [animate, setAnimate] = useState(false)
 
   const isOptimistic = task.id === "optimistic"
+  const isBeingDeleted = task.beingDeleted
+  const isBeingCompleted = task.beingCompleted
 
   useEffect(() => {
     if (isOptimistic) {
@@ -33,41 +35,47 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
       }, 0)
     }
   }, [])
+
   return (
     <div
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
-      className={`mainContainer sm:hover:border-neutral-600 transition-colors duration-300 
-      ${
-        isOptimistic && !animate
-          ? "optimisticStart"
-          : isOptimistic && animate
-          ? "optimisticEnd"
-          : ""
-      }`}
+      className={`mainContainer sm:hover:border-neutral-600 transition-colors duration-300 taskWrapper
+  ${
+    isOptimistic && !animate
+      ? "optimisticCreateStart"
+      : isOptimistic && animate
+      ? "optimisticCreateEnd"
+      : ""
+  } 
+  ${isBeingCompleted === "down" && "completedDown "}
+  ${isBeingCompleted === "up" && "completedUp "}
+   `}
     >
-      <div className="flex items-center">
-        <ToggleTaskComplete
-          expired={expired}
-          addOptimisticTask={addOptimisticTask}
-          task={task}
-        />
+      <div className="content">
+        <div className="flex items-center">
+          <ToggleTaskComplete
+            expired={expired}
+            addOptimisticTask={addOptimisticTask}
+            task={task}
+          />
 
-        <TaskUpdate
-          addOptimisticTask={addOptimisticTask}
-          task={task}
-          expired={expired}
-          className=" grow    "
-        />
+          <TaskUpdate
+            addOptimisticTask={addOptimisticTask}
+            task={task}
+            expired={expired}
+            className=" grow    "
+          />
 
-        <TaskDropDown
-          addOptimisticTask={addOptimisticTask}
-          task={task}
-          visible={visible}
-          expired={expired}
-        />
+          <TaskDropDown
+            addOptimisticTask={addOptimisticTask}
+            task={task}
+            visible={visible}
+            expired={expired}
+          />
+        </div>
+        <Steps expired={expired} addOptimisticTask={addOptimisticTask} task={task} />
       </div>
-      <Steps expired={expired} addOptimisticTask={addOptimisticTask} task={task} />
     </div>
   )
 }
