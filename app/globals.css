@@ -57,7 +57,7 @@ body *:focus {
 /* delete task/step animation */
 .deleteAnimation {
   opacity: 0;
-  transform: translateX(300px);
+  transform: translateX(120px);
   transition: opacity 0.3s, transform 0.2s ease-in;
 }
 
@@ -81,12 +81,12 @@ body *:focus {
     transform: translateY(0);
   }
   80% {
-    transform: translateY(200px);
+    transform: translateY(120px);
     opacity: 0;
   }
   100% {
     opacity: 0;
-    transform: translateY(200px);
+    transform: translateY(120px);
     grid-template-rows: 0fr;
     display: none;
   }
@@ -96,12 +96,12 @@ body *:focus {
     transform: translateY(0);
   }
   80% {
-    transform: translateY(-200px);
+    transform: translateY(-120px);
     opacity: 0;
   }
   100% {
     opacity: 0;
-    transform: translateY(-200px);
+    transform: translateY(-120px);
     grid-template-rows: 0fr;
     display: none;
   }

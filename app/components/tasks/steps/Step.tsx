@@ -26,6 +26,7 @@ export default function Step({ task, step, addOptimisticTask, expired }: Props) 
       }, 0)
     }
   }, [])
+  
   return (
     <div
       className={` ${
