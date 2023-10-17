@@ -1,9 +1,10 @@
 /** @format */
-
+"use client"
 import { toggleTaskComplete } from "@/app/actions/taskActions"
 import { useTransition } from "react"
 import Icon from "@mdi/react"
-import { mdiCheckBold } from "@mdi/js"
+import { mdiCheckBold, mdiCheckOutline } from "@mdi/js"
+import { useState } from "react"
 
 type Props = {
   task: Task
@@ -13,6 +14,7 @@ type Props = {
 
 export default function ToggleTaskComplete({ task, addOptimisticTask, expired }: Props) {
   const [isPending, startTransition] = useTransition()
+  const [hovering, setHovering] = useState(false)
 
   const handleToggleTaskComplete = async () => {
     addOptimisticTask([{ ...task, complete: !task.complete }])
@@ -20,9 +22,23 @@ export default function ToggleTaskComplete({ task, addOptimisticTask, expired }:
     await toggleTaskComplete({ taskId: task.id, complete: !task.complete })
   }
 
+  const getColor = () => {
+    if (task.complete) return "text-white"
+    switch (task.priority) {
+      case "LOW":
+        return "text-sky-400"
+      case "MEDIUM":
+        return "text-amber-400"
+      default:
+        return "text-rose-400"
+    }
+  }
+
   return (
     <button
       disabled={isPending || task.deleted || expired}
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
       className={` ${
         task.complete
           ? "bg-lime-600 md:hover:bg-lime-500"
@@ -31,16 +47,8 @@ export default function ToggleTaskComplete({ task, addOptimisticTask, expired }:
       onClick={() => startTransition(handleToggleTaskComplete)}
     >
       <Icon
-        path={mdiCheckBold}
-        className={`${
-          task.complete
-            ? "text-white"
-            : task.priority === "LOW"
-            ? "text-sky-400"
-            : task.priority === "MEDIUM"
-            ? "text-amber-400"
-            : "text-rose-400"
-        }  scale-75 sm:scale-100`}
+        path={task.complete || hovering ? mdiCheckBold : mdiCheckOutline}
+        className={`${getColor()} scale-75 sm:scale-100`}
         size={1}
       />
     </button>

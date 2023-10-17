@@ -1,9 +1,10 @@
 /** @format */
-
+"use client"
 import { toggleStepComplete } from "@/app/actions/stepActions"
 import { useTransition } from "react"
 import Icon from "@mdi/react"
-import { mdiCheckBold } from "@mdi/js"
+import { mdiCheckBold, mdiCheckOutline } from "@mdi/js"
+import { useState } from "react"
 
 type Props = {
   task: Task
@@ -28,6 +29,7 @@ const updateStepInTask = (task: Task, updatedStep: Step): Task => {
 
 export default function ToggleStepComplete({ task, step, addOptimisticTask }: Props) {
   const [isPending, startTransition] = useTransition()
+  const [hovering, setHovering] = useState(false)
 
   const handleToggleStepComplete = async () => {
     const updatedStep = { ...step, complete: !step.complete }
@@ -40,6 +42,8 @@ export default function ToggleStepComplete({ task, step, addOptimisticTask }: Pr
   return (
     <button
       disabled={isPending || task.deleted}
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
       className={` ${
         step.complete
           ? "bg-lime-600 md:hover:bg-lime-500"
@@ -50,8 +54,8 @@ export default function ToggleStepComplete({ task, step, addOptimisticTask }: Pr
       }}
     >
       <Icon
-        path={mdiCheckBold}
-        className={`${step.complete ? "text-white" : "text-neutral-300"}`}
+        path={step.complete || hovering ? mdiCheckBold : mdiCheckOutline}
+        className={`${step.complete ? "text-white" : "text-neutral-300"} `}
         size={0.8}
       />
     </button>
