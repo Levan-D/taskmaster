@@ -141,7 +141,7 @@ export default function Steps({ task, addOptimisticTask, expired }: Props) {
           {totalSteps > 0 && (
             <p
               className={`${
-                totalSteps === amountOfStepsCompleted && totalSteps > 0 && "text-lime-600"
+                totalSteps === amountOfStepsCompleted && totalSteps > 0 && "text-lime-400"
               }`}
             >
               {totalSteps}/{amountOfStepsCompleted}
@@ -153,7 +153,7 @@ export default function Steps({ task, addOptimisticTask, expired }: Props) {
               {task.start_time && (countdown !== "Done" || windowWidth > 640) && (
                 <>
                   {totalSteps > 0 && <div>-</div>}
-                  <div className={`flex gap-1 ${hasTaskStarted ? "text-lime-600" : ""}`}>
+                  <div className={`flex gap-1 ${hasTaskStarted ? "text-lime-400" : ""}`}>
                     <p>ST:</p>
                     <p>
                       {DateTime.fromJSDate(task.start_time).toLocaleString(
@@ -170,7 +170,7 @@ export default function Steps({ task, addOptimisticTask, expired }: Props) {
                     <div>-</div>
                     <div
                       className={`flex gap-1 ${
-                        countdown === "Done" ? "text-lime-600" : ""
+                        countdown === "Done" ? "text-lime-400" : ""
                       }`}
                     >
                       <p>DR: </p>
@@ -190,7 +190,7 @@ export default function Steps({ task, addOptimisticTask, expired }: Props) {
                   )}
                   <div
                     className={`flex gap-1 ${
-                      countdown === "Done" ? "text-lime-600" : ""
+                      countdown === "Done" ? "text-lime-400" : ""
                     }`}
                   >
                     CD: {countdown}
