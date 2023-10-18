@@ -183,6 +183,8 @@ export default function CreateTask({
       title: title,
       deleted: false,
       complete: false,
+      start_time: null,
+      end_time: null,
       creation_date: DateTime.now().toJSDate(),
       due_date: dueDate,
       priority: priority,
