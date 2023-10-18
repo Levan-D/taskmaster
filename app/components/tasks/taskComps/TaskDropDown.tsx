@@ -20,6 +20,8 @@ import { useAppSelector } from "@/lib/redux/hooks"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { useRef } from "react"
+import { useAppDispatch } from "@/lib/redux/hooks"
+import { setModal } from "@/lib/redux/slices/globalSlice"
 
 type Props = {
   task: Task
@@ -34,6 +36,7 @@ export default function TaskDropDown({
   visible,
   addOptimisticTask,
 }: Props) {
+  const dispatch = useAppDispatch()
   const { windowWidth } = useAppSelector(state => state.global)
   const [isPending, startTransition] = useTransition()
 
@@ -191,6 +194,14 @@ export default function TaskDropDown({
           </div>
         </div>
       ),
+    },
+    {
+      break: expired || task.deleted ? false : true,
+    },
+    {
+      title: !task.start_time ? "Enable timer" : "Edit timer",
+      action: () => dispatch(setModal({ open: true, type: "timer", taskId: task.id })),
+      invisible: expired || task.deleted ? true : false,
     },
     {
       break: expired || task.deleted ? false : true,

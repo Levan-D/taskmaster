@@ -52,6 +52,8 @@ type Task = {
   complete: boolean
   creation_date: Date
   due_date: string
+  start_time: Date | null
+  end_time: Date | null
   priority: TaskPriority
   user_id: string
   beingDeleted?: boolean

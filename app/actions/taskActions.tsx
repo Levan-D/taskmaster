@@ -68,6 +68,36 @@ export const updateTask = async ({
   }
 }
 
+export const setTimer = async ({
+  taskId,
+  start_time,
+  end_time,
+}: {
+  taskId: string
+  start_time: Date | null
+  end_time: Date | null
+}): Promise<ApiResponse<void>> => {
+  try {
+    const userData = await checkAuth()
+    if (!userData.id) return handleApiError("user data unavailable")
+
+    await prisma.tasks.update({
+      where: {
+        id: taskId,
+        user_id: userData.id,
+      },
+      data: {
+        start_time: start_time,
+        end_time: end_time,
+      },
+    })
+    revalidatePath("/dashboard")
+    return { success: true }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
 export const reviveTask = async ({
   taskId,
   dueDate,

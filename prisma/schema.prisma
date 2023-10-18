@@ -66,6 +66,8 @@ model Tasks {
   priority      TaskPriority @default(LOW)
   user          Users        @relation(fields: [user_id], references: [user_id])
   user_id       String
+  start_time    DateTime?
+  end_time      DateTime?
   steps         Steps[]
 
   @@index([user_id])
