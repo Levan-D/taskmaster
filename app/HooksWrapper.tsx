@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation"
 export const HooksWrapper = (props: React.PropsWithChildren) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
- 
+
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>
 
@@ -49,6 +49,39 @@ export const HooksWrapper = (props: React.PropsWithChildren) => {
     if (today !== userTimeFormatted) {
       setCookie("user_time", today)
       router.refresh()
+    }
+  }, [])
+
+  useEffect(() => {
+    let refreshTimeout: ReturnType<typeof setTimeout>
+
+    function resetRefreshTimer() {
+      clearTimeout(refreshTimeout)
+
+      refreshTimeout = setTimeout(() => {
+        window.location.reload()
+      }, 300000) // 5 minutes in milliseconds
+    }
+
+    resetRefreshTimer()
+
+    const handleUserInteraction = () => {
+      resetRefreshTimer()
+    }
+
+    document.addEventListener("mousemove", handleUserInteraction)
+    document.addEventListener("mousedown", handleUserInteraction)
+    document.addEventListener("keydown", handleUserInteraction)
+    document.addEventListener("touchstart", handleUserInteraction)
+    document.addEventListener("scroll", handleUserInteraction)
+
+    return () => {
+      clearTimeout(refreshTimeout)
+      document.removeEventListener("mousemove", handleUserInteraction)
+      document.removeEventListener("mousedown", handleUserInteraction)
+      document.removeEventListener("keydown", handleUserInteraction)
+      document.removeEventListener("touchstart", handleUserInteraction)
+      document.removeEventListener("scroll", handleUserInteraction)
     }
   }, [])
 
