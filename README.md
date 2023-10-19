@@ -1,8 +1,9 @@
 # Taskmaster
 
-![image not available](public/og-tag.png)
+![image not available](app/public/og-tag.png)
 
-Visit at https://taskmaster-flame.vercel.app/
+Visit at https://taskmaster-flame.vercel.app
+
 
 Meet Taskmaster: Your daily organizer reimagined. In the midst of daily routines and weekly commitments, having a reliable organizer is crucial. TaskMaster fills that gap, without overcomplicating things. Leveraging libraries like Next.js, Kinde Auth, React, TypeScript, Prisma, and TailwindCSS, it's robust and developer-friendly. Regardless of the device you're viewing it on, TaskMaster looks and feels intuitive. Plus, we've prioritized accessibility right from the start.
 
