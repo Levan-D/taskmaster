@@ -59,7 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <Providers>
       <html lang="en">
         <body
-          className={`${inter.className}  text-white bg-neutral-900 flex flex-col min-h-screen `}
+          className={`${inter.className}  text-white bg-neutral-900 flex flex-col min-h-screen overscroll-contain	`}
         >
           <HooksWrapper>
             <main className="grow min-h-screen">
