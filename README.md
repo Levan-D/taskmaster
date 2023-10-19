@@ -1,4 +1,4 @@
-# Taskmaster
+# TaskMaster
 
 ![image not available](public/og-tag.png)
 
