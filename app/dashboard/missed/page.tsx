@@ -2,6 +2,11 @@
 
 import { getMissedTasks } from "../../actions/taskActions"
 import TaskDisplay from "./TaskDisplay"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Missed",
+}
 
 type Props = {
   searchParams: { [key: string]: string | string[] | undefined }

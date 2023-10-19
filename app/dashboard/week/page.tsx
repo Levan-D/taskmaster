@@ -4,6 +4,11 @@ import { getWeeksTasks } from "../../actions/taskActions"
 import TaskDisplay from "./TaskDisplay"
 import { cookies } from "next/headers"
 import Loader from "@/app/components/Loader"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Week",
+}
 
 export default async function Week() {
   if (cookies().get("user_time")?.value === undefined) return <Loader />
