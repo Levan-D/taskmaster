@@ -12,8 +12,39 @@ import Modal from "./components/modal/Modal"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Taskmaster",
-  description: "Organize your tasks in orderly fashion",
+  title: {
+    template: "%s | Taskmaster",
+    default: "Taskmaster",
+  },
+  description: "One-stop shop for organizing your routine.",
+
+  generator: "Next.js",
+  applicationName: "Taskmaster",
+  keywords: ["Taskmaster", "to do", "to-do", "routine", "organize"],
+  authors: [{ name: "Lev" }],
+  colorScheme: "dark",
+  creator: "Levan Dolidze",
+  publisher: "Levan Dolidze",
+
+  metadataBase: new URL("https://taskmaster-flame.vercel.app"),
+
+  openGraph: {
+    title: "Taskmaster",
+    description: "One-stop shop for organizing your routine.",
+    url: "https://taskmaster-flame.vercel.app",
+    siteName: "Taskmaster",
+    images: [
+      {
+        url: "https://i.imgur.com/9ZHlWwd.png",
+        width: 1200,
+        height: 630,
+        alt: "Main OGT",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+
   viewport: "width=device-width, initial-scale=1, maximum-scale=1",
 }
 
