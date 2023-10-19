@@ -6,6 +6,9 @@ import {
   getKindeServerSession,
 } from "@kinde-oss/kinde-auth-nextjs/server"
 import { redirect } from "next/navigation"
+import Icon from "@mdi/react"
+import { mdiGithub } from "@mdi/js"
+import Link from "next/link"
 
 export default function Home() {
   const { getUser, isAuthenticated } = getKindeServerSession()
@@ -28,7 +31,7 @@ export default function Home() {
         </RegisterLink>
       </div>
 
-      <div className="w-full">
+      <footer className="w-full">
         <div>
           <svg
             className="waves"
@@ -52,10 +55,11 @@ export default function Home() {
             </g>
           </svg>
         </div>
-        <div className="text-neutral-950 bg-white text-center py-8 sm:py-12">
-          © 2023 Levan Dolidze. All Rights Reserved.
+        <div className="flex gap-4 justify-center items-center text-neutral-950 bg-white text-center py-8 sm:py-12">
+          <div className="">© 2023 Levan Dolidze. All Rights Reserved.</div>
+        <Link href={"https://github.com/Levan-D/taskmaster"}  target="_blank" >  <Icon  className="hover:text-sky-600 duration-300" path={mdiGithub} size={1} /></Link>
         </div>
-      </div>
+      </footer>
     </section>
   )
 }
