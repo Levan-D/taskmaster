@@ -17,7 +17,7 @@ export default function Home() {
   if (isAuthenticated()) redirect("/dashboard/today")
 
   return (
-    <section className="flex sm:h-screen h-[calc(100dvh)] flex-col items-center justify-between w-screen">
+    <section className="flex sm:min-h-screen min-h-[calc(100dvh)] flex-col items-center justify-between w-screen">
       <p className="text-3xl sm:text-5xl  lg:text-7xl font-semibold text-center max-w-6xl mt-36 mx-4 sm:mx-8">
         Your daily and weekly routine, simplified and organized.
       </p>
