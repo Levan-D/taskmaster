@@ -1,6 +1,6 @@
 # Taskmaster
 
-![image not available](public/og-tag.png)
+![image not available](app/public/og-tag.png)
 
 Visit at https://taskmaster-flame.vercel.app/
 
