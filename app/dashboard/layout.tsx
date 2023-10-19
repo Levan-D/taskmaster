@@ -4,11 +4,7 @@ import Sidebar from "../components/Sidebar"
 import UserInfo from "../components/UserInfo"
 import LogoutBtn from "../components/LogoutBtn"
 
-import { checkUserExists } from "../actions/userActions"
-
 export default function Layout({ children }: { children: React.ReactNode }) {
-  // await checkUserExists() <--  fix this
-
   return (
     <div className="flex ">
       <Sidebar LogoutBtn={<LogoutBtn />} UserInfo={<UserInfo />} />

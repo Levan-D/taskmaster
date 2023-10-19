@@ -17,7 +17,7 @@ export default function Home() {
   if (isAuthenticated()) redirect("/dashboard/today")
 
   return (
-    <section className="flex min-h-screen flex-col items-center justify-between w-screen">
+    <section className="flex sm:min-h-screen h-[calc(100dvh)] flex-col items-center justify-between w-screen">
       <p className="text-3xl sm:text-5xl  lg:text-7xl font-semibold text-center max-w-6xl mt-36 mx-4 sm:mx-8">
         Your daily and weekly routine, simplified and organized.
       </p>
@@ -57,7 +57,10 @@ export default function Home() {
         </div>
         <div className="flex gap-4 justify-center items-center text-neutral-950 bg-white text-center py-8 sm:py-12">
           <div className="">© 2023 Levan Dolidze. All Rights Reserved.</div>
-        <Link href={"https://github.com/Levan-D/taskmaster"}  target="_blank" >  <Icon  className="hover:text-sky-600 duration-300" path={mdiGithub} size={1} /></Link>
+          <Link href={"https://github.com/Levan-D/taskmaster"} target="_blank">
+            {" "}
+            <Icon className="hover:text-sky-600 duration-300" path={mdiGithub} size={1} />
+          </Link>
         </div>
       </footer>
     </section>

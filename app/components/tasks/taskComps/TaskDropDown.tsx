@@ -266,7 +266,7 @@ export default function TaskDropDown({
         )}
         <DropdownMenu
           ref={dropdownRef}
-          menuClassName="-translate-x-24  "
+          menuClassName="-translate-x-28  "
           button={button}
           items={items}
         />
