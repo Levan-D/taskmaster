@@ -55,10 +55,9 @@ export default function Home() {
             </g>
           </svg>
         </div>
-        <div className="flex gap-4 justify-center items-center text-neutral-950 bg-white text-center py-8 sm:py-12">
+        <div className="flex   flex-col-reverse sm:flex-row gap-4 justify-center items-center text-neutral-950 bg-white text-center py-8 sm:py-12">
           <div className="">© 2023 Levan Dolidze. All Rights Reserved.</div>
           <Link href={"https://github.com/Levan-D/taskmaster"} target="_blank">
-            {" "}
             <Icon className="hover:text-sky-600 duration-300" path={mdiGithub} size={1} />
           </Link>
         </div>

@@ -175,13 +175,6 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
 
   const items: DropDownItemType = [
     {
-      title: "test",
-      action: () => console.log(`alo`),
-    },
-    {
-      break: true,
-    },
-    {
       JSX: LogoutBtn,
     },
   ]
