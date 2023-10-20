@@ -89,7 +89,7 @@ export default function Timer({ task }: Props) {
     render && (
       <div
         style={progressBarStyle}
-        className={` px-2 rounded-full  text-white ${
+        className={` px-4  rounded-full  text-white ${
           windowWidth < 450 && "text-[10px] "
         }`}
       >

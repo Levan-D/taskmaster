@@ -47,7 +47,7 @@ export default function StepsAccordion({
           </p>
         )}
         {task.start_time && (
-          <div className={`${totalSteps === 0 && "pl-1"}`}>
+          <div className={`${totalSteps === 0 && "pl-0.5"}`}>
             <Timer task={task} />
           </div>
         )}
