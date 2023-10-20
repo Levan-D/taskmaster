@@ -14,6 +14,7 @@ export default function Timer({ task }: Props) {
 
   const [countdown, setCountdown] = useState("")
   const [render, setRender] = useState(false)
+  const [progressBarStyle, setProgressBarStyle] = useState({})
 
   const hasTaskStarted =
     task.start_time && DateTime.fromJSDate(task.start_time) <= DateTime.now()
@@ -34,6 +35,25 @@ export default function Timer({ task }: Props) {
         const now = DateTime.now()
         const startTime = DateTime.fromJSDate(task.start_time)
         const endTime = DateTime.fromJSDate(task.end_time)
+
+        if (task.start_time && task.end_time) {
+          const totalDuration = Interval.fromDateTimes(startTime, endTime).toDuration(
+            "seconds"
+          ).seconds
+          const elapsedDuration = Interval.fromDateTimes(startTime, now).toDuration(
+            "seconds"
+          ).seconds
+          const progressPercentage = (elapsedDuration / totalDuration) * 100
+
+          const spread = 20
+          const newProgressBarStyle = {
+            background: `linear-gradient(to right, #65a30d ${
+              progressPercentage - spread
+            }%,  #525252 ${progressPercentage + spread}%)`,
+          }
+
+          setProgressBarStyle(newProgressBarStyle)
+        }
 
         if (now > endTime) {
           setCountdown("Done")
@@ -68,7 +88,8 @@ export default function Timer({ task }: Props) {
   return (
     render && (
       <div
-        className={`bg-neutral-700 px-2 rounded-full ${
+        style={progressBarStyle}
+        className={` px-2 rounded-full  text-white ${
           windowWidth < 450 && "text-[10px] "
         }`}
       >
@@ -129,7 +150,7 @@ export default function Timer({ task }: Props) {
 
                 {/* If the task has ended */}
                 {countdown === "Done" && (
-                  <div className={`flex text-lime-400`}>
+                  <div className={`flex `}>
                     <p> {countdown}</p>
                   </div>
                 )}
@@ -161,7 +182,7 @@ export default function Timer({ task }: Props) {
 
                 {/* If the task has ended */}
                 {countdown === "Done" && (
-                  <div className={`flex text-lime-400`}>
+                  <div className={`flex `}>
                     <p> {countdown}</p>
                   </div>
                 )}
