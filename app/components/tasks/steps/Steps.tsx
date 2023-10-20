@@ -1,13 +1,12 @@
 /** @format */
 
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import Step from "./Step"
 import CreateStep from "./CreateStep"
 import Icon from "@mdi/react"
 import { mdiChevronDown } from "@mdi/js"
 import { getRelativeDateString } from "@/app/utils/dates"
-import { DateTime, Interval, Duration } from "luxon"
-import { useAppSelector } from "@/lib/redux/hooks"
+import Timer from "./Timer"
 
 type Props = {
   task: Task
@@ -16,63 +15,11 @@ type Props = {
 }
 
 export default function Steps({ task, addOptimisticTask, expired }: Props) {
-  const { windowWidth } = useAppSelector(state => state.global)
   const [open, setOpen] = useState(false)
-  const [countdown, setCountdown] = useState("")
-  const [render, setRender] = useState(false)
 
   const totalSteps = task.steps.length
   const amountOfStepsCompleted = task.steps.filter(step => step.complete).length
   const allStepsCompleted = totalSteps === amountOfStepsCompleted && totalSteps > 0
-  const hasTaskStarted =
-    task.start_time && DateTime.fromJSDate(task.start_time) <= DateTime.now()
-  const duration =
-    task.start_time && task.end_time
-      ? Duration.fromMillis(task.end_time.getTime() - task.start_time.getTime())
-      : null
-  const hours = duration ? duration.hours : 0
-
-  const totalMinutesFromDuration = duration ? Math.round(duration.as("minutes")) : 0
-  const hoursFromDuration = Math.floor(totalMinutesFromDuration / 60)
-  const minutesFromDuration = totalMinutesFromDuration % 60
-
-  useEffect(() => {
-    if (!render) setRender(true)
-    const updateCountdown = () => {
-      if (task.start_time && task.end_time) {
-        const now = DateTime.now()
-        const startTime = DateTime.fromJSDate(task.start_time)
-        const endTime = DateTime.fromJSDate(task.end_time)
-
-        if (now > endTime) {
-          setCountdown("Done")
-          return
-        }
-
-        const duration = Interval.fromDateTimes(now, endTime).toDuration([
-          "hours",
-          "minutes",
-          "seconds",
-        ])
-        const totalMinutes = Math.round(duration.as("minutes"))
-        const hours = Math.floor(totalMinutes / 60)
-        const minutes = totalMinutes % 60
-        const seconds = Math.round(duration.seconds)
-
-        if (duration.as("minutes") < 5) {
-          setCountdown(`${minutes}m : ${seconds}s`)
-        } else {
-          setCountdown(`${hours}h : ${minutes}m`)
-        }
-      }
-    }
-
-    updateCountdown()
-
-    const intervalId = setInterval(updateCountdown, 1000)
-
-    return () => clearInterval(intervalId)
-  }, [])
 
   return (
     <div>
@@ -137,7 +84,7 @@ export default function Steps({ task, addOptimisticTask, expired }: Props) {
         } px-2 
         transition-color flex justify-between items-center duration-300 rounded-b-lg  mb-0`}
       >
-        <div className="basis-2/5 text-left text-xs text-neutral-300 flex gap-2">
+        <div className="basis-2/5 text-left text-xs text-neutral-300 flex gap-2 ">
           {totalSteps > 0 && (
             <p
               className={`${
@@ -147,58 +94,7 @@ export default function Steps({ task, addOptimisticTask, expired }: Props) {
               {totalSteps}/{amountOfStepsCompleted}
             </p>
           )}
-
-          {render && (
-            <>
-              {task.start_time && (countdown !== "Done" || windowWidth > 640) && (
-                <>
-                  {totalSteps > 0 && <div>-</div>}
-                  <div className={`flex gap-1 ${hasTaskStarted ? "text-lime-400" : ""}`}>
-                    <p>ST:</p>
-                    <p>
-                      {DateTime.fromJSDate(task.start_time).toLocaleString(
-                        DateTime.TIME_SIMPLE
-                      )}
-                    </p>
-                  </div>
-                </>
-              )}
-              {task.start_time &&
-                task.end_time &&
-                (windowWidth > 640 || !hasTaskStarted) && (
-                  <>
-                    <div>-</div>
-                    <div
-                      className={`flex gap-1 ${
-                        countdown === "Done" ? "text-lime-400" : ""
-                      }`}
-                    >
-                      <p>DR: </p>
-                      <p>
-                        {hoursFromDuration > 0
-                          ? `${hoursFromDuration}h : ${minutesFromDuration}m`
-                          : `${minutesFromDuration}m`}
-                      </p>
-                    </div>
-                  </>
-                )}
-
-              {hasTaskStarted && (
-                <>
-                  {!(windowWidth < 640 && countdown === "Done" && totalSteps <= 0) && (
-                    <div>-</div>
-                  )}
-                  <div
-                    className={`flex gap-1 ${
-                      countdown === "Done" ? "text-lime-400" : ""
-                    }`}
-                  >
-                    CD: {countdown}
-                  </div>
-                </>
-              )}
-            </>
-          )}
+          <Timer task={task} />
         </div>
         {((!expired && !task.deleted) ||
           (expired && task.steps.length > 0) ||
