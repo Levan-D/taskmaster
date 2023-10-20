@@ -63,7 +63,7 @@ export default function Timer({ taskId }: Props) {
 
   return (
     <div className="flex flex-col justify-between grow ">
-      <div className="flex justify-center gap-8">
+      <div className="flex justify-center   sm:gap-8">
         <div>
           {/* Start Time Picker */}
           <DatePicker
@@ -71,7 +71,7 @@ export default function Timer({ taskId }: Props) {
             customInput={
               <div className="p-1.5 text-center">
                 <p>Start time</p>
-                <div className="input mt-4 flex gap-1 items-center  select-none  cursor-pointer">
+                <div className="input text-xs sm:text-base mt-4 flex gap-1 items-center  select-none  cursor-pointer">
                   <p> {DateTime.fromJSDate(startTime).toFormat("h:mm a")}</p>
                   <Icon path={mdiChevronDown} size={1} />
                 </div>
@@ -102,7 +102,7 @@ export default function Timer({ taskId }: Props) {
             customInput={
               <div className="p-1.5 text-center">
                 <p>End time</p>
-                <div className="input mt-4  select-none flex gap-1 items-center cursor-pointer">
+                <div className="input mt-4 text-xs sm:text-base select-none flex gap-1 items-center cursor-pointer">
                   <p> {DateTime.fromJSDate(endTime).toFormat("h:mm a")}</p>
                   <Icon path={mdiChevronDown} size={1} />
                 </div>

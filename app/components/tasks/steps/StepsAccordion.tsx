@@ -10,13 +10,20 @@ type Props = {
   expired: boolean
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  totalSteps: number
+  amountOfStepsCompleted: number
+  allStepsCompleted: boolean
 }
 
-export default function StepsAccordion({ task, expired, setOpen, open }: Props) {
-  const totalSteps = task.steps.length
-  const amountOfStepsCompleted = task.steps.filter(step => step.complete).length
-  const allStepsCompleted = totalSteps === amountOfStepsCompleted && totalSteps > 0
-
+export default function StepsAccordion({
+  task,
+  expired,
+  setOpen,
+  open,
+  totalSteps,
+  amountOfStepsCompleted,
+  allStepsCompleted,
+}: Props) {
   return (
     <button
       disabled={
@@ -30,20 +37,20 @@ export default function StepsAccordion({ task, expired, setOpen, open }: Props) 
         (task.deleted && task.steps.length > 0)
           ? "sm:hover:bg-neutral-500"
           : ""
-      } px-2 
+      } 
     transition-color flex justify-between items-center duration-300 rounded-b-lg  mb-0`}
     >
       <div className="basis-2/5 text-left text-xs text-neutral-300 flex gap-2 ">
         {totalSteps > 0 && (
-          <p
-            className={`${
-              totalSteps === amountOfStepsCompleted && totalSteps > 0 && "text-lime-400"
-            }`}
-          >
+          <p className={`${allStepsCompleted && "text-lime-400"} pl-2`}>
             {totalSteps}/{amountOfStepsCompleted}
           </p>
         )}
-        <Timer task={task} />
+        {task.start_time && (
+          <div className={`${totalSteps === 0 && "pl-1"}`}>
+            <Timer task={task} />
+          </div>
+        )}
       </div>
       {((!expired && !task.deleted) ||
         (expired && task.steps.length > 0) ||
@@ -57,7 +64,7 @@ export default function StepsAccordion({ task, expired, setOpen, open }: Props) 
         />
       )}
 
-      <div className="basis-2/5  py-1 text-xs text-neutral-300 text-end">
+      <div className="basis-2/5 pr-2 py-1 text-xs text-neutral-300 text-end">
         {typeof task.due_date === "string" && getRelativeDateString(task.due_date)}
       </div>
     </button>

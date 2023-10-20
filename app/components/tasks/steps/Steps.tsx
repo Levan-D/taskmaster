@@ -65,7 +65,15 @@ export default function Steps({ task, addOptimisticTask, expired }: Props) {
           )}
         </div>
       </div>
-      <StepsAccordion task={task} expired={expired} open={open} setOpen={setOpen} />
+      <StepsAccordion
+        totalSteps={totalSteps}
+        amountOfStepsCompleted={amountOfStepsCompleted}
+        allStepsCompleted={allStepsCompleted}
+        task={task}
+        expired={expired}
+        open={open}
+        setOpen={setOpen}
+      />
     </div>
   )
 }

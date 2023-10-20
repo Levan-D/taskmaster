@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react"
 import { DateTime, Interval, Duration } from "luxon"
 import { useAppSelector } from "@/lib/redux/hooks"
+import Tooltip from "../../Tooltip"
 
 type Props = {
   task: Task
@@ -50,9 +51,9 @@ export default function Timer({ task }: Props) {
         const seconds = Math.round(duration.seconds)
 
         if (duration.as("minutes") < 5) {
-          setCountdown(`${minutes}m : ${seconds}s`)
+          setCountdown(`${minutes}m:${seconds}s`)
         } else {
-          setCountdown(`${hours}h : ${minutes}m`)
+          setCountdown(`${hours}h:${minutes}m`)
         }
       }
     }
@@ -66,35 +67,108 @@ export default function Timer({ task }: Props) {
 
   return (
     render && (
-      <div className={`bg-neutral-700 py-0.5 px-2 rounded-full flex`}>
-        {task.start_time && (countdown !== "Done" || windowWidth > 640) && (
-          <>
-            <div className={`flex gap-1 ${hasTaskStarted ? "text-lime-400" : ""}`}>
-              <p>ST:</p>
-              <p>
-                {DateTime.fromJSDate(task.start_time).toLocaleString(
-                  DateTime.TIME_SIMPLE
+      <div
+        className={`bg-neutral-700 px-2 rounded-full ${
+          windowWidth < 450 && "text-[10px] "
+        }`}
+      >
+        <Tooltip
+          text={`ST:${DateTime.fromJSDate(task.start_time || new Date())
+            .toLocaleString(DateTime.TIME_SIMPLE)
+            .replace(/\s+/g, "")} DR:${
+            hoursFromDuration > 0
+              ? `${hoursFromDuration}h:${minutesFromDuration}m`
+              : `${minutesFromDuration}m`
+          }`}
+          position="right"
+          className="!translate-y-[-24px] text-xs"
+        >
+          <div className="flex gap-2">
+            {windowWidth >= 400 && (
+              <>
+                {/* If the task hasn't started */}
+                {!hasTaskStarted && task.start_time && (
+                  <>
+                    <div className="flex ">
+                      <p> ST:</p>
+                      <p>
+                        {DateTime.fromJSDate(task.start_time)
+                          .toLocaleString(DateTime.TIME_SIMPLE)
+                          .replace(/\s+/g, "")}
+                      </p>
+                    </div>
+                    <div className="flex ">
+                      <p>DR:</p>
+                      <p>
+                        {hoursFromDuration > 0
+                          ? `${hoursFromDuration}h:${minutesFromDuration}m`
+                          : `${minutesFromDuration}m`}
+                      </p>
+                    </div>
+                  </>
                 )}
-              </p>
-            </div>
-          </>
-        )}
-        {task.start_time && task.end_time && (windowWidth > 640 || !hasTaskStarted) && (
-          <div className={`flex gap-1 ${countdown === "Done" ? "text-lime-400" : ""}`}>
-            <p>DR: </p>
-            <p>
-              {hoursFromDuration > 0
-                ? `${hoursFromDuration}h : ${minutesFromDuration}m`
-                : `${minutesFromDuration}m`}
-            </p>
-          </div>
-        )}
 
-        {hasTaskStarted && (
-          <div className={`flex gap-1 ${countdown === "Done" ? "text-lime-400" : ""}`}>
-            CD: {countdown}
+                {/* If the task has started but not ended */}
+                {hasTaskStarted && countdown !== "Done" && (
+                  <>
+                    <div className="flex ">
+                      <p>DR:</p>
+                      <p>
+                        {hoursFromDuration > 0
+                          ? `${hoursFromDuration}h:${minutesFromDuration}m`
+                          : `${minutesFromDuration}m`}
+                      </p>
+                    </div>
+
+                    <div className="flex ">
+                      <p>CD:</p>
+                      <p>{countdown}</p>
+                    </div>
+                  </>
+                )}
+
+                {/* If the task has ended */}
+                {countdown === "Done" && (
+                  <div className={`flex text-lime-400`}>
+                    <p> {countdown}</p>
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* If windowWidth is less than 350 */}
+            {windowWidth < 400 && (
+              <>
+                {/* If the task hasn't started */}
+                {!hasTaskStarted && task.start_time && (
+                  <div className="flex">
+                    <p>ST:</p>
+                    <p>
+                      {DateTime.fromJSDate(task.start_time)
+                        .toLocaleString(DateTime.TIME_SIMPLE)
+                        .replace(/\s+/g, "")}
+                    </p>
+                  </div>
+                )}
+
+                {/* If the task has started but not ended */}
+                {hasTaskStarted && countdown !== "Done" && (
+                  <div className="flex">
+                    <p>CD:</p>
+                    <p>{countdown}</p>
+                  </div>
+                )}
+
+                {/* If the task has ended */}
+                {countdown === "Done" && (
+                  <div className={`flex text-lime-400`}>
+                    <p> {countdown}</p>
+                  </div>
+                )}
+              </>
+            )}
           </div>
-        )}
+        </Tooltip>
       </div>
     )
   )
