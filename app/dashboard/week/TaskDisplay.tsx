@@ -12,6 +12,7 @@ import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import { setWeeksOps } from "@/lib/redux/slices/globalSlice"
 import Loader from "@/app/components/Loader"
+import TaskCounter from "@/app/components/TaskCounter"
 
 type Props = {
   tasks: Task[]
@@ -108,11 +109,6 @@ export default function TaskDisplay({ tasks }: Props) {
 
   const weekTasksCompleted = weeksFinished.length
 
-  const weekTasksRatio = `${totalweeksTasks}/${weekTasksCompleted}`
-
-  const allWeeksTasksCompleted =
-    totalweeksTasks === weekTasksCompleted && totalweeksTasks > 0
-
   const tasksGroupedByDate = weeksUnfinished.reduce(
     (acc: { [key: string]: Task[] }, task) => {
       const dueDate = DateTime.fromISO(task.due_date).toFormat("yyyy-MM-dd")
@@ -171,25 +167,7 @@ export default function TaskDisplay({ tasks }: Props) {
       </div>
 
       {totalweeksTasks > 0 && (
-        <div className="flex items-center select-none mt-10 mb-12">
-          <hr
-            className={` ${
-              allWeeksTasksCompleted ? "  border-lime-400" : "  border-neutral-500"
-            } mx-4  block grow border-t-[1px]  border-opacity-75`}
-          />
-          <div
-            className={`${
-              allWeeksTasksCompleted ? "text-lime-400 " : "text-neutral-500 "
-            }  p-1.5 text-sm  shrink-0 `}
-          >
-            {weekTasksRatio}
-          </div>
-          <hr
-            className={` ${
-              allWeeksTasksCompleted ? "  border-lime-400" : "  border-neutral-500"
-            } mx-4    block grow border-t-[1px]  border-opacity-75`}
-          />
-        </div>
+        <TaskCounter total={totalweeksTasks} completed={weekTasksCompleted} />
       )}
 
       {sortedDates.length === 1 ? (

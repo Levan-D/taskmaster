@@ -13,6 +13,7 @@ import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import { setTodaysOps } from "@/lib/redux/slices/globalSlice"
 import Loader from "@/app/components/Loader"
+import TaskCounter from "@/app/components/TaskCounter"
 
 type Props = {
   tasks: Task[]
@@ -100,11 +101,6 @@ export default function TaskDisplay({ tasks }: Props) {
   const totalTodaysTasks = todayTasks.length
   const todaysTasksCompleted = todaysFinished.length
   const todaysTasksNotCompleted = todaysUnfinished.length
-
-  const todaysTasksRatio = `${totalTodaysTasks}/${todaysTasksCompleted}`
-
-  const allATodaysTasksCompleted =
-    totalTodaysTasks === todaysTasksCompleted && totalTodaysTasks > 0
 
   useEffect(() => {
     if (todaysOps) {
@@ -195,25 +191,7 @@ export default function TaskDisplay({ tasks }: Props) {
       )}
 
       {totalTodaysTasks > 0 && totalExpiredTasks === 0 && (
-        <div className="flex items-center select-none mt-10 mb-12">
-          <hr
-            className={` ${
-              allATodaysTasksCompleted ? "  border-lime-400" : "  border-neutral-500"
-            } mx-4  block grow border-t-[1px]  border-opacity-75`}
-          />
-          <div
-            className={`${
-              allATodaysTasksCompleted ? "text-lime-400 " : "text-neutral-500 "
-            }  p-1.5 text-sm  shrink-0 `}
-          >
-            {todaysTasksRatio}
-          </div>
-          <hr
-            className={` ${
-              allATodaysTasksCompleted ? "  border-lime-400" : "  border-neutral-500"
-            } mx-4    block grow border-t-[1px]  border-opacity-75`}
-          />
-        </div>
+        <TaskCounter total={totalTodaysTasks} completed={todaysTasksCompleted} />
       )}
 
       {todaysTasksNotCompleted > 0 && totalExpiredTasks === 0 && (

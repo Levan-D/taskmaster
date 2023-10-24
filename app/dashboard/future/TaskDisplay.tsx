@@ -10,6 +10,7 @@ import { experimental_useOptimistic as useOptimistic } from "react"
 import { DateTime } from "luxon"
 import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
 import Loader from "@/app/components/Loader"
+import TaskCounter from "@/app/components/TaskCounter"
 
 type Props = {
   tasks: Task[]
@@ -67,11 +68,6 @@ export default function TaskDisplay({ tasks }: Props) {
   const futuresTasksCompleted = futuresFinished.length
   const futuresTasksNotCompleted = futuresUnfinished.length
 
-  const todaysTasksRatio = `${totalFuturesTasks}/${futuresTasksCompleted}`
-
-  const allATodaysTasksCompleted =
-    totalFuturesTasks === futuresTasksCompleted && totalFuturesTasks > 0
-
   useEffect(() => {
     setMessage(
       <div className={`  mb-28 text-center text-sm sm:text-base`}>
@@ -113,25 +109,7 @@ export default function TaskDisplay({ tasks }: Props) {
       </div>
 
       {totalFuturesTasks > 0 && (
-        <div className="flex items-center select-none mt-10 mb-12">
-          <hr
-            className={` ${
-              allATodaysTasksCompleted ? "  border-lime-400" : "  border-neutral-500"
-            } mx-4  block grow border-t-[1px]  border-opacity-75`}
-          />
-          <div
-            className={`${
-              allATodaysTasksCompleted ? "text-lime-400 " : "text-neutral-500 "
-            }  p-1.5 text-sm  shrink-0 `}
-          >
-            {todaysTasksRatio}
-          </div>
-          <hr
-            className={` ${
-              allATodaysTasksCompleted ? "  border-lime-400" : "  border-neutral-500"
-            } mx-4    block grow border-t-[1px]  border-opacity-75`}
-          />
-        </div>
+        <TaskCounter total={totalFuturesTasks} completed={futuresTasksCompleted} />
       )}
 
       {futuresTasksNotCompleted > 0 && (
