@@ -83,7 +83,7 @@ export default function Timer({ task, totalSteps, open }: Props) {
           " px-[2px]"
         }
       
-        ${countdown === "Done" && "!bg-lime-400 !text-neutral-950 "} ${
+        ${countdown === "Done" && "!bg-lime-600 !text-white "} ${
           countdown === "Done" &&
           (totalSteps === 0 || (totalSteps > 0 && open)) &&
           " px-[5px]"

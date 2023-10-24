@@ -56,11 +56,11 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
   const totalCompletedTasks = filteredCompletedTasks.length
 
   return (
-    <div className={` py-4   `}>
+    <div className={` py-4  pt-14  sm:pt-4 `}>
       {totalCompletedTasks === 0 ? (
         <div
           className={` ${
-            totalCompletedTasks === 0 && "pt-[20vh]"
+            totalCompletedTasks === 0 && "pt-[12vh]"
           } mt-0 transition-[padding]   duration-500 `}
         >
           <div className={`mb-28 text-center text-sm sm:text-base`}>

@@ -49,13 +49,13 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
 
         const spread = 20
         const newProgressBarStyle = {
-          background: `linear-gradient(to right, #a3e635 ${
+          background: `linear-gradient(to right, #65a30d ${
             safeProgressPercentage - spread
           }%,  RGBA(64, 64, 64,0.6) ${safeProgressPercentage + 5}%)`,
         }
 
         const baseBg = {
-          background: `#a3e635`,
+          background: `#65a30d`,
         }
 
         setProgressBarStyle(safeProgressPercentage >= 100 ? baseBg : newProgressBarStyle)

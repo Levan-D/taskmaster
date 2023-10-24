@@ -13,6 +13,8 @@ import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import { setWeeksOps } from "@/lib/redux/slices/globalSlice"
 import Loader from "@/app/components/Loader"
 import TaskCounter from "@/app/components/TaskCounter"
+import TaskHeader from "@/app/components/TaskHeader"
+import { mdiCalendarWeekOutline } from "@mdi/js"
 
 type Props = {
   tasks: Task[]
@@ -150,10 +152,12 @@ export default function TaskDisplay({ tasks }: Props) {
     )
 
   return (
-    <div className={` py-4 `}>
+    <div className={` pb-4 `}>
+      <TaskHeader title="Week" icon={mdiCalendarWeekOutline} />
+
       <div
         className={` ${
-          totalweeksTasks === 0 && "pt-[20vh]"
+          totalweeksTasks === 0 && "pt-[12vh]"
         } mt-0 transition-[padding]   duration-500 `}
       >
         {totalweeksTasks === 0 && message}

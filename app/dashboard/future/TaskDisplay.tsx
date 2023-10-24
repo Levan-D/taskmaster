@@ -11,7 +11,8 @@ import { DateTime } from "luxon"
 import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
 import Loader from "@/app/components/Loader"
 import TaskCounter from "@/app/components/TaskCounter"
-
+import TaskHeader from "@/app/components/TaskHeader"
+import { mdiCalendarMonthOutline } from "@mdi/js"
 type Props = {
   tasks: Task[]
 }
@@ -92,10 +93,12 @@ export default function TaskDisplay({ tasks }: Props) {
     )
 
   return (
-    <div className={` py-4 `}>
+    <div className={` pb-4 `}>
+      <TaskHeader title="Future" icon={mdiCalendarMonthOutline} />
+
       <div
         className={` ${
-          optimisticTasksLength === 0 && "pt-[20vh]"
+          optimisticTasksLength === 0 && "pt-[12vh]"
         } mt-0 transition-[padding] duration-500 `}
       >
         {optimisticTasksLength === 0 && message}
