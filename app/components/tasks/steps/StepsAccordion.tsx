@@ -41,12 +41,12 @@ export default function StepsAccordion({
     transition-color flex justify-between items-center duration-300 rounded-b-lg  mb-0`}
     >
       <div className="basis-2/5 text-left text-xs text-neutral-300 items-center flex gap-2 ">
-        {totalSteps > 0 && (
+        {totalSteps > 0 && !open && (
           <p className={`${allStepsCompleted && "text-lime-400"} pl-2`}>
             {totalSteps}/{amountOfStepsCompleted}
           </p>
         )}
-        {task.start_time && <Timer task={task} totalSteps={totalSteps} />}
+        {task.start_time && <Timer task={task} totalSteps={totalSteps}  open={open} />}
       </div>
       {((!expired && !task.deleted) ||
         (expired && task.steps.length > 0) ||

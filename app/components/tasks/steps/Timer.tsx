@@ -7,10 +7,11 @@ import Tooltip from "../../Tooltip"
 
 type Props = {
   task: Task
-  totalSteps: Number
+  totalSteps: number
+  open: boolean
 }
 
-export default function Timer({ task, totalSteps }: Props) {
+export default function Timer({ task, totalSteps, open }: Props) {
   const { windowWidth } = useAppSelector(state => state.global)
 
   const [countdown, setCountdown] = useState("")
@@ -75,11 +76,19 @@ export default function Timer({ task, totalSteps }: Props) {
       <div
         className={`
         ${windowWidth < 640 && "text-[11px]"}
-        ${windowWidth < 640 && totalSteps === 0 && countdown === "Done" && " px-[2px]"}
+        ${
+          windowWidth < 640 &&
+          countdown === "Done" &&
+          (totalSteps === 0 || (totalSteps > 0 && open)) &&
+          " px-[2px]"
+        }
+      
         ${countdown === "Done" && "!bg-lime-400 !text-neutral-950 "} ${
-          countdown === "Done" && totalSteps === 0 && " px-[5px]"
+          countdown === "Done" &&
+          (totalSteps === 0 || (totalSteps > 0 && open)) &&
+          " px-[5px]"
         } ${
-          totalSteps === 0 &&
+          (totalSteps === 0 || (totalSteps > 0 && open)) &&
           "!rounded-none !rounded-bl-lg !rounded-tr-lg translate-y-[3px]"
         } px-[10px] bg-neutral-700 py-[2px] rounded-full  text-white ${
           windowWidth < 450 && "text-[10px] "

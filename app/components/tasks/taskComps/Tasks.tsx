@@ -51,7 +51,7 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
         const newProgressBarStyle = {
           background: `linear-gradient(to right, #a3e635 ${
             safeProgressPercentage - spread
-          }%,  RGBA(64, 64, 64,0.6) ${safeProgressPercentage+5}%)`,
+          }%,  RGBA(64, 64, 64,0.6) ${safeProgressPercentage + 5}%)`,
         }
 
         const baseBg = {
@@ -59,7 +59,7 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
         }
 
         setProgressBarStyle(safeProgressPercentage >= 100 ? baseBg : newProgressBarStyle)
-console.log(`i am log`)
+
         if (safeProgressPercentage >= 100) {
           clearInterval(intervalId)
         }
