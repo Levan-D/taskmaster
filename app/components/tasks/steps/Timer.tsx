@@ -89,8 +89,8 @@ export default function Timer({ task, totalSteps, open }: Props) {
           " px-[5px]"
         } ${
           (totalSteps === 0 || (totalSteps > 0 && open)) &&
-          "!rounded-none !rounded-bl-lg !rounded-tr-lg translate-y-[3px]"
-        } px-[10px] bg-neutral-700 py-[2px] rounded-full  text-white ${
+          "!rounded-none !rounded-bl-md !rounded-tr-lg py-[1px] translate-y-[3px]"
+        } px-[10px] bg-neutral-700  rounded-full  text-white ${
           windowWidth < 450 && "text-[10px] "
         }`}
       >
