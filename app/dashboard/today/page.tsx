@@ -15,7 +15,7 @@ export default async function Today() {
 
   const tasks = await getTodaysTasks()
   if (!tasks.success) return <span></span>
-  // console.log(tasks.data)
+
   return (
     <section className="  max-w-3xl mx-auto    ">
       {tasks.data !== undefined && <TaskDisplay tasks={tasks.data} />}
