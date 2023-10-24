@@ -5,11 +5,12 @@ import {
   mdiDotsVertical,
   mdiTrashCanOutline,
   mdiHeartOutline,
-  mdiTimerAlertOutline,
+  mdiFlagVariant,
   mdiCalendarTodayOutline,
   mdiCalendarWeekBeginOutline,
   mdiCalendarWeekOutline,
   mdiCalendarMonthOutline,
+  mdiTimerOutline,
 } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
 import { recycleTask, reviveTask, updateTask } from "../../../actions/taskActions"
@@ -164,7 +165,7 @@ export default function TaskDropDown({
                 }}
                 className="btnIcon p-1.5"
               >
-                <Icon className="text-sky-400" path={mdiTimerAlertOutline} size={0.7} />
+                <Icon className="text-sky-400" path={mdiFlagVariant} size={0.7} />
               </button>
             </Tooltip>
             <Tooltip className="delay-500" text="Medium">
@@ -176,7 +177,7 @@ export default function TaskDropDown({
                 }}
                 className="btnIcon p-1.5"
               >
-                <Icon className="text-amber-400" path={mdiTimerAlertOutline} size={0.7} />
+                <Icon className="text-amber-400" path={mdiFlagVariant} size={0.7} />
               </button>
             </Tooltip>
             <Tooltip className="delay-500" text="High">
@@ -188,7 +189,7 @@ export default function TaskDropDown({
                 }}
                 className="btnIcon p-1.5"
               >
-                <Icon className="text-rose-400" path={mdiTimerAlertOutline} size={0.7} />
+                <Icon className="text-rose-400" path={mdiFlagVariant} size={0.7} />
               </button>
             </Tooltip>
           </div>
@@ -200,11 +201,12 @@ export default function TaskDropDown({
     },
     {
       title: !task.start_time ? "Enable timer" : "Edit timer",
+      icon: <Icon path={mdiTimerOutline} size={0.7} />,
       action: () => dispatch(setModal({ open: true, type: "timer", taskId: task.id })),
-      invisible: expired || task.deleted ? true : false,
+      invisible: expired || task.deleted || task.complete ? true : false,
     },
     {
-      break: expired || task.deleted ? false : true,
+      break: expired || task.deleted || task.complete ? false : true,
     },
     {
       title: "Recycle",
@@ -266,7 +268,7 @@ export default function TaskDropDown({
         )}
         <DropdownMenu
           ref={dropdownRef}
-          menuClassName="-translate-x-28  "
+          menuClassName="-translate-x-[116px]  "
           button={button}
           items={items}
         />

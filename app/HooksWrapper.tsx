@@ -52,38 +52,38 @@ export const HooksWrapper = (props: React.PropsWithChildren) => {
     }
   }, [])
 
-  useEffect(() => {
-    let refreshTimeout: ReturnType<typeof setTimeout>
+  // useEffect(() => {
+  //   let refreshTimeout: ReturnType<typeof setTimeout>
 
-    function resetRefreshTimer() {
-      clearTimeout(refreshTimeout)
+  //   function resetRefreshTimer() {
+  //     clearTimeout(refreshTimeout)
 
-      refreshTimeout = setTimeout(() => {
-        window.location.reload()
-      }, 300000) // 5 minutes in milliseconds
-    }
+  //     refreshTimeout = setTimeout(() => {
+  //       window.location.reload()
+  //     }, 300000) // 5 minutes in milliseconds
+  //   }
 
-    resetRefreshTimer()
+  //   resetRefreshTimer()
 
-    const handleUserInteraction = () => {
-      resetRefreshTimer()
-    }
+  //   const handleUserInteraction = () => {
+  //     resetRefreshTimer()
+  //   }
 
-    document.addEventListener("mousemove", handleUserInteraction)
-    document.addEventListener("mousedown", handleUserInteraction)
-    document.addEventListener("keydown", handleUserInteraction)
-    document.addEventListener("touchstart", handleUserInteraction)
-    document.addEventListener("scroll", handleUserInteraction)
+  //   document.addEventListener("mousemove", handleUserInteraction)
+  //   document.addEventListener("mousedown", handleUserInteraction)
+  //   document.addEventListener("keydown", handleUserInteraction)
+  //   document.addEventListener("touchstart", handleUserInteraction)
+  //   document.addEventListener("scroll", handleUserInteraction)
 
-    return () => {
-      clearTimeout(refreshTimeout)
-      document.removeEventListener("mousemove", handleUserInteraction)
-      document.removeEventListener("mousedown", handleUserInteraction)
-      document.removeEventListener("keydown", handleUserInteraction)
-      document.removeEventListener("touchstart", handleUserInteraction)
-      document.removeEventListener("scroll", handleUserInteraction)
-    }
-  }, [])
+  //   return () => {
+  //     clearTimeout(refreshTimeout)
+  //     document.removeEventListener("mousemove", handleUserInteraction)
+  //     document.removeEventListener("mousedown", handleUserInteraction)
+  //     document.removeEventListener("keydown", handleUserInteraction)
+  //     document.removeEventListener("touchstart", handleUserInteraction)
+  //     document.removeEventListener("scroll", handleUserInteraction)
+  //   }
+  // }, [])
 
   useSetOps()
 

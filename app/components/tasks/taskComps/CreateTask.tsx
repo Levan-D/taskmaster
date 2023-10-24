@@ -5,7 +5,7 @@ import { createTask } from "../../../actions/taskActions"
 import Icon from "@mdi/react"
 import {
   mdiPlus,
-  mdiTimerAlertOutline,
+  mdiFlagVariant,
   mdiCalendarTodayOutline,
   mdiCalendarWeekBeginOutline,
   mdiCalendarWeekOutline,
@@ -59,7 +59,7 @@ export default function CreateTask({
 
   const priorityButton = (
     <div className={`${priorityClassName} btnSecondary`}>
-      <Icon path={mdiTimerAlertOutline} size={1} />
+      <Icon path={mdiFlagVariant} size={1} />
     </div>
   )
 
@@ -92,17 +92,17 @@ export default function CreateTask({
   const priorityItems: DropDownItemType = [
     {
       title: "Low",
-      icon: <Icon className="text-sky-400" path={mdiTimerAlertOutline} size={0.7} />,
+      icon: <Icon className="text-sky-400" path={mdiFlagVariant} size={0.7} />,
       action: () => setPriority("LOW"),
     },
     {
       title: "Medium",
-      icon: <Icon className="text-amber-400" path={mdiTimerAlertOutline} size={0.7} />,
+      icon: <Icon className="text-amber-400" path={mdiFlagVariant} size={0.7} />,
       action: () => setPriority("MEDIUM"),
     },
     {
       title: "High",
-      icon: <Icon className="text-rose-400" path={mdiTimerAlertOutline} size={0.7} />,
+      icon: <Icon className="text-rose-400" path={mdiFlagVariant} size={0.7} />,
       action: () => setPriority("HIGH"),
     },
   ]

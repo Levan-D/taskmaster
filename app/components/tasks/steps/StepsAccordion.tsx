@@ -40,17 +40,13 @@ export default function StepsAccordion({
       } 
     transition-color flex justify-between items-center duration-300 rounded-b-lg  mb-0`}
     >
-      <div className="basis-2/5 text-left text-xs text-neutral-300 flex gap-2 ">
+      <div className="basis-2/5 text-left text-xs text-neutral-300 items-center flex gap-2 ">
         {totalSteps > 0 && (
           <p className={`${allStepsCompleted && "text-lime-400"} pl-2`}>
             {totalSteps}/{amountOfStepsCompleted}
           </p>
         )}
-        {task.start_time && (
-          <div className={`${totalSteps === 0 && "pl-0.5"}`}>
-            <Timer task={task} />
-          </div>
-        )}
+        {task.start_time && <Timer task={task} totalSteps={totalSteps} />}
       </div>
       {((!expired && !task.deleted) ||
         (expired && task.steps.length > 0) ||

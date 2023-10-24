@@ -479,7 +479,7 @@ export const recycleTask = async ({
   try {
     await prisma.tasks.update({
       where: { id: taskId, user_id: userData.id },
-      data: { deleted: true },
+      data: { deleted: true, start_time: null, end_time: null },
     })
     revalidatePath("/dashboard")
     return { success: true }
@@ -499,7 +499,7 @@ export const recycleTasks = async ({
   try {
     await prisma.tasks.updateMany({
       where: { id: { in: taskIds }, user_id: userData.id },
-      data: { deleted: true },
+      data: { deleted: true, start_time: null, end_time: null },
     })
     revalidatePath("/dashboard")
     return { success: true }
@@ -516,7 +516,7 @@ export const recycleAllCompletedTasks = async (): Promise<ApiResponse<void>> => 
   try {
     await prisma.tasks.updateMany({
       where: { complete: true, user_id: userData.id },
-      data: { deleted: true },
+      data: { deleted: true, start_time: null, end_time: null },
     })
     revalidatePath("/dashboard")
     return { success: true }
@@ -543,7 +543,7 @@ export const recycleAllMissedTasks = async (): Promise<ApiResponse<void>> => {
         user_id: userData.id,
         complete: false,
       },
-      data: { deleted: true },
+      data: { deleted: true, start_time: null, end_time: null },
     })
     revalidatePath("/dashboard")
     return { success: true }
@@ -640,7 +640,7 @@ export const toggleTaskComplete = async ({
   try {
     await prisma.tasks.update({
       where: { id: taskId, user_id: userData.id },
-      data: { complete: complete },
+      data: { complete: complete, start_time: null, end_time: null },
     })
 
     if (complete)

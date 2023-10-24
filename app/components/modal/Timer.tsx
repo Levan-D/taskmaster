@@ -25,15 +25,11 @@ export default function Timer({ taskId }: Props) {
   const [isPending, startTransition] = useTransition()
 
   const getRoundedTime = () => {
-    const now = DateTime.now()
-    const roundedMinutes = Math.ceil(now.minute / 15) * 15
-    return now.set({ minute: roundedMinutes }).toJSDate()
+    return DateTime.now().toJSDate()
   }
 
   const [startTime, setStartTime] = useState<Date>(getRoundedTime())
-  const [endTime, setEndTime] = useState<Date>(
-    new Date(startTime.getTime() + 15 * 60 * 1000)
-  )
+  const [endTime, setEndTime] = useState<Date>(new Date(startTime.getTime() + 60 * 1000))
 
   const handleCloseModal = () => {
     dispatch(setModal({ open: false, type: null, taskId: "" }))
@@ -54,7 +50,7 @@ export default function Timer({ taskId }: Props) {
       const currentRoundedTime = getRoundedTime()
       if (startTime < currentRoundedTime) {
         setStartTime(currentRoundedTime)
-        setEndTime(new Date(currentRoundedTime.getTime() + 15 * 60 * 1000))
+        setEndTime(new Date(currentRoundedTime.getTime() + 60 * 1000))
       }
     }, 60 * 1000)
 
@@ -81,16 +77,16 @@ export default function Timer({ taskId }: Props) {
               if (date) {
                 setStartTime(date)
                 if (date >= endTime) {
-                  setEndTime(new Date(date.getTime() + 15 * 60 * 1000))
+                  setEndTime(new Date(date.getTime() + 60 * 1000))
                 }
               }
             }}
             showTimeSelect
             showTimeSelectOnly
-            timeIntervals={15}
+            timeIntervals={1}
             dateFormat="h:mm aa"
             minTime={new Date()}
-            maxTime={new Date(new Date().setHours(23, 45, 0, 0))}
+            maxTime={new Date(new Date().setHours(23, 58, 0, 0))}
           />
 
           {/* End Time Picker */}
@@ -113,10 +109,10 @@ export default function Timer({ taskId }: Props) {
             }}
             showTimeSelect
             showTimeSelectOnly
-            timeIntervals={15}
+            timeIntervals={1}
             dateFormat="h:mm aa"
-            minTime={new Date(startTime.getTime() + 15 * 60 * 1000)}
-            maxTime={new Date(new Date().setHours(23, 45, 0, 0))}
+            minTime={new Date(startTime.getTime() +  60 * 1000)}
+            maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
           />
         </div>
       </div>

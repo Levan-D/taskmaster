@@ -7,14 +7,14 @@ import Tooltip from "../../Tooltip"
 
 type Props = {
   task: Task
+  totalSteps: Number
 }
 
-export default function Timer({ task }: Props) {
+export default function Timer({ task, totalSteps }: Props) {
   const { windowWidth } = useAppSelector(state => state.global)
 
   const [countdown, setCountdown] = useState("")
   const [render, setRender] = useState(false)
-  const [progressBarStyle, setProgressBarStyle] = useState({})
 
   const hasTaskStarted =
     task.start_time && DateTime.fromJSDate(task.start_time) <= DateTime.now()
@@ -22,7 +22,6 @@ export default function Timer({ task }: Props) {
     task.start_time && task.end_time
       ? Duration.fromMillis(task.end_time.getTime() - task.start_time.getTime())
       : null
-  const hours = duration ? duration.hours : 0
 
   const totalMinutesFromDuration = duration ? Math.round(duration.as("minutes")) : 0
   const hoursFromDuration = Math.floor(totalMinutesFromDuration / 60)
@@ -33,27 +32,7 @@ export default function Timer({ task }: Props) {
     const updateCountdown = () => {
       if (task.start_time && task.end_time) {
         const now = DateTime.now()
-        const startTime = DateTime.fromJSDate(task.start_time)
         const endTime = DateTime.fromJSDate(task.end_time)
-
-        if (task.start_time && task.end_time) {
-          const totalDuration = Interval.fromDateTimes(startTime, endTime).toDuration(
-            "seconds"
-          ).seconds
-          const elapsedDuration = Interval.fromDateTimes(startTime, now).toDuration(
-            "seconds"
-          ).seconds
-          const progressPercentage = (elapsedDuration / totalDuration) * 100
-
-          const spread = 20
-          const newProgressBarStyle = {
-            background: `linear-gradient(to right, #65a30d ${
-              progressPercentage - spread
-            }%,  #525252 ${progressPercentage + spread}%)`,
-          }
-
-          setProgressBarStyle(newProgressBarStyle)
-        }
 
         if (now > endTime) {
           setCountdown("Done")
@@ -65,31 +44,44 @@ export default function Timer({ task }: Props) {
           "minutes",
           "seconds",
         ])
-        const totalMinutes = Math.round(duration.as("minutes"))
+        const totalMinutes = Math.floor(duration.as("minutes"))
         const hours = Math.floor(totalMinutes / 60)
         const minutes = totalMinutes % 60
         const seconds = Math.round(duration.seconds)
 
-        if (duration.as("minutes") < 5) {
-          setCountdown(`${minutes}m:${seconds}s`)
+        let formattedTime = ""
+        if (hours > 0) {
+          formattedTime = `${hours}h:${minutes}m`
+        } else if (minutes > 0) {
+          formattedTime = `${minutes}m`
         } else {
-          setCountdown(`${hours}h:${minutes}m`)
+          formattedTime = `${seconds}s`
         }
+
+        setCountdown(formattedTime)
       }
     }
-
     updateCountdown()
 
     const intervalId = setInterval(updateCountdown, 1000)
 
-    return () => clearInterval(intervalId)
-  }, [])
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [task.start_time, task.end_time])
 
   return (
     render && (
       <div
-        style={progressBarStyle}
-        className={` px-4  rounded-full  text-white ${
+        className={`
+        ${windowWidth < 640 && "text-[11px]"}
+        ${windowWidth < 640 && totalSteps === 0 && countdown === "Done" && " px-[2px]"}
+        ${countdown === "Done" && "!bg-lime-400 !text-neutral-950 "} ${
+          countdown === "Done" && totalSteps === 0 && " px-[5px]"
+        } ${
+          totalSteps === 0 &&
+          "!rounded-none !rounded-bl-lg !rounded-tr-lg translate-y-[3px]"
+        } px-[10px] bg-neutral-700 py-[2px] rounded-full  text-white ${
           windowWidth < 450 && "text-[10px] "
         }`}
       >

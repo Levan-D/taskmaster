@@ -5,6 +5,7 @@ import ToggleTaskComplete from "./ToggleTaskComplete"
 import Steps from "../steps/Steps"
 import TaskDropDown from "./TaskDropDown"
 import TaskUpdate from "./TaskUpdate"
+import { Interval, DateTime } from "luxon"
 
 type Props = {
   tasks: Task[]
@@ -22,10 +23,42 @@ type TaskProps = {
 function Task({ task, expired, addOptimisticTask }: TaskProps) {
   const [visible, setVisible] = useState(false)
   const [animate, setAnimate] = useState(false)
+  const [progressBarStyle, setProgressBarStyle] = useState({})
 
   const isOptimistic = task.id === "optimistic"
   const isBeingDeleted = task.beingDeleted
   const isBeingCompleted = task.beingCompleted
+
+  useEffect(() => {
+    if (task.start_time && task.end_time) {
+      const now = DateTime.now()
+      const startTime = DateTime.fromJSDate(task.start_time)
+      const endTime = DateTime.fromJSDate(task.end_time)
+
+      const totalDuration = Interval.fromDateTimes(startTime, endTime).toDuration(
+        "seconds"
+      ).seconds
+      const elapsedDuration = Interval.fromDateTimes(startTime, now).toDuration(
+        "seconds"
+      ).seconds
+
+      // Guard against division by zero
+      const progressPercentage =
+        totalDuration > 0 ? (elapsedDuration / totalDuration) * 100 : 0
+
+      // Guard against negative elapsedDuration
+      const safeProgressPercentage = Math.max(0, progressPercentage)
+
+      const spread = 20
+      const newProgressBarStyle = {
+        background: `linear-gradient(to right, #a3e635 ${
+          safeProgressPercentage - spread
+        }%,  RGBA(64, 64, 64,0.6) ${safeProgressPercentage + spread}%)`,
+      }
+
+      setProgressBarStyle(newProgressBarStyle)
+    }
+  }, [task.start_time, task.end_time])
 
   useEffect(() => {
     if (isOptimistic) {
@@ -38,9 +71,10 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
 
   return (
     <div
+      style={progressBarStyle}
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
-      className={`mainContainer sm:hover:border-neutral-600 transition-colors duration-300 taskWrapper
+      className={`  bg-neutral-700 bg-opacity-60 p-0.5  shadow-md shadow-neutral-950   taskWrapper  rounded-lg
   ${
     isOptimistic && !animate
       ? "optimisticCreateStart"
@@ -53,29 +87,31 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
   ${isBeingCompleted === "up" && "completedUp "}
    `}
     >
-      <div className="content">
-        <div className="flex items-center">
-          <ToggleTaskComplete
-            expired={expired}
-            addOptimisticTask={addOptimisticTask}
-            task={task}
-          />
+      <div className="mainContainer border-none  shadow-none">
+        <div className="content">
+          <div className="flex items-center">
+            <ToggleTaskComplete
+              expired={expired}
+              addOptimisticTask={addOptimisticTask}
+              task={task}
+            />
 
-          <TaskUpdate
-            addOptimisticTask={addOptimisticTask}
-            task={task}
-            expired={expired}
-            className=" grow    "
-          />
+            <TaskUpdate
+              addOptimisticTask={addOptimisticTask}
+              task={task}
+              expired={expired}
+              className=" grow    "
+            />
 
-          <TaskDropDown
-            addOptimisticTask={addOptimisticTask}
-            task={task}
-            visible={visible}
-            expired={expired}
-          />
+            <TaskDropDown
+              addOptimisticTask={addOptimisticTask}
+              task={task}
+              visible={visible}
+              expired={expired}
+            />
+          </div>
+          <Steps expired={expired} addOptimisticTask={addOptimisticTask} task={task} />
         </div>
-        <Steps expired={expired} addOptimisticTask={addOptimisticTask} task={task} />
       </div>
     </div>
   )
