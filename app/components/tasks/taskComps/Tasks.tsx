@@ -30,34 +30,45 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
   const isBeingCompleted = task.beingCompleted
 
   useEffect(() => {
-    if (task.start_time && task.end_time) {
-      const now = DateTime.now()
-      const startTime = DateTime.fromJSDate(task.start_time)
-      const endTime = DateTime.fromJSDate(task.end_time)
+    const updateProgressBar = () => {
+      if (task.start_time && task.end_time) {
+        const now = DateTime.now()
+        const startTime = DateTime.fromJSDate(task.start_time)
+        const endTime = DateTime.fromJSDate(task.end_time)
 
-      const totalDuration = Interval.fromDateTimes(startTime, endTime).toDuration(
-        "seconds"
-      ).seconds
-      const elapsedDuration = Interval.fromDateTimes(startTime, now).toDuration(
-        "seconds"
-      ).seconds
+        const totalDuration = Interval.fromDateTimes(startTime, endTime).toDuration(
+          "seconds"
+        ).seconds
+        const elapsedDuration = Interval.fromDateTimes(startTime, now).toDuration(
+          "seconds"
+        ).seconds
 
-      // Guard against division by zero
-      const progressPercentage =
-        totalDuration > 0 ? (elapsedDuration / totalDuration) * 100 : 0
+        const progressPercentage =
+          totalDuration > 0 ? (elapsedDuration / totalDuration) * 100 : 0
+        const safeProgressPercentage = Math.max(0, progressPercentage)
 
-      // Guard against negative elapsedDuration
-      const safeProgressPercentage = Math.max(0, progressPercentage)
+        const spread = 20
+        const newProgressBarStyle = {
+          background: `linear-gradient(to right, #a3e635 ${
+            safeProgressPercentage - spread
+          }%,  RGBA(64, 64, 64,0.6) ${safeProgressPercentage+5}%)`,
+        }
 
-      const spread = 20
-      const newProgressBarStyle = {
-        background: `linear-gradient(to right, #a3e635 ${
-          safeProgressPercentage - spread
-        }%,  RGBA(64, 64, 64,0.6) ${safeProgressPercentage + spread}%)`,
+        const baseBg = {
+          background: `#a3e635`,
+        }
+
+        setProgressBarStyle(safeProgressPercentage >= 100 ? baseBg : newProgressBarStyle)
+console.log(`i am log`)
+        if (safeProgressPercentage >= 100) {
+          clearInterval(intervalId)
+        }
       }
-
-      setProgressBarStyle(newProgressBarStyle)
     }
+
+    const intervalId = setInterval(updateProgressBar, 1000)
+
+    return () => clearInterval(intervalId)
   }, [task.start_time, task.end_time])
 
   useEffect(() => {
