@@ -23,14 +23,30 @@ enum Recurrence {
 }
 
 model Users {
-  id      String   @id @default(uuid())
+  id          String       @id @default(uuid())
   // login id is from kinde auth. this links login with database
-  user_id String   @unique
-  email   String   @unique
-  tasks   Tasks[]
-  habits  Habits[]
+  user_id     String       @unique
+  email       String       @unique
+  tasks       Tasks[]
+  habits      Habits[]
+  potatoPacer PotatoPacer?
 
   @@index([user_id])
+}
+
+model PotatoPacer {
+  id                String @id @default(uuid())
+  workDuration      Int
+  restDuration      Int
+  bigBreakFrequency Int
+  bigBreakDuration  Int
+  totalCycles       Int
+
+  // Establishing a one-to-one relation with Users model
+  user   Users  @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  @@index([userId])
 }
 
 model Habits {
