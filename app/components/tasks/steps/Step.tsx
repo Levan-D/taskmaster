@@ -26,7 +26,7 @@ export default function Step({ task, step, addOptimisticTask, expired }: Props) 
       }, 0)
     }
   }, [])
-  
+
   return (
     <div
       className={` ${
@@ -37,7 +37,7 @@ export default function Step({ task, step, addOptimisticTask, expired }: Props) 
           : ""
       }  ${
         isBeingDeleted && "deleteAnimation "
-      } flex gap-2 items-center group sm:hover:bg-neutral-600 p-2  rounded-md`}
+      } flex gap-2 items-center group hover:bg-neutral-600 p-2  rounded-md`}
     >
       <ToggleStepComplete addOptimisticTask={addOptimisticTask} task={task} step={step} />
       <StepUpdate

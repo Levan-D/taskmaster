@@ -201,7 +201,7 @@ export default function CreateTask({
   }
 
   return (
-    <div className="   p-2 mainContainer  sm:hover:border-neutral-600 transition-colors duration-300">
+    <div className="   p-2 mainContainer  hover:border-neutral-600 transition-colors duration-300">
       <form onSubmit={submitForm} className="relative">
         <div className="flex flex-col sm:flex-row gap-2">
           <input

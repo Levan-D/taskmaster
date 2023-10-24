@@ -69,7 +69,7 @@ export default function Modal() {
             <button
               aria-label="close"
               onClick={handleCloseButtonClick}
-              className=" active:text-neutral-400 sm:hover:text-neutral-200"
+              className=" active:text-neutral-400 hover:text-neutral-200"
             >
               <Icon path={mdiClose} size={1} />
             </button>

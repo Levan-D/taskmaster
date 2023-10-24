@@ -35,7 +35,7 @@ export default function StepsAccordion({
         (!expired && !task.deleted) ||
         (expired && task.steps.length > 0) ||
         (task.deleted && task.steps.length > 0)
-          ? "sm:hover:bg-neutral-500"
+          ? "hover:bg-neutral-500"
           : ""
       } 
     transition-color flex justify-between items-center duration-300 rounded-b-lg  mb-0`}
@@ -46,7 +46,7 @@ export default function StepsAccordion({
             {totalSteps}/{amountOfStepsCompleted}
           </p>
         )}
-        {task.start_time && <Timer task={task} totalSteps={totalSteps}  open={open} />}
+        {task.start_time && <Timer task={task} totalSteps={totalSteps} open={open} />}
       </div>
       {((!expired && !task.deleted) ||
         (expired && task.steps.length > 0) ||

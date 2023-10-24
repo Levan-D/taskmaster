@@ -33,7 +33,7 @@ export default function TasksRevive({ className, tasks, addOptimisticTask }: Pro
       onClick={() => {
         startTransition(handleReviveTasks)
       }}
-      className={`${className} btnSecondary bg-lime-600    px-4 sm:hover:bg-lime-500`}
+      className={`${className} btnSecondary bg-lime-600    px-4 hover:bg-lime-500`}
     >
       Revive All
     </button>

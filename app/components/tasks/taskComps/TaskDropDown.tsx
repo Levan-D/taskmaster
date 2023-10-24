@@ -221,7 +221,7 @@ export default function TaskDropDown({
     <div
       className={`${
         expired || (task.complete && !task.deleted) || task.deleted
-          ? `bg-neutral-600 shadow-sm sm:hover:bg-neutral-500`
+          ? `bg-neutral-600 shadow-sm hover:bg-neutral-500`
           : "rounded-bl-lg"
       } hover:bg-neutral-600 rounded-tr-lg p-1 sm:p-2   duration-300`}
     >
@@ -238,7 +238,7 @@ export default function TaskDropDown({
               onClick={() => {
                 startTransition(() => handleReviveTask({}))
               }}
-              className="p-1 sm:p-2 block bg-lime-600 shadow-sm sm:hover:bg-lime-500 rounded-bl-lg duration-300"
+              className="p-1 sm:p-2 block bg-lime-600 shadow-sm hover:bg-lime-500 rounded-bl-lg duration-300"
             >
               <Icon
                 className="  scale-75 sm:scale-100 "
@@ -256,7 +256,7 @@ export default function TaskDropDown({
               onClick={() => {
                 startTransition(handleRecycleTask)
               }}
-              className={`block bg-neutral-600 shadow-sm sm:hover:bg-neutral-500 border-r-[2px]  border-neutral-700    rounded-bl-lg p-1 sm:p-2 duration-300 `}
+              className={`block bg-neutral-600 shadow-sm hover:bg-neutral-500 border-r-[2px]  border-neutral-700    rounded-bl-lg p-1 sm:p-2 duration-300 `}
             >
               <Icon
                 className="  scale-75 sm:scale-100 "
