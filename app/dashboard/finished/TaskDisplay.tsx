@@ -4,8 +4,8 @@
 
 import Tasks from "@/app/components/tasks/taskComps/Tasks"
 import { experimental_useOptimistic as useOptimistic } from "react"
-import RecycleAllCompletedTasks from "./RecycleAllCompletedTasks"
 import Pagination from "@/app/components/Pagination"
+import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
 
 type Props = {
   tasks: Task[]
@@ -78,8 +78,8 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
               <p className="basis-3/4 text-neutral-200 text-sm sm:text-base">
                 Recycle all completed tasks.
               </p>
-
-              <RecycleAllCompletedTasks
+              <TasksRecycle
+                tasks={filteredCompletedTasks}
                 addOptimisticTask={addOptimisticTask}
                 className="shrink-0"
               />

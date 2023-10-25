@@ -508,50 +508,6 @@ export const recycleTasks = async ({
   }
 }
 
-export const recycleAllCompletedTasks = async (): Promise<ApiResponse<void>> => {
-  const userData = await checkAuth()
-
-  if (!userData.id) return handleApiError("invalid user id")
-
-  try {
-    await prisma.tasks.updateMany({
-      where: { complete: true, user_id: userData.id },
-      data: { deleted: true, start_time: null, end_time: null },
-    })
-    revalidatePath("/dashboard")
-    return { success: true }
-  } catch (error) {
-    return handleApiError(error)
-  }
-}
-
-export const recycleAllMissedTasks = async (): Promise<ApiResponse<void>> => {
-  const userData = await checkAuth()
-
-  const userTime = cookies().get("user_time")?.value
-  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
-  const todayISO = today.toISO() || ""
-
-  if (!userData.id) return handleApiError("invalid user id")
-
-  try {
-    await prisma.tasks.updateMany({
-      where: {
-        due_date: {
-          lt: todayISO,
-        },
-        user_id: userData.id,
-        complete: false,
-      },
-      data: { deleted: true, start_time: null, end_time: null },
-    })
-    revalidatePath("/dashboard")
-    return { success: true }
-  } catch (error) {
-    return handleApiError(error)
-  }
-}
-
 export const deleteAllTasks = async (): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
   if (!userData.id) return handleApiError("user data unavailable")
@@ -570,34 +526,6 @@ export const deleteAllTasks = async (): Promise<ApiResponse<void>> => {
       where: { user_id: userData.id, deleted: true },
     })
 
-    revalidatePath("/dashboard")
-    return { success: true }
-  } catch (error) {
-    return handleApiError(error)
-  }
-}
-
-export const reviveAllMissedTasks = async (): Promise<ApiResponse<void>> => {
-  const userData = await checkAuth()
-
-  const userTime = cookies().get("user_time")?.value
-  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
-  const todayISO = today.toISO() || ""
-
-  if (!userData.id) return handleApiError("invalid user id")
-
-  try {
-    await prisma.tasks.updateMany({
-      where: {
-        due_date: {
-          lt: todayISO,
-        },
-        complete: false,
-        deleted: false,
-        user_id: userData.id,
-      },
-      data: { due_date: todayISO },
-    })
     revalidatePath("/dashboard")
     return { success: true }
   } catch (error) {

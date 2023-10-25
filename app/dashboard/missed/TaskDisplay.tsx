@@ -4,9 +4,9 @@
 
 import Tasks from "@/app/components/tasks/taskComps/Tasks"
 import { experimental_useOptimistic as useOptimistic } from "react"
-import RecycleAllMissedTasks from "./RecycleAllMissedTasks"
-import ReviveAllMissedTasks from "./ReviveAllMissedTasks"
 import Pagination from "@/app/components/Pagination"
+import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
+import TasksRevive from "@/app/components/tasks/taskComps/TasksRevive"
 
 type Props = {
   tasks: Task[]
@@ -14,7 +14,7 @@ type Props = {
   currentPage: number
 }
 
-const filterCompletedTasks = (tasks: Task[]) => {
+const filterMissedTasks = (tasks: Task[]) => {
   const filteredTasks = tasks
     .filter((task: Task) => {
       if (task.deleted) return false
@@ -52,15 +52,15 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
     }
   )
 
-  const filteredCompletedTasks = filterCompletedTasks(optimisticTasks)
-  const totalCompletedTasks = filteredCompletedTasks.length
+  const filteredMissedTasks = filterMissedTasks(optimisticTasks)
+  const totalMissedTasks = filteredMissedTasks.length
 
   return (
     <div className={` py-4  pt-14  sm:pt-4 `}>
-      {totalCompletedTasks === 0 ? (
+      {totalMissedTasks === 0 ? (
         <div
           className={` ${
-            totalCompletedTasks === 0 && "pt-[12vh]"
+            totalMissedTasks === 0 && "pt-[12vh]"
           } mt-0 transition-[padding]   duration-500 `}
         >
           <div className={`mb-28 text-center text-sm sm:text-base`}>
@@ -79,13 +79,15 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
               </p>
 
               <div className="flex gap-4     shrink-0 ">
-                <ReviveAllMissedTasks
+                <TasksRevive
                   addOptimisticTask={addOptimisticTask}
-                  className="shrink-0 "
+                  tasks={filteredMissedTasks}
+                  className="shrink-0   "
                 />
-                <RecycleAllMissedTasks
+                <TasksRecycle
                   addOptimisticTask={addOptimisticTask}
-                  className="shrink-0 "
+                  tasks={filteredMissedTasks}
+                  className="shrink-0"
                 />
               </div>
             </div>
@@ -94,7 +96,7 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
               expired={true}
               addOptimisticTask={addOptimisticTask}
               className={"my-8"}
-              tasks={filteredCompletedTasks}
+              tasks={filteredMissedTasks}
             />
           </div>
 
