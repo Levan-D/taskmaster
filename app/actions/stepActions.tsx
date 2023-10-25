@@ -20,7 +20,7 @@ export const createStep = async ({
       },
     })
 
-    revalidatePath("/dashboard/today")
+    revalidatePath("/dashboard")
     return { success: true }
   } catch (error) {
     return handleApiError(error)
@@ -43,7 +43,7 @@ export const updateStep = async ({
         title: title,
       },
     })
-    revalidatePath("/dashboard/today")
+    revalidatePath("/dashboard")
     return { success: true }
   } catch (error) {
     return handleApiError(error)
@@ -60,7 +60,7 @@ export const recycleStep = async ({
       where: { id: stepId },
       data: { deleted: true },
     })
-    revalidatePath("/dashboard/today")
+    revalidatePath("/dashboard")
     return { success: true }
   } catch (error) {
     return handleApiError(error)
@@ -79,7 +79,7 @@ export const toggleStepComplete = async ({
       where: { id: stepId },
       data: { complete: complete },
     })
-    revalidatePath("/dashboard/today")
+    revalidatePath("/dashboard")
     return { success: true }
   } catch (error) {
     return handleApiError(error)
