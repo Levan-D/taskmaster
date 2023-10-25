@@ -4,6 +4,7 @@ import React from "react"
 import Icon from "@mdi/react"
 import { DateTime } from "luxon"
 import DropdownMenu from "./DropdownMenu"
+import WidgetMenu from "./WidgetMenu"
 
 type Props = {
   title: string
@@ -32,11 +33,17 @@ export default function TaskHeader({ title, icon, dropdownMenuItems }: Props) {
         </div>
       </div>
 
-      <div className="flex gap-2" >
+      <div className="flex gap-2">
+        <WidgetMenu />
         {dropdownMenuItems &&
           dropdownMenuItems.length > 0 &&
           dropdownMenuItems.map((menu, i) => (
-            <DropdownMenu items={menu.items} button={menu.button}  menuClassName={menu.classname} key={i} />
+            <DropdownMenu
+              items={menu.items}
+              button={menu.button}
+              menuClassName={menu.classname}
+              key={i}
+            />
           ))}
       </div>
     </div>

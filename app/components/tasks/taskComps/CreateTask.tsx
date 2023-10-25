@@ -43,7 +43,7 @@ export default function CreateTask({
   const [isPending, startTransition] = useTransition()
   const [title, setTitle] = useState("")
 
-  const today = DateTime.now().minus({ day: 1 }).toISO() ?? ""
+  const today = DateTime.now().minus({ day: 0 }).toISO() ?? ""
   const tomorrow = DateTime.now().plus({ day: 1 }).toISO() ?? ""
   const nextWeek = DateTime.now().plus({ day: 7 }).toISO() ?? ""
   const customDate = DateTime.fromJSDate(startDate).toISO() ?? ""
