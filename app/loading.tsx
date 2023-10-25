@@ -1,5 +1,9 @@
 /** @format */
 import Loader from "./components/Loader"
 export default function Loading() {
-  return <Loader />
+  return (
+    <div className="min-h-[100dvh]  flex flex-col justify-center">
+      <Loader />
+    </div>
+  )
 }
