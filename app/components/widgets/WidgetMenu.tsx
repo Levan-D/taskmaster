@@ -1,7 +1,7 @@
 /** @format */
 
 import React from "react"
-import DropdownMenu from "./DropdownMenu"
+import DropdownMenu from "../DropdownMenu"
 import Icon from "@mdi/react"
 import { mdiWidgetsOutline, mdiCookieOutline } from "@mdi/js"
 

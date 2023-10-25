@@ -12,8 +12,8 @@ import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import { setWeeksOps } from "@/lib/redux/slices/globalSlice"
 import Loader from "@/app/components/Loader"
-import TaskCounter from "@/app/components/TaskCounter"
-import TaskHeader from "@/app/components/TaskHeader"
+import TaskCounter from "@/app/components/tasks/TaskCounter"
+import TaskHeader from "@/app/components/tasks/TaskHeader"
 import { mdiCalendarWeekOutline } from "@mdi/js"
 
 type Props = {

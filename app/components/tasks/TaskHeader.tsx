@@ -3,8 +3,8 @@
 import React from "react"
 import Icon from "@mdi/react"
 import { DateTime } from "luxon"
-import DropdownMenu from "./DropdownMenu"
-import WidgetMenu from "./WidgetMenu"
+import DropdownMenu from "../DropdownMenu"
+import WidgetMenu from "../widgets/WidgetMenu"
 
 type Props = {
   title: string

@@ -10,8 +10,8 @@ import { experimental_useOptimistic as useOptimistic } from "react"
 import { DateTime } from "luxon"
 import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
 import Loader from "@/app/components/Loader"
-import TaskCounter from "@/app/components/TaskCounter"
-import TaskHeader from "@/app/components/TaskHeader"
+import TaskCounter from "@/app/components/tasks/TaskCounter"
+import TaskHeader from "@/app/components/tasks/TaskHeader"
 import { mdiCalendarMonthOutline } from "@mdi/js"
 type Props = {
   tasks: Task[]
