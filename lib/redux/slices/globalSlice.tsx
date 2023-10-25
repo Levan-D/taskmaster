@@ -9,6 +9,7 @@ interface initialStateType {
     type: null | "timer"
     taskId: string
   }
+  widget: "cookie clock" | null
   todaysOps: undefined | boolean
   weeksOps: undefined | boolean
   windowWidth: number
@@ -20,6 +21,7 @@ const initialState: initialStateType = {
     type: null,
     taskId: "",
   },
+  widget: null,
   todaysOps: undefined,
   weeksOps: undefined,
   windowWidth: 1400,
@@ -33,6 +35,9 @@ const globalSlice = createSlice({
     setTodaysOps: (state, action: PayloadAction<initialStateType["todaysOps"]>) => {
       state.todaysOps = action.payload
     },
+    setWidget: (state, action: PayloadAction<initialStateType["widget"]>) => {
+      state.widget = action.payload
+    },
     setModal: (state, action: PayloadAction<initialStateType["modal"]>) => {
       state.modal = action.payload
     },
@@ -45,5 +50,6 @@ const globalSlice = createSlice({
   },
 })
 
-export const { setTodaysOps, setWeeksOps, setWindowWidth, setModal } = globalSlice.actions
+export const { setTodaysOps, setWeeksOps, setWindowWidth, setModal, setWidget } =
+  globalSlice.actions
 export default globalSlice.reducer

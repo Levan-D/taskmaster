@@ -1,14 +1,23 @@
 /** @format */
-
+"use client"
 import React from "react"
 import Icon from "@mdi/react"
 import { DateTime } from "luxon"
 import DropdownMenu from "../DropdownMenu"
 import WidgetMenu from "../widgets/WidgetMenu"
+import { usePathname } from "next/navigation"
+import { capitalizeFirstLetter } from "@/app/utils/strings"
+import {
+  mdiCalendarTodayOutline,
+  mdiCalendarWeekOutline,
+  mdiCalendarMonthOutline,
+  mdiTrashCanOutline,
+  mdiCheckCircleOutline,
+  mdiClockAlertOutline,
+  mdiCircleDouble,
+} from "@mdi/js"
 
 type Props = {
-  title: string
-  icon: string
   dropdownMenuItems?: {
     button: JSX.Element
     items: DropDownItemType
@@ -16,16 +25,37 @@ type Props = {
   }[]
 }
 
-export default function TaskHeader({ title, icon, dropdownMenuItems }: Props) {
+export default function TaskHeader({ dropdownMenuItems }: Props) {
   const today = DateTime.now().startOf("day").toFormat("EEEE, MMMM d")
+  const pathname = usePathname().split("/")
+  const pathString = pathname[pathname.length - 1]
+  const title = capitalizeFirstLetter(pathString)
 
+  const renderIcon = (pathString: string) => {
+    switch (pathString) {
+      case "today":
+        return mdiCalendarTodayOutline
+      case "week":
+        return mdiCalendarWeekOutline
+      case "future":
+        return mdiCalendarMonthOutline
+      case "finished":
+        return mdiCheckCircleOutline
+      case "missed":
+        return mdiClockAlertOutline
+      case "bin":
+        return mdiTrashCanOutline
+      default:
+        return mdiCircleDouble
+    }
+  }
   return (
-    <div className="mainContainer p-2 pt-12 sm:pt-4 rounded-t-none border-neutral-900 bg-neutral-950 mb-10  text flex  justify-between ">
+    <div className="mainContainer p-2 pt-12 sm:pt-4 rounded-t-none border-neutral-900 bg-neutral-950     flex  justify-between ">
       <div className="">
         <div className="select-none">
           <div className="flex gap-2 items-center">
             <div>
-              <Icon path={icon} size={0.98} />
+              <Icon path={renderIcon(pathString)} size={0.98} />
             </div>
             <h1 className="text-xl font-semibold">{title}</h1>
           </div>

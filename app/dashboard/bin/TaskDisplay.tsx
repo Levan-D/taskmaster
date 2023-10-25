@@ -39,7 +39,7 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
   const totalCompletedTasks = optimisticTasks.length
 
   return (
-    <div className={` py-4 pt-14  sm:pt-4`}>
+    <div className={` pb-4 `}>
       {totalCompletedTasks === 0 ? (
         <div
           className={` ${
@@ -56,7 +56,7 @@ export default function TaskDisplay({ tasks, pageCount, currentPage }: Props) {
       ) : (
         <div className="flex flex-col min-h-screen">
           <div className="grow">
-            <div className="mainContainer bg-neutral-700 my-4 flex gap-4 flex-col  sm:flex-row text-center sm:text-left justify-between items-center   py-2 px-4">
+            <div className="mainContainer bg-neutral-700 mb-4 flex gap-4 flex-col  sm:flex-row text-center sm:text-left justify-between items-center   py-2 px-4">
               <p className="basis-3/4 text-neutral-200 text-sm sm:text-base">
                 Delete all completed tasks permanently.
               </p>

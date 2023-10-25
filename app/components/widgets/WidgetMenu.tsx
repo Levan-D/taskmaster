@@ -4,8 +4,12 @@ import React from "react"
 import DropdownMenu from "../DropdownMenu"
 import Icon from "@mdi/react"
 import { mdiWidgetsOutline, mdiCookieOutline } from "@mdi/js"
+import { useAppDispatch } from "@/lib/redux/hooks"
+import { setWidget } from "@/lib/redux/slices/globalSlice"
 
 export default function WidgetMenu() {
+  const dispatch = useAppDispatch()
+
   const button = (
     <div className="btnIcon text-neutral-300 hover:text-white  p-2">
       <Icon path={mdiWidgetsOutline} size={1} />
@@ -16,7 +20,7 @@ export default function WidgetMenu() {
     {
       title: "Cookie Clock",
       icon: <Icon path={mdiCookieOutline} size={1} />,
-      action: () => console.log(`cookcook`),
+      action: () => dispatch(setWidget("cookie clock")),
     },
   ]
 

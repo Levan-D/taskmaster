@@ -14,8 +14,6 @@ import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import { setTodaysOps } from "@/lib/redux/slices/globalSlice"
 import Loader from "@/app/components/Loader"
 import TaskCounter from "@/app/components/tasks/TaskCounter"
-import TaskHeader from "@/app/components/tasks/TaskHeader"
-import { mdiCalendarTodayOutline } from "@mdi/js"
 
 type Props = {
   tasks: Task[]
@@ -134,7 +132,6 @@ export default function TaskDisplay({ tasks }: Props) {
 
   return (
     <div className={` pb-4 `}>
-      <TaskHeader title="Today" icon={mdiCalendarTodayOutline} />
       <div
         className={` ${
           optimisticTasksLength === 0 && "pt-[12vh]"
