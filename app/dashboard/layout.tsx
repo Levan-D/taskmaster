@@ -18,7 +18,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="grow min-h-[calc(100dvh-140px)]  shrink-0   flex flex-col basis-2/3 overflow-auto max-w-3xl mx-auto ">
               <div className="   grow">{children}</div>
             </div>
-
             <WidgetDisplay className="sticky  h-[600px] top-4  w-full max-w-xl" />
           </div>
         </div>
