@@ -7,7 +7,7 @@ import { DateTime } from "luxon"
 import { checkAuth, handleApiError } from "./userActions"
 import { cookies } from "next/headers"
 
-export type PotatoPacerInput = {
+export type CookieClockInput = {
   workDuration: number
   restDuration: number
   bigBreakFrequency: number
@@ -15,8 +15,8 @@ export type PotatoPacerInput = {
   totalCycles: number
 }
 
-export const createOrUpdatePotatoPacer = async (
-  input: PotatoPacerInput
+export const createOrUpdateCookieClock = async (
+  input: CookieClockInput
 ): Promise<ApiResponse<void>> => {
   try {
     const userData = await checkAuth()
@@ -25,7 +25,7 @@ export const createOrUpdatePotatoPacer = async (
       throw new Error("Bad Request: Missing user data")
     }
 
-    await prisma.potatoPacer.upsert({
+    await prisma.cookieClock.upsert({
       where: {
         userId: userData.id,
       },

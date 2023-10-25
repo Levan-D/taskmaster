@@ -14,12 +14,12 @@ model Users {
   email       String       @unique
   tasks       Tasks[]
   habits      Habits[]
-  potatoPacer PotatoPacer?
+  cookieClock CookieClock?
 
   @@index([user_id])
 }
 
-model PotatoPacer {
+model CookieClock {
   id                String @id @default(uuid())
   workDuration      Int
   restDuration      Int
