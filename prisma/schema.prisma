@@ -9,27 +9,28 @@ datasource db {
 }
 
 model Users {
-  id          String       @id @default(uuid())
-  user_id     String       @unique
-  email       String       @unique
-  tasks       Tasks[]
-  habits      Habits[]
-  cookieClock CookieClock?
+  id           String       @id @default(uuid())
+  user_id      String       @unique
+  email        String       @unique
+  tasks        Tasks[]
+  habits       Habits[]
+  cookie_clock CookieClock?
 
   @@index([user_id])
 }
 
 model CookieClock {
-  id                String @id @default(uuid())
-  workDuration      Int
-  restDuration      Int
-  bigBreakFrequency Int
-  bigBreakDuration  Int
-  totalCycles       Int
-  userId            String @unique
-  user              Users  @relation(fields: [userId], references: [id])
+  id                  String   @id @default(uuid())
+  start_time          String
+  work_duration       Int
+  rest_duration       Int
+  big_break_frequency Int
+  big_break_duration  Int
+  total_cycles        Int
+  user_id             String   @unique
+  user                Users    @relation(fields: [user_id], references: [id])
 
-  @@index([userId])
+  @@index([user_id])
 }
 
 model Habits {

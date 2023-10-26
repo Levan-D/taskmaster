@@ -59,15 +59,15 @@ export default function Timer({ taskId }: Props) {
 
   return (
     <div className="flex flex-col justify-between grow ">
-      <div className="flex justify-center   sm:gap-8">
-        <div>
+      <div className="flex justify-between gap-2 sm:gap-8 ">
+        <div className="   flex flex-col basis-1/2 ">
           {/* Start Time Picker */}
           <DatePicker
             selected={startTime}
             customInput={
-              <div className="p-1.5 text-center">
+              <div className="p-1.5   text-center">
                 <p>Start time</p>
-                <div className="input text-xs sm:text-base mt-4 flex gap-1 items-center  select-none  cursor-pointer">
+                <div className="input justify-center  text-xs sm:text-base mt-4 flex gap-1 items-center  select-none  cursor-pointer">
                   <p> {DateTime.fromJSDate(startTime).toFormat("h:mm a")}</p>
                   <Icon path={mdiChevronDown} size={1} />
                 </div>
@@ -92,13 +92,13 @@ export default function Timer({ taskId }: Props) {
           {/* End Time Picker */}
         </div>
 
-        <div>
+        <div className="basis-1/2 flex flex-col ">
           <DatePicker
             selected={endTime}
             customInput={
               <div className="p-1.5 text-center">
                 <p>End time</p>
-                <div className="input mt-4 text-xs sm:text-base select-none flex gap-1 items-center cursor-pointer">
+                <div className="input mt-4 justify-center text-xs sm:text-base select-none flex gap-1 items-center cursor-pointer">
                   <p> {DateTime.fromJSDate(endTime).toFormat("h:mm a")}</p>
                   <Icon path={mdiChevronDown} size={1} />
                 </div>
@@ -121,7 +121,7 @@ export default function Timer({ taskId }: Props) {
         <button
           disabled={isPending}
           onClick={() => startTransition(handleResetTimer)}
-          className="btnSecondary w-full py-2"
+          className="btnSecondary w-full py-3"
         >
           <div
             className={`flex items-center w-fit mx-auto  gap-1 ${
@@ -142,7 +142,7 @@ export default function Timer({ taskId }: Props) {
         <button
           disabled={isPending}
           onClick={() => startTransition(handleSetTimer)}
-          className="btnPrimary block w-full py-2"
+          className="btnPrimary block w-full py-3"
         >
           <div
             className={` ${
@@ -160,7 +160,7 @@ export default function Timer({ taskId }: Props) {
         <button
           disabled={isPending}
           onClick={handleCloseModal}
-          className="btnSecondary block w-full py-2"
+          className="btnSecondary block w-full py-3"
         >
           <div
             className={` ${
@@ -168,7 +168,7 @@ export default function Timer({ taskId }: Props) {
             } flex items-center gap-1 w-fit  mx-auto`}
           >
             <Icon path={mdiWindowClose} size={0.8} />
-            <p>Close</p>
+            <p>Cancel</p>
           </div>
         </button>
       </div>

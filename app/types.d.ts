@@ -66,3 +66,12 @@ type ApiResponse<T> = { success: boolean; data?: T; error?: any }
 type DropdownRefType = {
   closeDropdown: () => void
 }
+
+type CookieClockType = {
+  start_time: string
+  work_duration: number
+  rest_duration: number
+  big_break_frequency: number
+  big_break_duration: number
+  total_cycles: number
+}

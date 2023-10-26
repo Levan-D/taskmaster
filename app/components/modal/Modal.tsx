@@ -3,9 +3,10 @@
 import { useEffect } from "react"
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import Icon from "@mdi/react"
-import { mdiClose } from "@mdi/js"
+import { mdiClose, mdiTimerOutline, mdiCookieOutline, mdiCircleDouble } from "@mdi/js"
 import { setModal } from "@/lib/redux/slices/globalSlice"
 import Timer from "./Timer"
+import CookieClock from "./CookieClock"
 
 export default function Modal() {
   const dispatch = useAppDispatch()
@@ -39,6 +40,8 @@ export default function Modal() {
     switch (type) {
       case "timer":
         return <Timer taskId={taskId} />
+      case "cookie clock":
+        return <CookieClock />
 
       default:
         return null
@@ -49,9 +52,23 @@ export default function Modal() {
     switch (type) {
       case "timer":
         return "Set timer"
+      case "cookie clock":
+        return "Cookie Clock"
 
       default:
         return null
+    }
+  }
+
+  const renderIcon = () => {
+    switch (type) {
+      case "timer":
+        return mdiTimerOutline
+      case "cookie clock":
+        return mdiCookieOutline
+
+      default:
+        return mdiCircleDouble
     }
   }
 
@@ -65,7 +82,10 @@ export default function Modal() {
       <div className="z-50  flex min-h-[500px] w-full max-w-[540px]  flex-col   mainContainer     md:min-h-[600px] ">
         <div className=" flex grow flex-col rounded-xl      px-6 py-4 ">
           <div className="flex  items-center justify-between">
-            <h3 className="text-xl font-semibold">{renderTitle()}</h3>
+            <div className="flex gap-1  items-center">
+              <Icon path={renderIcon()} size={0.98} />
+              <h3 className="text-xl font-semibold">{renderTitle()}</h3>
+            </div>
             <button
               aria-label="close"
               onClick={handleCloseButtonClick}

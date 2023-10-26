@@ -2,21 +2,32 @@
 
 "use server"
 import { prisma } from "../db"
-import { revalidatePath } from "next/cache"
-import { DateTime } from "luxon"
 import { checkAuth, handleApiError } from "./userActions"
-import { cookies } from "next/headers"
 
-export type CookieClockInput = {
-  workDuration: number
-  restDuration: number
-  bigBreakFrequency: number
-  bigBreakDuration: number
-  totalCycles: number
+export const getCookieClockData = async (): Promise<ApiResponse<CookieClockType>> => {
+  const userData = await checkAuth()
+
+  try {
+    if (userData && userData.id) {
+      const cookieClockData = await prisma.cookieClock.findUnique({
+        where: {
+          user_id: userData.id,
+        },
+      })
+      return {
+        success: true,
+        data: cookieClockData === null ? undefined : cookieClockData,
+      }
+    } else {
+      throw new Error("Bad Request: Missing user data")
+    }
+  } catch (error) {
+    return handleApiError(error)
+  }
 }
 
 export const createOrUpdateCookieClock = async (
-  input: CookieClockInput
+  input: CookieClockType
 ): Promise<ApiResponse<void>> => {
   try {
     const userData = await checkAuth()
@@ -27,18 +38,17 @@ export const createOrUpdateCookieClock = async (
 
     await prisma.cookieClock.upsert({
       where: {
-        userId: userData.id,
+        user_id: userData.id,
       },
       create: {
         ...input,
-        userId: userData.id,
+        user_id: userData.id,
       },
       update: {
         ...input,
       },
     })
 
-    revalidatePath("/dashboard")
     return { success: true }
   } catch (error) {
     return handleApiError(error)
