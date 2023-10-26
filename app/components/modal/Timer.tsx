@@ -11,7 +11,7 @@ import Icon from "@mdi/react"
 import {
   mdiContentSaveOutline,
   mdiLoading,
-  mdiCloseCircleOutline,
+  mdiWindowClose,
   mdiTimerOffOutline,
   mdiChevronDown,
 } from "@mdi/js"
@@ -111,7 +111,7 @@ export default function Timer({ taskId }: Props) {
             showTimeSelectOnly
             timeIntervals={1}
             dateFormat="h:mm aa"
-            minTime={new Date(startTime.getTime() +  60 * 1000)}
+            minTime={new Date(startTime.getTime() + 60 * 1000)}
             maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
           />
         </div>
@@ -167,7 +167,7 @@ export default function Timer({ taskId }: Props) {
               isPending && "opacity-75"
             } flex items-center gap-1 w-fit  mx-auto`}
           >
-            <Icon path={mdiCloseCircleOutline} size={0.8} />
+            <Icon path={mdiWindowClose} size={0.8} />
             <p>Close</p>
           </div>
         </button>

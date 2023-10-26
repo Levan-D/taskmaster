@@ -21,7 +21,7 @@ const initialState: initialStateType = {
     type: null,
     taskId: "",
   },
-  widget: null,
+  widget: "cookie clock",
   todaysOps: undefined,
   weeksOps: undefined,
   windowWidth: 1400,
