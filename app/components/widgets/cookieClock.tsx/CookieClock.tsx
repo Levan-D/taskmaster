@@ -52,7 +52,7 @@ export default function CookieClock() {
           onClick={handleSetNewCookieClock}
         >
           <div className="flex items-center gap-1 w-fit mx-auto">
-            <Icon path={mdiPlus} size={0.8} />
+            <Icon path={mdiPlus} size={0.7} />
             <p>New</p>
           </div>
         </button>
@@ -68,7 +68,7 @@ export default function CookieClock() {
           onClick={handleSetNewCookieClock}
         >
           <div className="flex items-center gap-1 w-fit mx-auto">
-            <Icon path={mdiPencilOutline} size={0.8} />
+            <Icon path={mdiPencilOutline} size={0.7} />
             <p> Edit</p>
           </div>
         </button>

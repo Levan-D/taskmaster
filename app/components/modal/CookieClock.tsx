@@ -94,7 +94,7 @@ export default function CookieClock() {
             />
           </div>
           <div className="flex  items-center justify-between">
-            <label>Break Frequency:</label>
+            <label>Big Break Frequency:</label>
             <input
               onBlur={handleBlur}
               min={1}
@@ -107,7 +107,7 @@ export default function CookieClock() {
             />
           </div>
           <div className="flex  items-center justify-between">
-            <label>Break Duration:</label>
+            <label>Big Break Duration:</label>
             <input
               onBlur={handleBlur}
               min={1}

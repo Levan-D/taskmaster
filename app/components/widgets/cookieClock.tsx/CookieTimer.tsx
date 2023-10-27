@@ -1,141 +1,131 @@
 /** @format */
 
-import React, { useState, useEffect, useCallback } from "react"
-import { DateTime } from "luxon" // Make sure to install luxon or replace with your preferred date library
-
-import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
+import React, { useState, useEffect } from "react"
+import { DateTime } from "luxon"
+import { useAppSelector } from "@/lib/redux/hooks"
+import CookieProgress from "./CookieProgress"
 
 export default function CookieTimer() {
-  const dispatch = useAppDispatch()
   const { cookieClockData } = useAppSelector(state => state.global)
   const [secondsLeft, setSecondsLeft] = useState(0)
   const [currentCycle, setCurrentCycle] = useState(1)
   const [currentPhase, setCurrentPhase] = useState("work")
-  // Calculate the elapsed time in seconds since the start_time
-  const calculateElapsedTime = () => {
-    if (!cookieClockData || !cookieClockData.start_time) return 0
-    const startTime = DateTime.fromISO(cookieClockData.start_time)
-    const now = DateTime.now()
-    return now.diff(startTime, "seconds").seconds
-  }
 
-  // Determine the current phase and cycle based on elapsed time
-  const updatePhaseAndCycle = useCallback(() => {
-    if (!cookieClockData) return
+  const calculateElapsedTime = () =>
+    cookieClockData?.start_time
+      ? DateTime.now().diff(DateTime.fromISO(cookieClockData.start_time), "seconds")
+          .seconds
+      : 0
 
-    let elapsedTime = calculateElapsedTime()
-
-    // Calculate total cycle duration excluding the big break
-    const cycleDuration =
-      cookieClockData.work_duration * 60 + cookieClockData.rest_duration * 60
-
-    // Determine how many total cycles, including big breaks, have completed
-    let totalDurationIncludingBigBreak =
-      cycleDuration * cookieClockData.big_break_frequency +
-      cookieClockData.big_break_duration * 60
-    let cyclesCompleted = Math.floor(elapsedTime / totalDurationIncludingBigBreak)
-    elapsedTime -= cyclesCompleted * totalDurationIncludingBigBreak
-
-    // Determine the current cycle and whether it's work time, rest time, or big break
-    let cycleWithinBigBreak = Math.floor(elapsedTime / cycleDuration) + 1
-    elapsedTime -= (cycleWithinBigBreak - 1) * cycleDuration
-
-    let calculatedCurrentCycle =
-      cyclesCompleted * cookieClockData.big_break_frequency + cycleWithinBigBreak
-
-    let isBigBreakDue = cycleWithinBigBreak % cookieClockData.big_break_frequency === 0
-    if (isBigBreakDue && elapsedTime >= cookieClockData.work_duration * 60) {
-      setCurrentPhase("big_break")
-      setSecondsLeft(totalDurationIncludingBigBreak - elapsedTime)
-    } else if (!isBigBreakDue && elapsedTime >= cookieClockData.work_duration * 60) {
-      setCurrentPhase("rest")
-      setSecondsLeft(cycleDuration - elapsedTime)
-    } else {
-      setCurrentPhase("work")
-      setSecondsLeft(cookieClockData.work_duration * 60 - elapsedTime)
-    }
-
-    // Correctly calculating the current cycle number
-    setCurrentCycle(
-      cyclesCompleted * cookieClockData.big_break_frequency + cycleWithinBigBreak
+  const calculateTotalDuration = (): number => {
+    if (!cookieClockData) return 0
+    const workDuration = cookieClockData.work_duration * cookieClockData.total_cycles
+    const breakFrequency = Math.floor(
+      (cookieClockData.total_cycles - 1) / cookieClockData.big_break_frequency
     )
+    const restDuration =
+      cookieClockData.rest_duration * (cookieClockData.total_cycles - breakFrequency - 1)
+    const breakDuration = cookieClockData.big_break_duration * breakFrequency
 
-    if (calculatedCurrentCycle > cookieClockData.total_cycles) {
-      setCurrentPhase("done")
-      setSecondsLeft(0)
-    } else {
-      setCurrentCycle(calculatedCurrentCycle)
-    }
-  }, [cookieClockData])
+    return workDuration + restDuration + breakDuration
+  }
 
   const calculateEndTime = () => {
     if (!cookieClockData) return ""
 
-    // Total duration of one regular cycle (work + rest)
-    const oneCycleDuration = cookieClockData.work_duration + cookieClockData.rest_duration
-
-    // Number of big breaks that will actually occur
-    const bigBreaksCount = Math.floor(
-      (cookieClockData.total_cycles - 1) / cookieClockData.big_break_frequency
-    )
-
-    // Total duration for all cycles, but deducting the rest time for each big break
-    const totalDuration =
-      cookieClockData.total_cycles * oneCycleDuration -
-      bigBreaksCount * cookieClockData.rest_duration +
-      bigBreaksCount * cookieClockData.big_break_duration
-
-    // Calculate and format end time
-    const endTime = DateTime.fromISO(cookieClockData.start_time)
-      .plus({ minutes: totalDuration })
+    return DateTime.fromISO(cookieClockData.start_time)
+      .plus({ minutes: calculateTotalDuration() })
       .toFormat("h:mm a")
+  }
 
-    return endTime
+  const updatePhaseAndCycle = () => {
+    if (!cookieClockData) return
+
+    let elapsedTime = calculateElapsedTime()
+    const workDurationSecs = cookieClockData.work_duration * 60
+    const restDurationSecs = cookieClockData.rest_duration * 60
+    const breakDurationSecs = cookieClockData.big_break_duration * 60
+
+    // Calculating the complete cycle duration based on whether it's a big break cycle
+    let cycleDuration =
+      workDurationSecs +
+      (currentCycle % cookieClockData.big_break_frequency === 0
+        ? breakDurationSecs
+        : restDurationSecs)
+    let totalCyclesCompleted = Math.floor(elapsedTime / cycleDuration)
+    let timeInCurrentCycle = elapsedTime % cycleDuration
+
+    let phase, timeLeft
+
+    if (totalCyclesCompleted >= cookieClockData.total_cycles) {
+      // All cycles complete
+      phase = "done"
+      timeLeft = 0
+    } else if (timeInCurrentCycle < workDurationSecs) {
+      // During work
+      phase = "work"
+      timeLeft = workDurationSecs - timeInCurrentCycle
+    } else if (currentCycle % cookieClockData.big_break_frequency === 0) {
+      // During big break (no rest in this cycle)
+      phase = "big_break"
+      timeLeft = breakDurationSecs - (timeInCurrentCycle - workDurationSecs)
+    } else {
+      // During rest (not a big break cycle)
+      phase = "rest"
+      timeLeft = restDurationSecs - (timeInCurrentCycle - workDurationSecs)
+    }
+
+    // Check and adjust if it's the final work cycle (no break or rest afterwards)
+    if (totalCyclesCompleted === cookieClockData.total_cycles - 1 && phase !== "work") {
+      phase = "done"
+      timeLeft = 0
+    }
+
+    setCurrentCycle(totalCyclesCompleted + 1) // Adding 1 to convert from 0-based index
+    setCurrentPhase(phase)
+    setSecondsLeft(timeLeft)
   }
 
   useEffect(() => {
-    if (cookieClockData) {
-      updatePhaseAndCycle() // Update on initial load
-    }
-  }, [cookieClockData, updatePhaseAndCycle])
+    if (cookieClockData) updatePhaseAndCycle()
+  }, [cookieClockData])
 
   useEffect(() => {
-    const timer =
-      secondsLeft > 0 && currentPhase !== "done"
-        ? setInterval(() => {
-            setSecondsLeft(prevSecondsLeft => prevSecondsLeft - 1)
-          }, 1000)
-        : undefined
-
-    if (secondsLeft === 0 && currentPhase !== "done") {
-      updatePhaseAndCycle()
+    let timer: NodeJS.Timeout
+    if (currentPhase !== "done") {
+      timer = setInterval(() => {
+        setSecondsLeft(prev => {
+          const next = Math.max(prev - 1, 0)
+          if (next === 0) updatePhaseAndCycle()
+          return next
+        })
+      }, 1000)
     }
-
-    return () => {
-      if (timer) clearInterval(timer)
-    }
-  }, [secondsLeft, currentPhase, updatePhaseAndCycle])
+    return () => clearInterval(timer)
+  }, [currentPhase])
 
   return (
     cookieClockData && (
       <div>
+        <CookieProgress
+          calculateElapsedTime={calculateElapsedTime}
+          calculateTotalDuration={calculateTotalDuration}
+          currentCycle={currentCycle}
+          currentPhase={currentPhase}
+        />
         <p>
           Start Time: {DateTime.fromISO(cookieClockData.start_time).toFormat("h:mm a")}
         </p>
         <p>End Time: {calculateEndTime()}</p>
-
         <p>Current Phase: {currentPhase}</p>
         <p>
-          Time left:
+          Time left:{" "}
           {secondsLeft > 60
-            ? `${Math.floor(secondsLeft / 60)} minutes`
-            : `${secondsLeft > 0 ? "0:" : ""}${String(
-                Math.round(secondsLeft % 60)
-              ).padStart(2, "0")}`}
+            ? `${Math.ceil(secondsLeft / 60)}m`
+            : `${String(Math.round(secondsLeft % 60)).padStart(2, "0")}s`}
         </p>
-
         <p>
-          Cycle:
+          Cycle:{" "}
           {currentPhase === "done"
             ? "Done"
             : `${currentCycle}/${cookieClockData.total_cycles}`}
