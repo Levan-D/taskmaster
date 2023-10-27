@@ -8,15 +8,17 @@ import { mdiCookie } from "@mdi/js"
 type Props = {
   calculateElapsedTime: () => number
   calculateTotalDuration: () => number
+  calculateCycleDurations: () => number[]
   currentCycle: number
-  currentPhase: string
+   
 }
 
 export default function CookieProgress({
   calculateElapsedTime,
   calculateTotalDuration,
+  calculateCycleDurations,
   currentCycle,
-  currentPhase,
+ 
 }: Props) {
   const { cookieClockData } = useAppSelector(state => state.global)
 
@@ -25,22 +27,6 @@ export default function CookieProgress({
     const totalDurationSecs = calculateTotalDuration() * 60
     const elapsedTime = calculateElapsedTime()
     return Math.min(Math.round((elapsedTime / totalDurationSecs) * 100 + 1), 100)
-  }
-
-  const calculateCycleDurations = () => {
-    let cycleDurations = []
-    for (let i = 1; i <= (cookieClockData?.total_cycles || 0); i++) {
-      let duration = cookieClockData?.work_duration || 0
-      if (i !== cookieClockData?.total_cycles) {
-        if (i % (cookieClockData?.big_break_frequency || Number.MAX_SAFE_INTEGER) === 0) {
-          duration += cookieClockData?.big_break_duration || 0
-        } else {
-          duration += cookieClockData?.rest_duration || 0
-        }
-      }
-      cycleDurations.push(duration)
-    }
-    return cycleDurations
   }
 
   if (!cookieClockData) return

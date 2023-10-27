@@ -4,8 +4,6 @@ import React, { useState, useEffect } from "react"
 import { DateTime } from "luxon"
 import { useAppSelector } from "@/lib/redux/hooks"
 import CookieProgress from "./CookieProgress"
-import Icon from "@mdi/react"
-import { mdiTimerOutline } from "@mdi/js"
 
 export default function CookieTimer() {
   const { cookieClockData } = useAppSelector(state => state.global)
@@ -42,50 +40,57 @@ export default function CookieTimer() {
       .toFormat("h:mm a")
   }
 
+  const calculateCycleDurations = () => {
+    let cycleDurations = []
+    for (let i = 1; i <= (cookieClockData?.total_cycles || 0); i++) {
+      let duration = cookieClockData?.work_duration || 0
+      if (i !== cookieClockData?.total_cycles) {
+        if (i % (cookieClockData?.big_break_frequency || Number.MAX_SAFE_INTEGER) === 0) {
+          duration += cookieClockData?.big_break_duration || 0
+        } else {
+          duration += cookieClockData?.rest_duration || 0
+        }
+      }
+      cycleDurations.push(duration)
+    }
+    return cycleDurations
+  }
+
   const updatePhaseAndCycle = () => {
     if (!cookieClockData) return
 
     let elapsedTime = calculateElapsedTime()
-    const workDurationSecs = cookieClockData.work_duration * 60
-    const restDurationSecs = cookieClockData.rest_duration * 60
-    const breakDurationSecs = cookieClockData.big_break_duration * 60
+    const durations = calculateCycleDurations()
 
-    // Calculating the complete cycle duration based on whether it's a big break cycle
-    let cycleDuration =
-      workDurationSecs +
-      (currentCycle % cookieClockData.big_break_frequency === 0
-        ? breakDurationSecs
-        : restDurationSecs)
-    let totalCyclesCompleted = Math.floor(elapsedTime / cycleDuration)
-    let timeInCurrentCycle = elapsedTime % cycleDuration
+    let totalTime = 0
+    let cycleIndex
+    for (cycleIndex = 0; cycleIndex < durations.length; cycleIndex++) {
+      totalTime += durations[cycleIndex] * 60 // Converting minutes to seconds
+      if (elapsedTime < totalTime) break
+    }
 
     let phase, timeLeft
-
-    if (totalCyclesCompleted >= cookieClockData.total_cycles) {
-      // All cycles complete
+    if (cycleIndex >= cookieClockData.total_cycles) {
       phase = "Done"
       timeLeft = 0
-    } else if (timeInCurrentCycle < workDurationSecs) {
-      // During work
-      phase = "Work"
-      timeLeft = workDurationSecs - timeInCurrentCycle
-    } else if (currentCycle % cookieClockData.big_break_frequency === 0) {
-      // During big break (no rest in this cycle)
-      phase = "Break"
-      timeLeft = breakDurationSecs - (timeInCurrentCycle - workDurationSecs)
     } else {
-      // During rest (not a big break cycle)
-      phase = "Rest"
-      timeLeft = restDurationSecs - (timeInCurrentCycle - workDurationSecs)
+      let cycleStartTime = totalTime - durations[cycleIndex] * 60
+      let timeInCurrentCycle = elapsedTime - cycleStartTime
+      let workDurationSecs = cookieClockData.work_duration * 60
+
+      if (timeInCurrentCycle < workDurationSecs) {
+        phase = "Work"
+        timeLeft = workDurationSecs - timeInCurrentCycle
+      } else if (cycleIndex % cookieClockData.big_break_frequency === 0) {
+        phase = "Break"
+        timeLeft = durations[cycleIndex] * 60 - timeInCurrentCycle
+      } else {
+        phase = "Rest"
+        timeLeft = durations[cycleIndex] * 60 - timeInCurrentCycle
+      }
     }
 
-    // Check and adjust if it's the final work cycle (no break or rest afterwards)
-    if (totalCyclesCompleted === cookieClockData.total_cycles - 1 && phase !== "Work") {
-      phase = "Done"
-      timeLeft = 0
-    }
-
-    setCurrentCycle(totalCyclesCompleted + 1) // Adding 1 to convert from 0-based index
+    setCurrentCycle(cycleIndex + 1)
     setCurrentPhase(phase)
     setSecondsLeft(timeLeft)
   }
@@ -108,6 +113,7 @@ export default function CookieTimer() {
     return () => clearInterval(timer)
   }, [currentPhase])
 
+  console.log(secondsLeft, currentPhase, currentCycle)
   return (
     cookieClockData && (
       <div>
@@ -124,8 +130,8 @@ export default function CookieTimer() {
           <CookieProgress
             calculateElapsedTime={calculateElapsedTime}
             calculateTotalDuration={calculateTotalDuration}
+            calculateCycleDurations={calculateCycleDurations}
             currentCycle={currentCycle}
-            currentPhase={currentPhase}
           />
           <div className="flex justify-between  text-xs  text-neutral-300 text-center">
             <p>{DateTime.fromISO(cookieClockData.start_time).toFormat("h:mm a")}</p>
