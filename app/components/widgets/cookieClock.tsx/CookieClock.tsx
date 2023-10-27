@@ -6,7 +6,7 @@ import { getCookieClockData } from "@/app/actions/cookieClockActions"
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
 import { setModal, setCookieClockData } from "@/lib/redux/slices/globalSlice"
 import Icon from "@mdi/react"
-import { mdiPlus, mdiPencilOutline } from "@mdi/js"
+import { mdiPlus } from "@mdi/js"
 import Loader from "../../Loader"
 import CookieTimer from "./CookieTimer"
 
@@ -62,16 +62,7 @@ export default function CookieClock() {
   if (cookieClockData)
     return (
       <div className=" flex flex-col justify-between h-full   ">
-        <CookieTimer />
-        <button
-          className="btnSecondary  max-w-[444px] mx-auto w-full py-2"
-          onClick={handleSetNewCookieClock}
-        >
-          <div className="flex items-center gap-1 w-fit mx-auto">
-            <Icon path={mdiPencilOutline} size={0.7} />
-            <p> Edit</p>
-          </div>
-        </button>
+        <CookieTimer handleSetNewCookieClock={handleSetNewCookieClock} />
       </div>
     )
 }

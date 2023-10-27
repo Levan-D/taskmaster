@@ -4,8 +4,17 @@ import React, { useState, useEffect } from "react"
 import { DateTime } from "luxon"
 import { useAppSelector } from "@/lib/redux/hooks"
 import CookieProgress from "./CookieProgress"
+import { useAppDispatch } from "@/lib/redux/hooks"
+import { setCookieClockData } from "@/lib/redux/slices/globalSlice"
+import Icon from "@mdi/react"
+import { mdiPencilOutline, mdiRestart } from "@mdi/js"
 
-export default function CookieTimer() {
+type Props = {
+  handleSetNewCookieClock: () => void
+}
+
+export default function CookieTimer({ handleSetNewCookieClock }: Props) {
+  const dispatch = useAppDispatch()
   const { cookieClockData } = useAppSelector(state => state.global)
   const [secondsLeft, setSecondsLeft] = useState(0)
   const [currentCycle, setCurrentCycle] = useState(1)
@@ -56,6 +65,16 @@ export default function CookieTimer() {
     return cycleDurations
   }
 
+  const resetClock = () => {
+    if (cookieClockData)
+      dispatch(
+        setCookieClockData({
+          ...cookieClockData,
+          start_time: DateTime.now().toISO() || "",
+        })
+      )
+  }
+
   const updatePhaseAndCycle = () => {
     if (!cookieClockData) return
 
@@ -81,11 +100,14 @@ export default function CookieTimer() {
       if (timeInCurrentCycle < workDurationSecs) {
         phase = "Work"
         timeLeft = workDurationSecs - timeInCurrentCycle
-      } else if (cycleIndex % cookieClockData.big_break_frequency === 0) {
-        phase = "Break"
-        timeLeft = durations[cycleIndex] * 60 - timeInCurrentCycle
       } else {
-        phase = "Rest"
+        // Determine if we are in a "Big Break" phase
+        // Consider whether the current cycleIndex + 1 is divisible by big_break_frequency
+        if ((cycleIndex + 1) % cookieClockData.big_break_frequency === 0) {
+          phase = "Break"
+        } else {
+          phase = "Rest"
+        }
         timeLeft = durations[cycleIndex] * 60 - timeInCurrentCycle
       }
     }
@@ -113,11 +135,10 @@ export default function CookieTimer() {
     return () => clearInterval(timer)
   }, [currentPhase])
 
-  console.log(secondsLeft, currentPhase, currentCycle)
   return (
     cookieClockData && (
-      <div>
-        <div className="innerContainer mb-6 mt-4 py-1 px-2 ">
+      <div className="flex   gap-2 lg:block">
+        <div className="innerContainer lg:mb-6 lg:mt-4 py-1 px-2 basis-4/5 sm:basis-3/5 ">
           <p
             className={`${
               currentPhase === "Done" && "text-lime-400"
@@ -139,8 +160,8 @@ export default function CookieTimer() {
             <p>{calculateEndTime()}</p>
           </div>
         </div>
-        <div className="innerContainer my-6  p-2 ">
-          <div className="flex   justify-between  items-center gap-1">
+        <div className="innerContainer lg:my-6  p-2 flex items-center basis-1/5  ">
+          <div className="sm:flex  text-xs sm:text-base text-center sm:text-start   justify-between w-full items-center gap-1">
             <p className="   "> {currentPhase}</p>
             <p>
               {secondsLeft > 60
@@ -148,6 +169,30 @@ export default function CookieTimer() {
                 : `${String(Math.round(secondsLeft % 60)).padStart(2, "0")}s`}
             </p>
           </div>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-2  lg:gap-4 sm:basis-1/5">
+          {currentPhase === "Done" && (
+            <button
+              className="btnSecondary px-2 basis-1/2 max-w-[444px] mx-auto w-full py-2"
+              onClick={resetClock}
+            >
+              <div className="flex items-center gap-1 w-fit mx-auto">
+                <Icon path={mdiRestart} size={0.7} />
+                <p  className=" hidden md:block text-sm " > Reset</p>
+              </div>
+            </button>
+          )}
+          <button
+            className={`${
+              currentPhase === "Done" && "basis-1/2"
+            }  btnSecondary px-2 max-w-[444px] mx-auto w-full py-2`}
+            onClick={handleSetNewCookieClock}
+          >
+            <div className="flex items-center gap-1 w-fit mx-auto">
+              <Icon path={mdiPencilOutline} size={0.7} />
+              <p  className=" hidden md:block text-sm " > Edit</p>
+            </div>
+          </button>
         </div>
       </div>
     )
