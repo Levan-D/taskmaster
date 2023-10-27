@@ -4,17 +4,21 @@ import React, { useState, useEffect } from "react"
 import { DateTime } from "luxon"
 import { useAppSelector } from "@/lib/redux/hooks"
 import CookieProgress from "./CookieProgress"
+import Icon from "@mdi/react"
+import { mdiTimerOutline } from "@mdi/js"
 
 export default function CookieTimer() {
   const { cookieClockData } = useAppSelector(state => state.global)
   const [secondsLeft, setSecondsLeft] = useState(0)
   const [currentCycle, setCurrentCycle] = useState(1)
-  const [currentPhase, setCurrentPhase] = useState("work")
+  const [currentPhase, setCurrentPhase] = useState("Work")
 
   const calculateElapsedTime = () =>
     cookieClockData?.start_time
-      ? DateTime.now().diff(DateTime.fromISO(cookieClockData.start_time), "seconds")
-          .seconds
+      ? Math.round(
+          DateTime.now().diff(DateTime.fromISO(cookieClockData.start_time), "seconds")
+            .seconds
+        )
       : 0
 
   const calculateTotalDuration = (): number => {
@@ -59,25 +63,25 @@ export default function CookieTimer() {
 
     if (totalCyclesCompleted >= cookieClockData.total_cycles) {
       // All cycles complete
-      phase = "done"
+      phase = "Done"
       timeLeft = 0
     } else if (timeInCurrentCycle < workDurationSecs) {
       // During work
-      phase = "work"
+      phase = "Work"
       timeLeft = workDurationSecs - timeInCurrentCycle
     } else if (currentCycle % cookieClockData.big_break_frequency === 0) {
       // During big break (no rest in this cycle)
-      phase = "big_break"
+      phase = "Break"
       timeLeft = breakDurationSecs - (timeInCurrentCycle - workDurationSecs)
     } else {
       // During rest (not a big break cycle)
-      phase = "rest"
+      phase = "Rest"
       timeLeft = restDurationSecs - (timeInCurrentCycle - workDurationSecs)
     }
 
     // Check and adjust if it's the final work cycle (no break or rest afterwards)
-    if (totalCyclesCompleted === cookieClockData.total_cycles - 1 && phase !== "work") {
-      phase = "done"
+    if (totalCyclesCompleted === cookieClockData.total_cycles - 1 && phase !== "Work") {
+      phase = "Done"
       timeLeft = 0
     }
 
@@ -92,7 +96,7 @@ export default function CookieTimer() {
 
   useEffect(() => {
     let timer: NodeJS.Timeout
-    if (currentPhase !== "done") {
+    if (currentPhase !== "Done") {
       timer = setInterval(() => {
         setSecondsLeft(prev => {
           const next = Math.max(prev - 1, 0)
@@ -107,29 +111,38 @@ export default function CookieTimer() {
   return (
     cookieClockData && (
       <div>
-        <CookieProgress
-          calculateElapsedTime={calculateElapsedTime}
-          calculateTotalDuration={calculateTotalDuration}
-          currentCycle={currentCycle}
-          currentPhase={currentPhase}
-        />
-        <p>
-          Start Time: {DateTime.fromISO(cookieClockData.start_time).toFormat("h:mm a")}
-        </p>
-        <p>End Time: {calculateEndTime()}</p>
-        <p>Current Phase: {currentPhase}</p>
-        <p>
-          Time left:{" "}
-          {secondsLeft > 60
-            ? `${Math.ceil(secondsLeft / 60)}m`
-            : `${String(Math.round(secondsLeft % 60)).padStart(2, "0")}s`}
-        </p>
-        <p>
-          Cycle:{" "}
-          {currentPhase === "done"
-            ? "Done"
-            : `${currentCycle}/${cookieClockData.total_cycles}`}
-        </p>
+        <div className="innerContainer mb-6 mt-4 py-1 px-2 ">
+          <p
+            className={`${
+              currentPhase === "Done" && "text-lime-400"
+            } text-right text-xs  text-neutral-300`}
+          >
+            {currentPhase === "Done"
+              ? "Done"
+              : `${currentCycle}/${cookieClockData.total_cycles}`}
+          </p>
+          <CookieProgress
+            calculateElapsedTime={calculateElapsedTime}
+            calculateTotalDuration={calculateTotalDuration}
+            currentCycle={currentCycle}
+            currentPhase={currentPhase}
+          />
+          <div className="flex justify-between  text-xs  text-neutral-300 text-center">
+            <p>{DateTime.fromISO(cookieClockData.start_time).toFormat("h:mm a")}</p>
+
+            <p>{calculateEndTime()}</p>
+          </div>
+        </div>
+        <div className="innerContainer my-6  p-2 ">
+          <div className="flex   justify-between  items-center gap-1">
+            <p className="   "> {currentPhase}</p>
+            <p>
+              {secondsLeft > 60
+                ? `${Math.ceil(secondsLeft / 60)}m`
+                : `${String(Math.round(secondsLeft % 60)).padStart(2, "0")}s`}
+            </p>
+          </div>
+        </div>
       </div>
     )
   )

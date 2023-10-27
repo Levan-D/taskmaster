@@ -39,7 +39,7 @@ export default function CookieClock() {
 
   if (isPending || loading)
     return (
-      <div className=" flex flex-col justify-center h-full   ">
+      <div className=" flex flex-col justify-center h-full py-12  ">
         <Loader className="!bg-neutral-900 !bg-opacity-75 !max-w-[50px] !max-h-[50px] lg:!max-w-[150px] lg:!max-h-[150px]" />
       </div>
     )
@@ -62,7 +62,7 @@ export default function CookieClock() {
   if (cookieClockData)
     return (
       <div className=" flex flex-col justify-between h-full   ">
-         <CookieTimer />
+        <CookieTimer />
         <button
           className="btnSecondary  max-w-[444px] mx-auto w-full py-2"
           onClick={handleSetNewCookieClock}

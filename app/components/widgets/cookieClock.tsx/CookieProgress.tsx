@@ -22,33 +22,26 @@ export default function CookieProgress({
 
   const calculateProgress = () => {
     if (!cookieClockData) return ""
-
     const totalDurationSecs = calculateTotalDuration() * 60
-
     const elapsedTime = calculateElapsedTime()
-    return Math.min((elapsedTime / totalDurationSecs) * 100, 100)
+    return Math.min(Math.round((elapsedTime / totalDurationSecs) * 100 + 1), 100)
   }
 
   const calculateCycleDurations = () => {
-    let cycleDurations = [];
+    let cycleDurations = []
     for (let i = 1; i <= (cookieClockData?.total_cycles || 0); i++) {
-      let duration = cookieClockData?.work_duration || 0;
-  
-      // Check for big break cycle
-      if (i % (cookieClockData?.big_break_frequency || Number.MAX_SAFE_INTEGER) === 0) {
-        // Add big break duration
-        duration += cookieClockData?.big_break_duration || 0;
-      } 
-      // Else check for rest duration (if not the last cycle)
-      else if (i !== cookieClockData?.total_cycles) {
-        duration += cookieClockData?.rest_duration || 0;
+      let duration = cookieClockData?.work_duration || 0
+      if (i !== cookieClockData?.total_cycles) {
+        if (i % (cookieClockData?.big_break_frequency || Number.MAX_SAFE_INTEGER) === 0) {
+          duration += cookieClockData?.big_break_duration || 0
+        } else {
+          duration += cookieClockData?.rest_duration || 0
+        }
       }
-  
-      cycleDurations.push(duration);
+      cycleDurations.push(duration)
     }
-    return cycleDurations;
-  };
-  
+    return cycleDurations
+  }
 
   if (!cookieClockData) return
 
@@ -60,15 +53,13 @@ export default function CookieProgress({
     let elapsed = 0
     for (let duration of cycleDurations) {
       elapsed += duration
-      // Positioning each cookie at the end of its cycle
       positions.push(elapsed / totalDuration)
     }
 
     return positions
   }
-  console.log(calculateCycleDurations(), calculateTotalDuration())
   return (
-    <div className="w-full rounded-full my-6 relative bg-neutral-500">
+    <div className="w-full  rounded-full mt-3 mb-4 relative bg-neutral-950">
       <div
         className="h-1 rounded-full bg-lime-400"
         style={{ width: `${calculateProgress()}%` }}
@@ -78,15 +69,12 @@ export default function CookieProgress({
           key={index}
           className="absolute -bottom-3"
           style={{
-            left: `calc(${position * 100}% - 29px)`,
+            left: `calc(${position * 100}% - 24px)`,
           }}
         >
           <Icon
-            className={`bg-neutral-800 rounded-full ${
-              index < currentCycle - 1 ||
-              (index === currentCycle - 1 && currentPhase !== "work")
-                ? "text-lime-400"
-                : "text-neutral-500"
+            className={`bg-neutral-700 rounded-full ${
+              index < currentCycle - 1 ? "text-lime-400" : "text-neutral-950"
             }`}
             path={mdiCookie}
             size={1.2}
