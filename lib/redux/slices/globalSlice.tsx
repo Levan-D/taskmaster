@@ -33,7 +33,7 @@ const initialState: initialStateType = {
     big_break_duration: 30,
     total_cycles: 3,
   },
-  widget: "cookie clock",
+  widget: null,
   todaysOps: undefined,
   weeksOps: undefined,
   windowWidth: 1400,

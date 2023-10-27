@@ -85,7 +85,7 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
       style={progressBarStyle}
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
-      className={`  bg-neutral-700 bg-opacity-60 p-0.5  shadow-md shadow-neutral-950   taskWrapper  rounded-lg
+      className={`${expired && "opacity-75"}  bg-neutral-700 bg-opacity-60 p-0.5  shadow-md shadow-neutral-950   taskWrapper  rounded-lg
   ${
     isOptimistic && !animate
       ? "optimisticCreateStart"

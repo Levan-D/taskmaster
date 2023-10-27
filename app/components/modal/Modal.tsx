@@ -79,7 +79,7 @@ export default function Modal() {
         open ? "visible opacity-100" : "collapse opacity-0"
       }`}
     >
-      <div className="z-50  flex min-h-[500px] w-full max-w-[540px]  flex-col   mainContainer     md:min-h-[600px] ">
+      <div className="z-50  flex min-h-[360px] w-full max-w-[540px]  flex-col   mainContainer     md:min-h-[600px] ">
         <div className=" flex grow flex-col rounded-xl      px-6 py-4 ">
           <div className="flex  items-center justify-between">
             <div className="flex gap-1  items-center">

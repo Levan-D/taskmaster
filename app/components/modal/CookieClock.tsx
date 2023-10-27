@@ -92,7 +92,7 @@ export default function CookieClock() {
     <div className="flex  grow ">
       <form onSubmit={handleSubmit} className="flex flex-col justify-between grow">
         <div>
-          <p className="text-neutral-300 text-sm">
+          <p className="text-neutral-300  text-xs sm:text-sm">
             Cookie Clock is designed to boost your productivity. For best results, set the
             focus for 20-40 minutes & rest for 5-10 minutes. After completing 3-4 work
             cycles, reward yourself with a longer 20-30 minute break.
@@ -103,7 +103,7 @@ export default function CookieClock() {
           </p>
         </div>
 
-        <div className="flex flex-col gap-4 my-4">
+        <div className="flex flex-col gap-2 mb-4 text-sm  sm:text-base">
           <div className="flex justify-end">
             <Tooltip text="Reset to default" position="left">
               <button
