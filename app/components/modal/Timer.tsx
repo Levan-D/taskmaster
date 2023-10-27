@@ -29,7 +29,9 @@ export default function Timer({ taskId }: Props) {
   }
 
   const [startTime, setStartTime] = useState<Date>(getRoundedTime())
-  const [endTime, setEndTime] = useState<Date>(new Date(startTime.getTime() + 2*60 * 1000))
+  const [endTime, setEndTime] = useState<Date>(
+    new Date(startTime.getTime() + 5 * 60 * 1000)
+  )
 
   const handleCloseModal = () => {
     dispatch(setModal({ open: false, type: null, taskId: "" }))
@@ -111,7 +113,7 @@ export default function Timer({ taskId }: Props) {
             showTimeSelectOnly
             timeIntervals={1}
             dateFormat="h:mm aa"
-            minTime={new Date(startTime.getTime() + 2 * 60 * 1000)}
+            minTime={new Date(startTime.getTime() + 60 * 1000)}
             maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
           />
         </div>
