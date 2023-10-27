@@ -5,8 +5,9 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
 import { setModal, setCookieClockData } from "@/lib/redux/slices/globalSlice"
 import { createOrUpdateCookieClock } from "@/app/actions/cookieClockActions"
 import Icon from "@mdi/react"
-import { mdiContentSaveOutline, mdiLoading, mdiWindowClose } from "@mdi/js"
+import { mdiContentSaveOutline, mdiLoading, mdiWindowClose, mdiRestart } from "@mdi/js"
 import { DateTime } from "luxon"
+import Tooltip from "../Tooltip"
 
 export default function CookieClock() {
   const dispatch = useAppDispatch()
@@ -22,7 +23,7 @@ export default function CookieClock() {
           rest_duration: 5,
           big_break_frequency: 3,
           big_break_duration: 30,
-          total_cycles: 6,
+          total_cycles: 3,
         }
   )
 
@@ -42,6 +43,30 @@ export default function CookieClock() {
       } catch (error) {
         console.error("Error updating cookie clock data:", error)
       }
+    })
+  }
+
+  const resetCookieClockData = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    dispatch(
+      setCookieClockData({
+        start_time: DateTime.now().toISO() || "",
+        work_duration: 25,
+        rest_duration: 5,
+        big_break_frequency: 4,
+        big_break_duration: 30,
+        total_cycles: 3,
+      })
+    )
+
+    setFormValues({
+      start_time: DateTime.now().toISO() || "",
+      work_duration: 25,
+      rest_duration: 5,
+      big_break_frequency: 4,
+      big_break_duration: 30,
+      total_cycles: 3,
     })
   }
 
@@ -66,7 +91,29 @@ export default function CookieClock() {
   return (
     <div className="flex  grow ">
       <form onSubmit={handleSubmit} className="flex flex-col justify-between grow">
-        <div className="flex flex-col gap-4">
+        <div>
+          <p className="text-neutral-300 text-sm">
+            Cookie Clock is designed to boost your productivity. For best results, set the
+            focus for 20-40 minutes & rest for 5-10 minutes. After completing 3-4 work
+            cycles, reward yourself with a longer 20-30 minute break.
+          </p>
+          <p className="text-neutral-300 text-sm mt-1">
+            These cycles of focus, rest, & breaks help to maintain your energy and
+            concentration levels without exhausting you.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-4 my-4">
+          <div className="flex justify-end">
+            <Tooltip text="Reset to default" position="left">
+              <button
+                onClick={resetCookieClockData}
+                className="btnIcon p-1  text-neutral-300 hover:text-white"
+              >
+                <Icon path={mdiRestart} size={1} />
+              </button>
+            </Tooltip>
+          </div>
           <div className="flex  items-center justify-between">
             <label>Focus Duration:</label>
             <input
@@ -94,7 +141,7 @@ export default function CookieClock() {
             />
           </div>
           <div className="flex  items-center justify-between">
-            <label>Big Break Frequency:</label>
+            <label>Break Frequency:</label>
             <input
               onBlur={handleBlur}
               min={1}
@@ -107,7 +154,7 @@ export default function CookieClock() {
             />
           </div>
           <div className="flex  items-center justify-between">
-            <label>Big Break Duration:</label>
+            <label>Break Duration:</label>
             <input
               onBlur={handleBlur}
               min={1}

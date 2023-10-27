@@ -18,7 +18,7 @@ export default function CookieTimer({ handleSetNewCookieClock }: Props) {
   const { cookieClockData } = useAppSelector(state => state.global)
   const [secondsLeft, setSecondsLeft] = useState(0)
   const [currentCycle, setCurrentCycle] = useState(1)
-  const [currentPhase, setCurrentPhase] = useState("Work")
+  const [currentPhase, setCurrentPhase] = useState("Focus")
 
   const calculateElapsedTime = () =>
     cookieClockData?.start_time
@@ -98,7 +98,7 @@ export default function CookieTimer({ handleSetNewCookieClock }: Props) {
       let workDurationSecs = cookieClockData.work_duration * 60
 
       if (timeInCurrentCycle < workDurationSecs) {
-        phase = "Work"
+        phase = "Focus"
         timeLeft = workDurationSecs - timeInCurrentCycle
       } else {
         // Determine if we are in a "Big Break" phase

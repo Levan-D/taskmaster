@@ -31,7 +31,7 @@ const initialState: initialStateType = {
     rest_duration: 5,
     big_break_frequency: 3,
     big_break_duration: 30,
-    total_cycles: 6,
+    total_cycles: 3,
   },
   widget: "cookie clock",
   todaysOps: undefined,
