@@ -34,15 +34,15 @@ type TaskPageType =
       break: boolean
     }
 
-const taskPages: TaskPageType[] = [
-  // {
-  //   icon: mdiSync,
-  //   title: "Habits",
-  //   path: "/dashboard/habits",
-  // },
-  // {
-  //   break: true,
-  // },
+export const taskPages: TaskPageType[] = [
+  {
+    icon: mdiSync,
+    title: "Habits",
+    path: "/dashboard/habits",
+  },
+  {
+    break: true,
+  },
   {
     icon: mdiCalendarTodayOutline,
     title: "Today",
