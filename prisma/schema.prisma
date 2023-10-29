@@ -20,15 +20,15 @@ model Users {
 }
 
 model CookieClock {
-  id                  String   @id @default(uuid())
+  id                  String @id @default(uuid())
   start_time          String
   work_duration       Int
   rest_duration       Int
   big_break_frequency Int
   big_break_duration  Int
   total_cycles        Int
-  user_id             String   @unique
-  user                Users    @relation(fields: [user_id], references: [id])
+  user_id             String @unique
+  user                Users  @relation(fields: [user_id], references: [id])
 
   @@index([user_id])
 }
@@ -64,6 +64,7 @@ model Tasks {
   creation_date DateTime     @default(now())
   due_date      String
   priority      TaskPriority @default(LOW)
+  repeat        Json?
   user_id       String
   start_time    DateTime?
   end_time      DateTime?

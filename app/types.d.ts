@@ -45,6 +45,23 @@ type Step = {
   beingDeleted?: boolean
 }
 
+type ApiTaskReturn = {
+  id: string
+  title: string
+  deleted: boolean
+  complete: boolean
+  creation_date: Date
+  due_date: string
+  start_time: Date | null
+  end_time: Date | null
+  priority: TaskPriority
+  repeat: JsonValue
+  user_id: string
+  beingDeleted?: boolean
+  beingCompleted?: false | "up" | "down"
+  steps: Step[] | []
+}
+
 type Task = {
   id: string
   title: string
@@ -55,10 +72,16 @@ type Task = {
   start_time: Date | null
   end_time: Date | null
   priority: TaskPriority
+  repeat: null | RepeatType
   user_id: string
   beingDeleted?: boolean
   beingCompleted?: false | "up" | "down"
   steps: Step[] | []
+}
+
+type RepeatType = {
+  type: "daily" | "weekly"
+  days?: ("Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun")[]
 }
 
 type ApiResponse<T> = { success: boolean; data?: T; error?: any }

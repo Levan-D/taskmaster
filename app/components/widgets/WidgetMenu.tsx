@@ -10,12 +10,6 @@ import { setWidget } from "@/lib/redux/slices/globalSlice"
 export default function WidgetMenu() {
   const dispatch = useAppDispatch()
 
-  const button = (
-    <div className="btnIcon text-neutral-300 hover:text-white  p-2">
-      <Icon path={mdiWidgetsOutline} size={1} />
-    </div>
-  )
-
   const items: DropDownItemType = [
     {
       title: "Cookie Clock",
@@ -24,5 +18,11 @@ export default function WidgetMenu() {
     },
   ]
 
-  return <DropdownMenu button={button} items={items} menuClassName="-translate-x-32" />
+  return (
+    <DropdownMenu items={items} menuClassName="-translate-x-32">
+      <div className="btnIcon text-neutral-300 hover:text-white  p-2">
+        <Icon path={mdiWidgetsOutline} size={1} />
+      </div>
+    </DropdownMenu>
+  )
 }

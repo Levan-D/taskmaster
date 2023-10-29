@@ -123,12 +123,7 @@ export default function TaskDisplay({ tasks }: Props) {
       )
   }, [])
 
-  if (optimisticTasksLength === 0 && message === null)
-    return (
-      <div className="h-screen">
-        <Loader />
-      </div>
-    )
+  if (optimisticTasksLength === 0 && message === null) return <Loader />
 
   return (
     <div className={` pb-4 `}>

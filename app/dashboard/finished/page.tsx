@@ -24,7 +24,7 @@ export default async function Finished({ searchParams }: Props) {
   const pageCount = (tasks.totalCount && Math.ceil(tasks?.totalCount / take)) || 0
 
   return (
-    <section className="  max-w-3xl mx-auto ">
+    <section className=" h-full max-w-3xl mx-auto ">
       {tasks.data !== undefined && (
         <TaskDisplay tasks={tasks.data} pageCount={pageCount} currentPage={currentPage} />
       )}

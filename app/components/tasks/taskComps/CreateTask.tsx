@@ -57,12 +57,6 @@ export default function CreateTask({
     priorityClassName = "text-rose-400"
   }
 
-  const priorityButton = (
-    <div className={`${priorityClassName} btnSecondary`}>
-      <Icon path={mdiFlagVariant} size={1} />
-    </div>
-  )
-
   let calendarClassName = ""
   let calendarIconPath = ""
   if (calendar === "Today") {
@@ -75,19 +69,6 @@ export default function CreateTask({
     calendarClassName = "text-teal-400"
     calendarIconPath = mdiCalendarWeekOutline
   }
-
-  const calendarButton = (
-    <div className={`${calendarClassName} btnSecondary`}>
-      {calendar !== "Custom date" ? (
-        <Icon path={calendarIconPath} size={1} />
-      ) : (
-        <div className="w-6 text-sm ">
-          {DateTime.fromJSDate(startDate).day}
-          <sup>{getOrdinalSuffix(DateTime.fromJSDate(startDate).day)}</sup>
-        </div>
-      )}
-    </div>
-  )
 
   const priorityItems: DropDownItemType = [
     {
@@ -185,6 +166,7 @@ export default function CreateTask({
       complete: false,
       start_time: null,
       end_time: null,
+      repeat: null,
       creation_date: DateTime.now().toJSDate(),
       due_date: dueDate,
       priority: priority,
@@ -231,16 +213,26 @@ export default function CreateTask({
             <div className="flex flex-row sm:flex-col gap-2">
               <DropdownMenu
                 menuClassName="sm:-translate-x-32  "
-                button={calendarButton}
                 items={calendarItems}
                 ref={dropdownRef}
-              />
+              >
+                <div className={`${calendarClassName} btnSecondary`}>
+                  {calendar !== "Custom date" ? (
+                    <Icon path={calendarIconPath} size={1} />
+                  ) : (
+                    <div className="w-6 text-sm ">
+                      {DateTime.fromJSDate(startDate).day}
+                      <sup>{getOrdinalSuffix(DateTime.fromJSDate(startDate).day)}</sup>
+                    </div>
+                  )}
+                </div>
+              </DropdownMenu>
 
-              <DropdownMenu
-                menuClassName="sm:-translate-x-24   "
-                button={priorityButton}
-                items={priorityItems}
-              />
+              <DropdownMenu menuClassName="sm:-translate-x-24   " items={priorityItems}>
+                <div className={`${priorityClassName} btnSecondary`}>
+                  <Icon path={mdiFlagVariant} size={1} />
+                </div>
+              </DropdownMenu>
             </div>
 
             <div className="grow ">

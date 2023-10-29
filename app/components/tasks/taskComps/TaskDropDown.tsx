@@ -11,6 +11,7 @@ import {
   mdiCalendarWeekOutline,
   mdiCalendarMonthOutline,
   mdiTimerOutline,
+  mdiSync,
 } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
 import { recycleTask, reviveTask, updateTask } from "../../../actions/taskActions"
@@ -206,6 +207,12 @@ export default function TaskDropDown({
       invisible: expired || task.deleted || task.complete ? true : false,
     },
     {
+      title: !task.repeat ? "Create habit" : "Edit habit",
+      icon: <Icon path={mdiSync} size={0.7} />,
+      action: () => dispatch(setModal({ open: true, type: "habit", taskId: task.id })),
+      invisible: expired || task.deleted || task.complete ? true : false,
+    },
+    {
       break: expired || task.deleted || task.complete ? false : true,
     },
     {
@@ -217,17 +224,7 @@ export default function TaskDropDown({
       },
     },
   ]
-  const button = (
-    <div
-      className={`${
-        expired || (task.complete && !task.deleted) || task.deleted
-          ? `bg-neutral-600 shadow-sm hover:bg-neutral-500`
-          : "rounded-bl-lg"
-      } hover:bg-neutral-600 rounded-tr-lg p-1 sm:p-2   duration-300`}
-    >
-      <Icon path={mdiDotsVertical} size={1} className="  scale-75 sm:scale-100 " />
-    </div>
-  )
+
   return (
     (windowWidth <= 640 || (windowWidth > 640 && visible)) && (
       <div className="flex ">
@@ -248,7 +245,6 @@ export default function TaskDropDown({
             </button>
           </Tooltip>
         )}
-
         {task.complete && !task.deleted && (
           <Tooltip text="Recycle" className="delay-500">
             <button
@@ -269,9 +265,18 @@ export default function TaskDropDown({
         <DropdownMenu
           ref={dropdownRef}
           menuClassName="-translate-x-[116px]  "
-          button={button}
           items={items}
-        />
+        >
+          <div
+            className={`${
+              expired || (task.complete && !task.deleted) || task.deleted
+                ? `bg-neutral-600 shadow-sm hover:bg-neutral-500`
+                : "rounded-bl-lg"
+            } hover:bg-neutral-600 rounded-tr-lg p-1 sm:p-2   duration-300`}
+          >
+            <Icon path={mdiDotsVertical} size={1} className="  scale-75 sm:scale-100 " />
+          </div>
+        </DropdownMenu>
       </div>
     )
   )

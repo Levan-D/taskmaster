@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState, useImperativeHandle, forwardRef } from "react"
 
 type Props = {
-  button: JSX.Element
+  children: JSX.Element
   items: DropDownItemType
   disabled?: boolean
   className?: string
@@ -11,7 +11,7 @@ type Props = {
 }
 
 const DropdownMenu = forwardRef(
-  ({ items, button, disabled = false, className, menuClassName }: Props, ref) => {
+  ({ items, children, disabled = false, className, menuClassName }: Props, ref) => {
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false)
     const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -52,7 +52,7 @@ const DropdownMenu = forwardRef(
           className={`${className} block relative`}
           onMouseDown={handleDropdownClick}
         >
-          {button}
+          {children}
         </button>
         {isDropdownMenuOpen && (
           <div

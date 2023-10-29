@@ -7,7 +7,7 @@ import { DateTime } from "luxon"
 interface initialStateType {
   modal: {
     open: boolean
-    type: null | "timer" | "cookie clock"
+    type: null | "timer" | "cookie clock"|"habit"
     taskId: string
   }
 

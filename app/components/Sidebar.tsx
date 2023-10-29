@@ -202,8 +202,9 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
                 menuClassName="translate-x-12"
                 items={items}
                 className={"  grow  btnIcon  m-2 w-full"}
-                button={UserInfo}
-              />
+              >
+                {UserInfo}
+              </DropdownMenu>
             )}
           </div>
           <button onClick={toggleNav} className=" bg-neutral-950 w-10 h-10 m-2 btnIcon ">

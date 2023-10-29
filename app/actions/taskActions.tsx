@@ -7,6 +7,36 @@ import { DateTime } from "luxon"
 import { checkAuth, handleApiError } from "./userActions"
 import { cookies } from "next/headers"
 
+const transformTasks = (tasks: ApiTaskReturn[]): Task[] => {
+  let transformedTaskArray: Task[] = []
+
+  tasks.map(task => {
+    if (typeof task.repeat === "string") {
+      const parsedRepeat = JSON.parse(task.repeat)
+      if (
+        parsedRepeat &&
+        (parsedRepeat.type === "daily" || parsedRepeat.type === "weekly") &&
+        (!parsedRepeat.days ||
+          (Array.isArray(parsedRepeat.days) &&
+            parsedRepeat.days.every(
+              (day: string) =>
+                day === "Mon" ||
+                day === "Tue" ||
+                day === "Wed" ||
+                day === "Thu" ||
+                day === "Fri" ||
+                day === "Sat" ||
+                day === "Sun"
+            )))
+      ) {
+        transformedTaskArray.push({ ...task, repeat: parsedRepeat })
+      }
+    } else transformedTaskArray.push({ ...task, repeat: null })
+  })
+
+  return transformedTaskArray
+}
+
 export const createTask = async ({
   title,
   priority,
@@ -172,7 +202,8 @@ export const getTodaysTasks = async (): Promise<ApiResponse<Task[]>> => {
           },
         ],
       })
-      return { success: true, data: tasks }
+      const transformedTasks = transformTasks(tasks)
+      return { success: true, data: transformedTasks }
     } else {
       throw new Error("Bad Request: Missing user data")
     }
@@ -217,7 +248,10 @@ export const getWeeksTasks = async (): Promise<ApiResponse<Task[]>> => {
           },
         ],
       })
-      return { success: true, data: tasks }
+
+      const transformedTasks = transformTasks(tasks)
+
+      return { success: true, data: transformedTasks }
     } else {
       throw new Error("Bad Request: Missing user data")
     }
@@ -260,7 +294,9 @@ export const getFutureTasks = async (): Promise<ApiResponse<Task[]>> => {
           },
         ],
       })
-      return { success: true, data: tasks }
+      const transformedTasks = transformTasks(tasks)
+
+      return { success: true, data: transformedTasks }
     } else {
       throw new Error("Bad Request: Missing user data")
     }
@@ -334,7 +370,9 @@ export const getMissedTasks = async ({
         ],
       })
 
-      return { success: true, data: tasks, totalCount: totalCount }
+      const transformedTasks = transformTasks(tasks)
+
+      return { success: true, data: transformedTasks, totalCount: totalCount }
     } else {
       throw new Error("Bad Request: Missing user data")
     }
@@ -398,7 +436,9 @@ export const getCompletedTasks = async ({
         ],
       })
 
-      return { success: true, data: tasks, totalCount: totalCount }
+      const transformedTasks = transformTasks(tasks)
+
+      return { success: true, data: transformedTasks, totalCount: totalCount }
     } else {
       throw new Error("Bad Request: Missing user data")
     }
@@ -458,8 +498,9 @@ export const getRecycledTasks = async ({
           },
         ],
       })
+      const transformedTasks = transformTasks(tasks)
 
-      return { success: true, data: tasks, totalCount: totalCount }
+      return { success: true, data: transformedTasks, totalCount: totalCount }
     } else {
       throw new Error("Bad Request: Missing user data")
     }

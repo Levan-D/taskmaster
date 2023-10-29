@@ -3,10 +3,17 @@
 import { useEffect } from "react"
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import Icon from "@mdi/react"
-import { mdiClose, mdiTimerOutline, mdiCookieOutline, mdiCircleDouble } from "@mdi/js"
+import {
+  mdiClose,
+  mdiTimerOutline,
+  mdiCookieOutline,
+  mdiCircleDouble,
+  mdiSync,
+} from "@mdi/js"
 import { setModal } from "@/lib/redux/slices/globalSlice"
 import Timer from "./Timer"
 import CookieClock from "./CookieClock"
+import Habit from "./Habit"
 
 export default function Modal() {
   const dispatch = useAppDispatch()
@@ -42,6 +49,8 @@ export default function Modal() {
         return <Timer taskId={taskId} />
       case "cookie clock":
         return <CookieClock />
+      case "habit":
+        return <Habit />
 
       default:
         return null
@@ -54,6 +63,8 @@ export default function Modal() {
         return "Set timer"
       case "cookie clock":
         return "Cookie Clock"
+      case "habit":
+        return "Habit"
 
       default:
         return null
@@ -66,6 +77,8 @@ export default function Modal() {
         return mdiTimerOutline
       case "cookie clock":
         return mdiCookieOutline
+      case "habit":
+        return mdiSync
 
       default:
         return mdiCircleDouble

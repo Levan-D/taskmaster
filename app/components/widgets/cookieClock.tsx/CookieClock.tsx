@@ -39,9 +39,10 @@ export default function CookieClock() {
 
   if (isPending || loading)
     return (
-      <div className=" flex flex-col justify-center lg:h-full lg:py-12 py-4  ">
-        <Loader className="!bg-neutral-900 !bg-opacity-75 !max-w-[50px] !max-h-[50px] lg:!max-w-[150px] lg:!max-h-[150px]" />
-      </div>
+      <Loader
+        containerHeight="!min-h-fit py-4 lg:py-12"
+        className="!bg-neutral-900 !bg-opacity-75 !max-w-[50px] !max-h-[50px] lg:!max-w-[150px] lg:!max-h-[150px]"
+      />
     )
 
   if (cookieClockData === null || cookieClockData === undefined)

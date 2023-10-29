@@ -142,12 +142,7 @@ export default function TaskDisplay({ tasks }: Props) {
 
   const sortedDates = Object.keys(tasksGroupedByDate).sort()
 
-  if (totalweeksTasks === 0 && message === null)
-    return (
-      <div className="h-screen">
-        <Loader />
-      </div>
-    )
+  if (totalweeksTasks === 0 && message === null) return <Loader />
 
   return (
     <div className={` pb-4 `}>

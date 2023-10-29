@@ -18,7 +18,7 @@ export default async function Week() {
   if (!tasks.success) return <span></span>
 
   return (
-    <section className="  max-w-3xl mx-auto ">
+    <section className="h-full  max-w-3xl mx-auto ">
       {tasks.data !== undefined && <TaskDisplay tasks={tasks.data} />}
     </section>
   )

@@ -49,12 +49,9 @@ export default function TaskHeader({ dropdownMenuItems }: Props) {
         {dropdownMenuItems &&
           dropdownMenuItems.length > 0 &&
           dropdownMenuItems.map((menu, i) => (
-            <DropdownMenu
-              items={menu.items}
-              button={menu.button}
-              menuClassName={menu.classname}
-              key={i}
-            />
+            <DropdownMenu items={menu.items} menuClassName={menu.classname} key={i}>
+              {menu.button}
+            </DropdownMenu>
           ))}
       </div>
     </div>
