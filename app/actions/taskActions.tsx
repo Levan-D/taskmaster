@@ -6,11 +6,12 @@ import { revalidatePath } from "next/cache"
 import { DateTime } from "luxon"
 import { checkAuth, handleApiError } from "./userActions"
 import { cookies } from "next/headers"
+import { Prisma } from "@prisma/client"
 
 const transformTasks = (tasks: ApiTaskReturn[]): Task[] => {
   let transformedTaskArray: Task[] = []
 
-  tasks.map((task) => {
+  tasks.map(task => {
     if (typeof task.repeat === "string") {
       const parsedRepeat = JSON.parse(task.repeat)
       if (
@@ -126,6 +127,31 @@ export const updateTaskHabit = async ({
   }
 }
 
+export const deleteTaskHabit = async ({
+  taskId,
+}: {
+  taskId: string
+}): Promise<ApiResponse<void>> => {
+  try {
+    const userData = await checkAuth()
+    if (!userData.id) return handleApiError("user data unavailable")
+
+    await prisma.tasks.update({
+      where: {
+        id: taskId,
+        user_id: userData.id,
+      },
+      data: {
+        repeat: Prisma.JsonNull,
+      },
+    })
+    revalidatePath("/dashboard")
+    return { success: true }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
 export const setTimer = async ({
   taskId,
   start_time,
@@ -184,13 +210,52 @@ export const reviveTask = async ({
   }
 }
 
+export const getHabits = async (): Promise<ApiResponse<Task[]>> => {
+  const userData = await checkAuth()
+
+  try {
+    if (userData && userData.id) {
+      const tasks = await prisma.tasks.findMany({
+        where: {
+          user_id: userData.id,
+          deleted: false,
+          NOT: [{ repeat: { equals: Prisma.AnyNull } }],
+        },
+
+        include: {
+          steps: {
+            where: { deleted: false },
+            orderBy: [
+              {
+                creation_date: "desc",
+              },
+            ],
+          },
+        },
+        orderBy: [
+          {
+            due_date: "desc",
+          },
+          {
+            creation_date: "desc",
+          },
+        ],
+      })
+      const transformedTasks = transformTasks(tasks)
+      return { success: true, data: transformedTasks }
+    } else {
+      throw new Error("Bad Request: Missing user data")
+    }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
 export const getTodaysTasks = async (): Promise<ApiResponse<Task[]>> => {
   const userData = await checkAuth()
 
   const userTime = cookies().get("user_time")?.value
-  const today = userTime
-    ? DateTime.fromISO(userTime)
-    : DateTime.now().startOf("day")
+  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
   const yesterday = today.minus({ days: 1 }).toISO() || ""
   const tomorrow = today.plus({ days: 1 }).toISO() || ""
   const todayISO = today.toISO() || ""
@@ -246,9 +311,7 @@ export const getWeeksTasks = async (): Promise<ApiResponse<Task[]>> => {
   const userData = await checkAuth()
 
   const userTime = cookies().get("user_time")?.value
-  const today = userTime
-    ? DateTime.fromISO(userTime)
-    : DateTime.now().startOf("day")
+  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
   const tomorrow = today.plus({ days: 1 }).toISO() || ""
   const week = today.plus({ days: 8 }).toISO() || ""
 
@@ -296,9 +359,7 @@ export const getFutureTasks = async (): Promise<ApiResponse<Task[]>> => {
   const userData = await checkAuth()
 
   const userTime = cookies().get("user_time")?.value
-  const today = userTime
-    ? DateTime.fromISO(userTime)
-    : DateTime.now().startOf("day")
+  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
   const week = today.plus({ days: 8 }).toISO() || ""
 
   try {
@@ -349,9 +410,7 @@ export const getMissedTasks = async ({
   const userData = await checkAuth()
 
   const userTime = cookies().get("user_time")?.value
-  const today = userTime
-    ? DateTime.fromISO(userTime)
-    : DateTime.now().startOf("day")
+  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
   const todayISO = today.toISO() || ""
 
   try {

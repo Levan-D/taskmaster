@@ -69,8 +69,11 @@ export default function StepsAccordion({
       )}
 
       <div className="flex basis-2/5  items-center justify-end  gap-2 pr-2">
-        {isTodayRepeat && (
-          <Tooltip className=" text-xs translate-y-2" text="Habit">
+        {isRepeat && (
+          <Tooltip
+            className=" -translate-x-48 text-xs translate-y-2"
+            text={`Repeats: ${repeatDays}`}
+          >
             <div className="py-1 text-xs text-neutral-300 ">
               <Icon path={mdiSync} size={0.6} />
             </div>

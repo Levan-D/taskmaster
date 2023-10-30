@@ -1,3 +1,5 @@
+/** @format */
+
 "use client"
 
 import React, { useState, useTransition } from "react"
@@ -12,7 +14,7 @@ import {
 } from "@mdi/js"
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
 import { setModal } from "@/lib/redux/slices/globalSlice"
-import { updateTaskHabit } from "@/app/actions/taskActions"
+import { updateTaskHabit, deleteTaskHabit } from "@/app/actions/taskActions"
 
 type Radio = {
   Monday: boolean
@@ -29,7 +31,7 @@ export default function Habit() {
   const dispatch = useAppDispatch()
   const {
     modal: { selectedTask },
-  } = useAppSelector((state) => state.global)
+  } = useAppSelector(state => state.global)
 
   const defaultState = {
     Monday: false,
@@ -41,9 +43,7 @@ export default function Habit() {
     Sunday: false,
   }
 
-  const dayToAbbreviation = (
-    day: RadioKey
-  ): DaysAbr => {
+  const dayToAbbreviation = (day: RadioKey): DaysAbr => {
     switch (day) {
       case "Monday":
         return "Mon"
@@ -90,31 +90,34 @@ export default function Habit() {
     dispatch(setModal({ open: false, type: null, selectedTask: null }))
   }
 
+  const handleDeleteHabit = async () => {
+    if (selectedTask) await deleteTaskHabit({ taskId: selectedTask?.id })
+    handleCloseModal()
+  }
+
   const handleUpdateHabit = async () => {
+    if (!selectedTask) return
+
     const selectedDays = Object.keys(radio)
-      .filter((key) => radio[key as RadioKey])
-      .map((key) => key.slice(0, 3)) as RepeatType["days"]
-    if (selectedTask)
+      .filter(key => radio[key as RadioKey])
+      .map(key => key.slice(0, 3)) as RepeatType["days"]
+
+    if (selectedDays.length > 0) {
       await updateTaskHabit({
         taskId: selectedTask?.id,
         repeat: { days: selectedDays },
       })
-    handleCloseModal()
-  }
-
-  const handleDeleteHabit = async () => {
-    if (selectedTask)
-      await updateTaskHabit({ taskId: selectedTask?.id, repeat: { days: [] } })
-    handleCloseModal()
+      handleCloseModal()
+    } else handleDeleteHabit()
   }
 
   return (
     <div className="flex flex-col justify-between grow select-none">
       <div className="flex flex-col gap-2 mb-4">
         <p className="text-neutral-300 mb-4  text-xs sm:text-sm">
-          Set days on which your task will repeat. Go to habits page to manage
-          your repeating tasks. If you delete your repeating task for the day
-          the habit will also get deleted.
+          Set days on which your task will repeat. Go to habits page to manage your
+          repeating tasks. If you delete your repeating task for the day the habit will
+          also get deleted.
         </p>
 
         {Object.keys(radio).map((btn, i) => (
@@ -126,9 +129,7 @@ export default function Habit() {
                   radio[btn as RadioKey] && "!text-sky-400"
                 } text-neutral-500  hover:text-sky-300 transition-colors duration-300`}
                 path={
-                  radio[btn as RadioKey]
-                    ? mdiCheckboxOutline
-                    : mdiCheckboxBlankOutline
+                  radio[btn as RadioKey] ? mdiCheckboxOutline : mdiCheckboxBlankOutline
                 }
                 size={1.2}
               />
