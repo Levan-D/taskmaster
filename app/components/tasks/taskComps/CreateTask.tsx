@@ -19,6 +19,7 @@ import { useTransition } from "react"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { getOrdinalSuffix } from "@/app/utils/dates"
+import { usePathname } from "next/navigation"
 
 type Props = {
   taskLimit: number
@@ -33,11 +34,18 @@ export default function CreateTask({
   defaultDate,
   defaultPriority,
 }: Props) {
+  const pathname = usePathname().split("/")
+  const currentPath = pathname[pathname.length - 1]
+
   const [priority, setPriority] = useState<TaskPriority>(defaultPriority)
   const [calendar, setCalendar] = useState<Calendar>(defaultDate)
   const [charCount, setCharCount] = useState(0)
   const [focus, setFocus] = useState(false)
-  const [startDate, setStartDate] = useState(DateTime.now().plus({ days: 8 }).toJSDate())
+  const [startDate, setStartDate] = useState(
+    DateTime.now()
+      .plus({ days: currentPath === "future" ? 8 : 0 })
+      .toJSDate()
+  )
   const dropdownRef = useRef<DropdownRefType | null>(null)
 
   const [isPending, startTransition] = useTransition()
@@ -119,7 +127,7 @@ export default function CreateTask({
               <p>Custom Date</p>
             </div>
           }
-          minDate={DateTime.now().plus({ days: 8 }).toJSDate()}
+          minDate={DateTime.now().plus({ days: 0 }).toJSDate()}
           selected={startDate}
           onChange={date => {
             if (date) setStartDate(date)

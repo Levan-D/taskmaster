@@ -19,12 +19,12 @@ import {
 export default function Timer() {
   const {
     modal: { selectedTask },
-  } = useAppSelector((state) => state.global)
+  } = useAppSelector(state => state.global)
   const dispatch = useAppDispatch()
   const [isPending, startTransition] = useTransition()
 
   const getRoundedTime = () => {
-    return DateTime.now().toJSDate()
+    return DateTime.now().plus({ minutes: 1 }).toJSDate()
   }
 
   const [startTime, setStartTime] = useState<Date>(

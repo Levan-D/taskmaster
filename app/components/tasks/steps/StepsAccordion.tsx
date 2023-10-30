@@ -1,9 +1,11 @@
 /** @format */
 
 import Icon from "@mdi/react"
-import { mdiChevronDown } from "@mdi/js"
+import { mdiChevronDown, mdiSync } from "@mdi/js"
 import { getRelativeDateString } from "@/app/utils/dates"
 import Timer from "./Timer"
+import { DateTime } from "luxon"
+import Tooltip from "../../Tooltip"
 
 type Props = {
   task: Task
@@ -24,6 +26,12 @@ export default function StepsAccordion({
   amountOfStepsCompleted,
   allStepsCompleted,
 }: Props) {
+  const today = DateTime.now().toFormat("EEE")
+
+  const isRepeat = task.repeat && task.repeat?.days.length > 0
+  const repeatDays = task.repeat && task.repeat?.days.length > 0 && task.repeat.days
+  const isTodayRepeat = repeatDays && repeatDays.includes((today as DaysAbr) || "")
+
   return (
     <button
       disabled={
@@ -60,8 +68,17 @@ export default function StepsAccordion({
         />
       )}
 
-      <div className="basis-2/5 pr-2 py-1 text-xs text-neutral-300 text-end">
-        {typeof task.due_date === "string" && getRelativeDateString(task.due_date)}
+      <div className="flex items-center  justify-end basis-2/5">
+        {isRepeat && (
+          <div className=" pr-2 py-1 text-xs text-neutral-300 ">
+            <Icon path={mdiSync} size={0.6} />
+          </div>
+        )}
+        {typeof task.due_date === "string" && (
+          <p className=" pr-2 py-1 text-xs text-neutral-300 ">
+            {getRelativeDateString(task.due_date)}
+          </p>
+        )}
       </div>
     </button>
   )

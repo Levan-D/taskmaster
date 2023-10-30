@@ -97,8 +97,10 @@ type Task = {
 }
 
 type RepeatType = {
-  days: ("Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun")[]
+  days: DaysAbr[]
 }
+
+type DaysAbr = "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun"
 
 type ApiResponse<T> = { success: boolean; data?: T; error?: any }
 

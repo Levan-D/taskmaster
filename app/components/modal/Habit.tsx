@@ -43,7 +43,7 @@ export default function Habit() {
 
   const dayToAbbreviation = (
     day: RadioKey
-  ): "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun" => {
+  ): DaysAbr => {
     switch (day) {
       case "Monday":
         return "Mon"
@@ -93,15 +93,7 @@ export default function Habit() {
   const handleUpdateHabit = async () => {
     const selectedDays = Object.keys(radio)
       .filter((key) => radio[key as RadioKey])
-      .map((key) => key.slice(0, 3)) as (
-      | "Mon"
-      | "Tue"
-      | "Wed"
-      | "Thu"
-      | "Fri"
-      | "Sat"
-      | "Sun"
-    )[]
+      .map((key) => key.slice(0, 3)) as RepeatType["days"]
     if (selectedTask)
       await updateTaskHabit({
         taskId: selectedTask?.id,

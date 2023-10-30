@@ -30,6 +30,8 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
   const isBeingCompleted = task.beingCompleted
 
   useEffect(() => {
+    if (!task.start_time && !task.end_time) return
+
     const updateProgressBar = () => {
       if (task.start_time && task.end_time) {
         const now = DateTime.now()
@@ -63,11 +65,10 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
         if (safeProgressPercentage >= 100) {
           clearInterval(intervalId)
         }
-      } else if (!task.start_time && !task.end_time){
+      } else if (!task.start_time && !task.end_time) {
         setProgressBarStyle({
           background: `RGBA(64, 64, 64,0.6)`,
         })
-
       }
     }
 
@@ -90,7 +91,9 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
       style={progressBarStyle}
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
-      className={`${expired && "opacity-75"}  bg-neutral-700 bg-opacity-60 p-0.5  shadow-md shadow-neutral-950   taskWrapper  rounded-lg
+      className={`${
+        expired && "opacity-75"
+      }  bg-neutral-700 bg-opacity-60 p-0.5  shadow-md shadow-neutral-950   taskWrapper  rounded-lg
   ${
     isOptimistic && !animate
       ? "optimisticCreateStart"
