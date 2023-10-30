@@ -6,6 +6,8 @@ import { getRelativeDateString } from "@/app/utils/dates"
 import Timer from "./Timer"
 import { DateTime } from "luxon"
 import Tooltip from "../../Tooltip"
+import { usePathname } from "next/navigation"
+import { useAppSelector } from "@/lib/redux/hooks"
 
 type Props = {
   task: Task
@@ -26,8 +28,11 @@ export default function StepsAccordion({
   amountOfStepsCompleted,
   allStepsCompleted,
 }: Props) {
-  const today = DateTime.now().toFormat("EEE")
+  const { windowWidth } = useAppSelector(state => state.global)
+  const path = usePathname().split("/")
+  const currentPage = path[path.length - 1]
 
+  const today = DateTime.now().toFormat("EEE")
   const isRepeat = task.repeat && task.repeat?.days.length > 0
   const repeatDays = task.repeat && task.repeat?.days.length > 0 && task.repeat.days
   const isTodayRepeat = repeatDays && repeatDays.includes((today as DaysAbr) || "")
@@ -68,28 +73,52 @@ export default function StepsAccordion({
         />
       )}
 
-      <div className="flex basis-2/5  items-center justify-end  gap-2 pr-2">
-        {isRepeat && (
-          <Tooltip
-            className=" -translate-x-48 text-xs translate-y-2"
-            text={`Repeats: ${repeatDays}`}
-          >
-            <div className="py-1 text-xs text-neutral-300 ">
-              <Icon path={mdiSync} size={0.6} />
-            </div>
-          </Tooltip>
-        )}
-        {typeof task.due_date === "string" && (
-          <Tooltip
-            className="-translate-x-24 text-xs translate-y-2"
-            text={`Due ${getRelativeDateString(task.due_date)}`}
-          >
-            <p className="  py-1 text-xs text-neutral-300 ">
-              {getRelativeDateString(task.due_date)}
-            </p>
-          </Tooltip>
-        )}
-      </div>
+      {currentPage !== "habits" && (
+        <div className="flex basis-2/5  items-center justify-end  gap-2 pr-2">
+          {isRepeat && (
+            <Tooltip
+              className=" -translate-x-48 text-xs translate-y-2"
+              text={`Repeats: ${repeatDays && repeatDays.join(", ")}`}
+            >
+              <div className="py-1 text-xs text-neutral-300 ">
+                <Icon path={mdiSync} size={0.6} />
+              </div>
+            </Tooltip>
+          )}
+          {typeof task.due_date === "string" && (
+            <Tooltip
+              className="-translate-x-24 text-xs translate-y-2"
+              text={`Due ${getRelativeDateString(task.due_date)}`}
+            >
+              <p className="  py-1 text-xs text-neutral-300 ">
+                {getRelativeDateString(task.due_date)}
+              </p>
+            </Tooltip>
+          )}
+        </div>
+      )}
+
+      {currentPage === "habits" && (
+        <div className="flex basis-2/5  items-center justify-end  gap-2 pr-2">
+          {isRepeat && (
+            <Tooltip
+              className=" -translate-x-48 text-xs translate-y-2"
+              text={`Repeats: ${repeatDays && repeatDays.join(", ")}`}
+            >
+              {windowWidth > 640 && (
+                <p className="py-1 text-xs text-neutral-300 ">
+                  {repeatDays && repeatDays.join(", ")}
+                </p>
+              )}
+              {windowWidth <= 640 && (
+                <p className="py-1 text-xs text-neutral-300  line-clamp-1    translate-y-[2px] ">
+                  {repeatDays && repeatDays.map(day => day.slice(0, 2)).join(", ")}
+                </p>
+              )}
+            </Tooltip>
+          )}
+        </div>
+      )}
     </button>
   )
 }
