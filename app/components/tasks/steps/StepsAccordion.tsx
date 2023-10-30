@@ -68,16 +68,23 @@ export default function StepsAccordion({
         />
       )}
 
-      <div className="flex items-center  justify-end basis-2/5">
-        {isRepeat && (
-          <div className=" pr-2 py-1 text-xs text-neutral-300 ">
-            <Icon path={mdiSync} size={0.6} />
-          </div>
+      <div className="flex basis-2/5  items-center justify-end  gap-2 pr-2">
+        {isTodayRepeat && (
+          <Tooltip className=" text-xs translate-y-2" text="Habit">
+            <div className="py-1 text-xs text-neutral-300 ">
+              <Icon path={mdiSync} size={0.6} />
+            </div>
+          </Tooltip>
         )}
         {typeof task.due_date === "string" && (
-          <p className=" pr-2 py-1 text-xs text-neutral-300 ">
-            {getRelativeDateString(task.due_date)}
-          </p>
+          <Tooltip
+            className="-translate-x-24 text-xs translate-y-2"
+            text={`Due ${getRelativeDateString(task.due_date)}`}
+          >
+            <p className="  py-1 text-xs text-neutral-300 ">
+              {getRelativeDateString(task.due_date)}
+            </p>
+          </Tooltip>
         )}
       </div>
     </button>
