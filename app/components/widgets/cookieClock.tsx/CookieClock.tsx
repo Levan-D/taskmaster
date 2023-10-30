@@ -12,7 +12,7 @@ import CookieTimer from "./CookieTimer"
 
 export default function CookieClock() {
   const dispatch = useAppDispatch()
-  const { cookieClockData } = useAppSelector(state => state.global)
+  const { cookieClockData } = useAppSelector((state) => state.global)
 
   const [loading, setLoading] = useState(true)
   const [isPending, startTransition] = useTransition()
@@ -34,7 +34,7 @@ export default function CookieClock() {
   }, [])
 
   const handleSetNewCookieClock = () => {
-    dispatch(setModal({ open: true, type: "cookie clock", taskId: "" }))
+    dispatch(setModal({ open: true, type: "cookie clock", selectedTask: null }))
   }
 
   if (isPending || loading)

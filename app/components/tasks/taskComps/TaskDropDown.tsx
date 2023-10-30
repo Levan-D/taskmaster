@@ -14,7 +14,11 @@ import {
   mdiSync,
 } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
-import { recycleTask, reviveTask, updateTask } from "../../../actions/taskActions"
+import {
+  recycleTask,
+  reviveTask,
+  updateTask,
+} from "../../../actions/taskActions"
 import { useTransition } from "react"
 import { DateTime } from "luxon"
 import Tooltip from "../../Tooltip"
@@ -32,6 +36,8 @@ type Props = {
   addOptimisticTask: (action: Task[]) => void
 }
 
+type TaskKeys = keyof Task
+
 export default function TaskDropDown({
   task,
   expired,
@@ -39,7 +45,7 @@ export default function TaskDropDown({
   addOptimisticTask,
 }: Props) {
   const dispatch = useAppDispatch()
-  const { windowWidth } = useAppSelector(state => state.global)
+  const { windowWidth } = useAppSelector((state) => state.global)
   const [isPending, startTransition] = useTransition()
 
   const today = DateTime.now().minus({ day: 0 }).toISO() ?? ""
@@ -71,11 +77,24 @@ export default function TaskDropDown({
     await updateTask({ taskId: task.id, priority: priority, title: task.title })
   }
 
+  const stringifyDates = (task: Task): TaskStringed => {
+    const stringifiedTask: TaskStringed = {
+      ...task,
+      creation_date: task.creation_date.toISOString(),
+      start_time: task.start_time ? task.start_time.toISOString() : null,
+      end_time: task.end_time ? task.end_time.toISOString() : null,
+    }
+
+    return stringifiedTask
+  }
+
   const items: DropDownItemType = [
     {
       JSX: (
         <div className="px-4 py-1.5 text-sm">
-          <p className="text-neutral-200  text-xs">{task.deleted ? "Revive" : "Date"}</p>
+          <p className="text-neutral-200  text-xs">
+            {task.deleted ? "Revive" : "Date"}
+          </p>
           <div className="flex  ">
             <Tooltip className="delay-500" text="Today">
               <button
@@ -136,7 +155,7 @@ export default function TaskDropDown({
                     </div>
                   }
                   minDate={new Date()}
-                  onChange={date => {
+                  onChange={(date) => {
                     if (date)
                       handleReviveTask({
                         date: DateTime.fromJSDate(date).toISO() || "",
@@ -166,7 +185,11 @@ export default function TaskDropDown({
                 }}
                 className="btnIcon p-1.5"
               >
-                <Icon className="text-sky-400" path={mdiFlagVariant} size={0.7} />
+                <Icon
+                  className="text-sky-400"
+                  path={mdiFlagVariant}
+                  size={0.7}
+                />
               </button>
             </Tooltip>
             <Tooltip className="delay-500" text="Medium">
@@ -178,7 +201,11 @@ export default function TaskDropDown({
                 }}
                 className="btnIcon p-1.5"
               >
-                <Icon className="text-amber-400" path={mdiFlagVariant} size={0.7} />
+                <Icon
+                  className="text-amber-400"
+                  path={mdiFlagVariant}
+                  size={0.7}
+                />
               </button>
             </Tooltip>
             <Tooltip className="delay-500" text="High">
@@ -190,7 +217,11 @@ export default function TaskDropDown({
                 }}
                 className="btnIcon p-1.5"
               >
-                <Icon className="text-rose-400" path={mdiFlagVariant} size={0.7} />
+                <Icon
+                  className="text-rose-400"
+                  path={mdiFlagVariant}
+                  size={0.7}
+                />
               </button>
             </Tooltip>
           </div>
@@ -203,13 +234,30 @@ export default function TaskDropDown({
     {
       title: !task.start_time ? "Enable timer" : "Edit timer",
       icon: <Icon path={mdiTimerOutline} size={0.7} />,
-      action: () => dispatch(setModal({ open: true, type: "timer", taskId: task.id })),
+      action: () =>
+        dispatch(
+          setModal({
+            open: true,
+            type: "timer",
+            selectedTask: stringifyDates(task),
+          })
+        ),
       invisible: expired || task.deleted || task.complete ? true : false,
     },
     {
-      title: !task.repeat ? "Create habit" : "Edit habit",
+      title:
+        task.repeat && task.repeat.days.length > 0
+          ? "Edit habit"
+          : "Create habit",
       icon: <Icon path={mdiSync} size={0.7} />,
-      action: () => dispatch(setModal({ open: true, type: "habit", taskId: task.id })),
+      action: () =>
+        dispatch(
+          setModal({
+            open: true,
+            type: "habit",
+            selectedTask: stringifyDates(task),
+          })
+        ),
       invisible: expired || task.deleted || task.complete ? true : false,
     },
     {
@@ -274,7 +322,11 @@ export default function TaskDropDown({
                 : "rounded-bl-lg"
             } hover:bg-neutral-600 rounded-tr-lg p-1 sm:p-2   duration-300`}
           >
-            <Icon path={mdiDotsVertical} size={1} className="  scale-75 sm:scale-100 " />
+            <Icon
+              path={mdiDotsVertical}
+              size={1}
+              className="  scale-75 sm:scale-100 "
+            />
           </div>
         </DropdownMenu>
       </div>

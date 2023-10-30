@@ -10,12 +10,11 @@ import { cookies } from "next/headers"
 const transformTasks = (tasks: ApiTaskReturn[]): Task[] => {
   let transformedTaskArray: Task[] = []
 
-  tasks.map(task => {
+  tasks.map((task) => {
     if (typeof task.repeat === "string") {
       const parsedRepeat = JSON.parse(task.repeat)
       if (
         parsedRepeat &&
-        (parsedRepeat.type === "daily" || parsedRepeat.type === "weekly") &&
         (!parsedRepeat.days ||
           (Array.isArray(parsedRepeat.days) &&
             parsedRepeat.days.every(
@@ -98,6 +97,35 @@ export const updateTask = async ({
   }
 }
 
+export const updateTaskHabit = async ({
+  repeat,
+  taskId,
+}: {
+  repeat: RepeatType
+  taskId: string
+}): Promise<ApiResponse<void>> => {
+  try {
+    const userData = await checkAuth()
+    if (!userData.id) return handleApiError("user data unavailable")
+
+    const strigifiedHabit = JSON.stringify(repeat)
+
+    await prisma.tasks.update({
+      where: {
+        id: taskId,
+        user_id: userData.id,
+      },
+      data: {
+        repeat: strigifiedHabit,
+      },
+    })
+    revalidatePath("/dashboard")
+    return { success: true }
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
 export const setTimer = async ({
   taskId,
   start_time,
@@ -160,7 +188,9 @@ export const getTodaysTasks = async (): Promise<ApiResponse<Task[]>> => {
   const userData = await checkAuth()
 
   const userTime = cookies().get("user_time")?.value
-  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
+  const today = userTime
+    ? DateTime.fromISO(userTime)
+    : DateTime.now().startOf("day")
   const yesterday = today.minus({ days: 1 }).toISO() || ""
   const tomorrow = today.plus({ days: 1 }).toISO() || ""
   const todayISO = today.toISO() || ""
@@ -216,7 +246,9 @@ export const getWeeksTasks = async (): Promise<ApiResponse<Task[]>> => {
   const userData = await checkAuth()
 
   const userTime = cookies().get("user_time")?.value
-  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
+  const today = userTime
+    ? DateTime.fromISO(userTime)
+    : DateTime.now().startOf("day")
   const tomorrow = today.plus({ days: 1 }).toISO() || ""
   const week = today.plus({ days: 8 }).toISO() || ""
 
@@ -264,7 +296,9 @@ export const getFutureTasks = async (): Promise<ApiResponse<Task[]>> => {
   const userData = await checkAuth()
 
   const userTime = cookies().get("user_time")?.value
-  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
+  const today = userTime
+    ? DateTime.fromISO(userTime)
+    : DateTime.now().startOf("day")
   const week = today.plus({ days: 8 }).toISO() || ""
 
   try {
@@ -315,7 +349,9 @@ export const getMissedTasks = async ({
   const userData = await checkAuth()
 
   const userTime = cookies().get("user_time")?.value
-  const today = userTime ? DateTime.fromISO(userTime) : DateTime.now().startOf("day")
+  const today = userTime
+    ? DateTime.fromISO(userTime)
+    : DateTime.now().startOf("day")
   const todayISO = today.toISO() || ""
 
   try {

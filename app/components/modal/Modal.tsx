@@ -18,8 +18,8 @@ import Habit from "./Habit"
 export default function Modal() {
   const dispatch = useAppDispatch()
   const {
-    modal: { open, type, taskId },
-  } = useAppSelector(state => state.global)
+    modal: { open, type },
+  } = useAppSelector((state) => state.global)
 
   useEffect(() => {
     if (open) {
@@ -35,18 +35,18 @@ export default function Modal() {
 
   const handleCloseModal = (event: React.MouseEvent) => {
     if (event.target === event.currentTarget) {
-      dispatch(setModal({ open: false, type: null, taskId: "" }))
+      dispatch(setModal({ open: false, type: null, selectedTask: null }))
     }
   }
 
   const handleCloseButtonClick = () => {
-    dispatch(setModal({ open: false, type: null, taskId: "" }))
+    dispatch(setModal({ open: false, type: null, selectedTask: null }))
   }
 
   const renderContenet = () => {
     switch (type) {
       case "timer":
-        return <Timer taskId={taskId} />
+        return <Timer />
       case "cookie clock":
         return <CookieClock />
       case "habit":
@@ -97,12 +97,14 @@ export default function Modal() {
           <div className="flex  items-center justify-between">
             <div className="flex gap-1  items-center">
               <Icon path={renderIcon()} size={0.98} />
-              <h3 className="text-xl font-semibold">{renderTitle()}</h3>
+              <h3 className="text-xl font-semibold select-none">
+                {renderTitle()}
+              </h3>
             </div>
             <button
               aria-label="close"
               onClick={handleCloseButtonClick}
-              className=" active:text-neutral-400 hover:text-neutral-200"
+              className=" p-0.5 btnIcon"
             >
               <Icon path={mdiClose} size={1} />
             </button>

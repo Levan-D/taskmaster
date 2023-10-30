@@ -63,6 +63,11 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
         if (safeProgressPercentage >= 100) {
           clearInterval(intervalId)
         }
+      } else if (!task.start_time && !task.end_time){
+        setProgressBarStyle({
+          background: `RGBA(64, 64, 64,0.6)`,
+        })
+
       }
     }
 

@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { DateTime } from "luxon"
 import { setTimer } from "@/app/actions/taskActions"
-import { useAppDispatch } from "@/lib/redux/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
 import { setModal } from "@/lib/redux/slices/globalSlice"
 import Icon from "@mdi/react"
 import {
@@ -16,11 +16,10 @@ import {
   mdiChevronDown,
 } from "@mdi/js"
 
-type Props = {
-  taskId: string
-}
-
-export default function Timer({ taskId }: Props) {
+export default function Timer() {
+  const {
+    modal: { selectedTask },
+  } = useAppSelector((state) => state.global)
   const dispatch = useAppDispatch()
   const [isPending, startTransition] = useTransition()
 
@@ -28,22 +27,38 @@ export default function Timer({ taskId }: Props) {
     return DateTime.now().toJSDate()
   }
 
-  const [startTime, setStartTime] = useState<Date>(getRoundedTime())
+  const [startTime, setStartTime] = useState<Date>(
+    selectedTask?.start_time
+      ? DateTime.fromISO(selectedTask.start_time).toJSDate()
+      : getRoundedTime()
+  )
   const [endTime, setEndTime] = useState<Date>(
-    new Date(startTime.getTime() + 5 * 60 * 1000)
+    selectedTask?.end_time
+      ? DateTime.fromISO(selectedTask.end_time).toJSDate()
+      : new Date(startTime.getTime() + 5 * 60 * 1000)
   )
 
   const handleCloseModal = () => {
-    dispatch(setModal({ open: false, type: null, taskId: "" }))
+    dispatch(setModal({ open: false, type: null, selectedTask: null }))
   }
 
   const handleSetTimer = async () => {
-    await setTimer({ taskId: taskId, end_time: endTime, start_time: startTime })
+    if (selectedTask)
+      await setTimer({
+        taskId: selectedTask?.id,
+        end_time: endTime,
+        start_time: startTime,
+      })
     handleCloseModal()
   }
 
   const handleResetTimer = async () => {
-    await setTimer({ taskId: taskId, end_time: null, start_time: null })
+    if (selectedTask)
+      await setTimer({
+        taskId: selectedTask?.id,
+        end_time: null,
+        start_time: null,
+      })
     handleCloseModal()
   }
 

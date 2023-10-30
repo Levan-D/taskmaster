@@ -71,7 +71,7 @@ export default function CookieClock() {
   }
 
   const handleCloseModal = () => {
-    dispatch(setModal({ open: false, type: null, taskId: "" }))
+    dispatch(setModal({ open: false, type: null, selectedTask: null }))
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
