@@ -63,7 +63,7 @@ export default function TaskDropDown({
   const handleReviveTask = async ({ date = today }: { date?: DateTime }) => {
     addOptimisticTask([{ ...task, due_date: date, deleted: false }])
 
-    await reviveTask({ taskId: task.id, dueDate: date })
+    await reviveTask({ taskId: task.id, dueDate: date.toJSDate() })
   }
 
   const handleChangeTaskPriority = async (priority: TaskPriority) => {

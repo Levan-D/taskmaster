@@ -154,7 +154,7 @@ export default function CreateTask({
     }
 
     const handleCreateTask = async () => {
-      await createTask({ title: title, priority: priority, dueDate: dueDate })
+      await createTask({ title: title, priority: priority, dueDate: dueDate.toJSDate() })
     }
 
     if (taskLimit > 19) {

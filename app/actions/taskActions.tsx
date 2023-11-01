@@ -58,7 +58,7 @@ export const createTask = async ({
 }: {
   title: string
   priority: TaskPriority
-  dueDate: DateTime
+  dueDate: Date
 }): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
 
@@ -69,7 +69,7 @@ export const createTask = async ({
           title: title,
           user_id: userData.id,
           priority: priority,
-          due_date: dueDate.toJSDate(),
+          due_date: dueDate,
         },
       })
       revalidatePath("/dashboard")
@@ -201,7 +201,7 @@ export const reviveTask = async ({
   dueDate,
 }: {
   taskId: string
-  dueDate: DateTime
+  dueDate: Date
 }): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
   if (!userData.id) return handleApiError("user data unavailable")
@@ -213,7 +213,7 @@ export const reviveTask = async ({
         user_id: userData.id,
       },
       data: {
-        due_date: dueDate.toJSDate(),
+        due_date: dueDate,
         deleted: false,
       },
     })
@@ -693,7 +693,7 @@ export const reviveTasks = async ({
   dueDate,
 }: {
   taskIds: string[]
-  dueDate: DateTime
+  dueDate: Date
 }): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
   if (!userData.id) return handleApiError("user data unavailable")
@@ -701,7 +701,7 @@ export const reviveTasks = async ({
   try {
     await prisma.tasks.updateMany({
       where: { id: { in: taskIds }, user_id: userData.id },
-      data: { due_date: dueDate.toJSDate() },
+      data: { due_date: dueDate },
     })
     revalidatePath("/dashboard")
     return { success: true }

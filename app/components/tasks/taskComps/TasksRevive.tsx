@@ -23,7 +23,7 @@ export default function TasksRevive({ className, tasks, addOptimisticTask }: Pro
     })
     addOptimisticTask(updatedTasks)
 
-    await reviveTasks({ taskIds: expiredTaskIds, dueDate: today })
+    await reviveTasks({ taskIds: expiredTaskIds, dueDate: today.toJSDate() })
   }
 
   return (
