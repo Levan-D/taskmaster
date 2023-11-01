@@ -85,12 +85,12 @@ export default function StepsAccordion({
               </div>
             </Tooltip>
           )}
-          {typeof task.due_date === "string" && (
+          {task.due_date && !task.repeat && (
             <Tooltip
               className="-translate-x-24 text-xs translate-y-2"
               text={`Due ${getRelativeDateString(task.due_date)}`}
             >
-              <p className="  py-1 text-xs text-neutral-300 ">
+              <p className="py-1 text-xs text-neutral-300">
                 {getRelativeDateString(task.due_date)}
               </p>
             </Tooltip>

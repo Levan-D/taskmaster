@@ -51,10 +51,10 @@ export default function CreateTask({
   const [isPending, startTransition] = useTransition()
   const [title, setTitle] = useState("")
 
-  const today = DateTime.now().minus({ day: 0 }).toISO() ?? ""
-  const tomorrow = DateTime.now().plus({ day: 1 }).toISO() ?? ""
-  const nextWeek = DateTime.now().plus({ day: 7 }).toISO() ?? ""
-  const customDate = DateTime.fromJSDate(startDate).toISO() ?? ""
+  const today = DateTime.now().minus({ day: 0 })
+  const tomorrow = DateTime.now().plus({ day: 1 })
+  const nextWeek = DateTime.now().plus({ day: 7 })
+  const customDate = DateTime.fromJSDate(startDate)
 
   let priorityClassName = ""
   if (priority === "LOW") {
@@ -141,7 +141,7 @@ export default function CreateTask({
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    let dueDate = ""
+    let dueDate = today
 
     if (calendar === "Today") {
       dueDate = today
@@ -173,10 +173,11 @@ export default function CreateTask({
       deleted: false,
       complete: false,
       start_time: null,
+      completion_date: null,
       end_time: null,
       repeat: null,
       creation_date: DateTime.now().toJSDate(),
-      due_date: dueDate,
+      due_date: dueDate.toJSDate(),
       priority: priority,
       user_id: "optimistic",
       steps: [],

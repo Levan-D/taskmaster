@@ -23,7 +23,7 @@ const filterFutureTasks = (tasks: Task[]) => {
     .filter((task: Task) => {
       if (task.deleted) return false
 
-      const taskDueDate = DateTime.fromISO(task.due_date).startOf("day")
+      const taskDueDate = DateTime.fromJSDate(task.due_date).startOf("day")
 
       // Check if the task's due date is between today (inclusive) and one week from now (exclusive)
       return taskDueDate > oneWeekFromNow

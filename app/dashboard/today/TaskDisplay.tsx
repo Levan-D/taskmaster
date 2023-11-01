@@ -24,9 +24,9 @@ const filterExpiredTasks = (tasks: Task[], today: DateTime) => {
 
   return tasks
     .filter((task: Task) => {
-      if (!task.due_date || task.complete) return false
+      if (!task.due_date || task.complete || task.repeat || task.deleted) return false
 
-      const taskDueDate = DateTime.fromISO(task.due_date).startOf("day")
+      const taskDueDate = DateTime.fromJSDate(task.due_date).startOf("day")
       return taskDueDate.hasSame(yesterday, "day")
     })
     .map((task: Task) => ({
@@ -38,9 +38,10 @@ const filterExpiredTasks = (tasks: Task[], today: DateTime) => {
 const filterTodayTasks = (tasks: Task[], today: DateTime) =>
   tasks
     .filter((task: Task) => {
-      if (task.deleted) return false
+      if (task.deleted || task.repeat) return false
+
       if (!task.due_date) return true
-      const taskDueDate = DateTime.fromISO(task.due_date).startOf("day")
+      const taskDueDate = DateTime.fromJSDate(task.due_date).startOf("day")
       return taskDueDate.hasSame(today, "day")
     })
     .map((task: Task) => ({

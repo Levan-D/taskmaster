@@ -62,7 +62,8 @@ model Tasks {
   deleted       Boolean      @default(false)
   complete      Boolean      @default(false)
   creation_date DateTime     @default(now())
-  due_date      String
+  due_date      DateTime
+  completion_date DateTime?
   priority      TaskPriority @default(LOW)
   repeat        Json?
   user_id       String

@@ -27,7 +27,7 @@ const filterAndSortFutureTasks = (tasks: Task[], today: DateTime) => {
       if (task.deleted) return false
       if (!task.due_date) return false
 
-      const taskDueDate = DateTime.fromISO(task.due_date).startOf("day")
+      const taskDueDate = DateTime.fromJSDate(task.due_date).startOf("day")
 
       return taskDueDate >= startFromTomorrow && taskDueDate <= oneWeekFromTomorrow
     })
@@ -37,8 +37,8 @@ const filterAndSortFutureTasks = (tasks: Task[], today: DateTime) => {
     }))
 
   const sortedTasks = filteredTasks.sort((taskA: Task, taskB: Task) => {
-    const dueDateA = DateTime.fromISO(taskA.due_date)
-    const dueDateB = DateTime.fromISO(taskB.due_date)
+    const dueDateA = DateTime.fromJSDate(taskA.due_date)
+    const dueDateB = DateTime.fromJSDate(taskB.due_date)
     const creationDateA = taskA.creation_date.getTime()
     const creationDateB = taskB.creation_date.getTime()
 
@@ -111,7 +111,7 @@ export default function TaskDisplay({ tasks }: Props) {
 
   const tasksGroupedByDate = weeksUnfinished.reduce(
     (acc: { [key: string]: Task[] }, task) => {
-      const dueDate = DateTime.fromISO(task.due_date).toFormat("yyyy-MM-dd")
+      const dueDate = DateTime.fromJSDate(task.due_date).toFormat("yyyy-MM-dd")
       if (!acc[dueDate]) {
         acc[dueDate] = []
       }

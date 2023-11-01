@@ -14,11 +14,7 @@ import {
   mdiSync,
 } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
-import {
-  recycleTask,
-  reviveTask,
-  updateTask,
-} from "../../../actions/taskActions"
+import { recycleTask, reviveTask, updateTask } from "../../../actions/taskActions"
 import { useTransition } from "react"
 import { DateTime } from "luxon"
 import Tooltip from "../../Tooltip"
@@ -36,8 +32,6 @@ type Props = {
   addOptimisticTask: (action: Task[]) => void
 }
 
-type TaskKeys = keyof Task
-
 export default function TaskDropDown({
   task,
   expired,
@@ -45,12 +39,13 @@ export default function TaskDropDown({
   addOptimisticTask,
 }: Props) {
   const dispatch = useAppDispatch()
-  const { windowWidth } = useAppSelector((state) => state.global)
+  const { windowWidth } = useAppSelector(state => state.global)
   const [isPending, startTransition] = useTransition()
 
-  const today = DateTime.now().minus({ day: 0 }).toISO() ?? ""
-  const tomorrow = DateTime.now().plus({ day: 1 }).toISO() ?? ""
-  const nextWeek = DateTime.now().plus({ day: 7 }).toISO() ?? ""
+  const today = DateTime.now().minus({ day: 0 })
+
+  const tomorrow = DateTime.now().plus({ day: 1 })
+  const nextWeek = DateTime.now().plus({ day: 7 })
 
   const dropdownRef = useRef<DropdownRefType | null>(null)
 
@@ -65,7 +60,7 @@ export default function TaskDropDown({
     }, 300)
   }
 
-  const handleReviveTask = async ({ date = today }: { date?: string }) => {
+  const handleReviveTask = async ({ date = today }: { date?: DateTime }) => {
     addOptimisticTask([{ ...task, due_date: date, deleted: false }])
 
     await reviveTask({ taskId: task.id, dueDate: date })
@@ -92,9 +87,7 @@ export default function TaskDropDown({
     {
       JSX: (
         <div className="px-4 py-1.5 text-sm">
-          <p className="text-neutral-200  text-xs">
-            {task.deleted ? "Revive" : "Date"}
-          </p>
+          <p className="text-neutral-200  text-xs">{task.deleted ? "Revive" : "Date"}</p>
           <div className="flex  ">
             <Tooltip className="delay-500" text="Today">
               <button
@@ -155,10 +148,10 @@ export default function TaskDropDown({
                     </div>
                   }
                   minDate={new Date()}
-                  onChange={(date) => {
+                  onChange={date => {
                     if (date)
                       handleReviveTask({
-                        date: DateTime.fromJSDate(date).toISO() || "",
+                        date: DateTime.fromJSDate(date),
                       })
                     if (dropdownRef.current) dropdownRef.current.closeDropdown()
                   }}
@@ -185,11 +178,7 @@ export default function TaskDropDown({
                 }}
                 className="btnIcon p-1.5"
               >
-                <Icon
-                  className="text-sky-400"
-                  path={mdiFlagVariant}
-                  size={0.7}
-                />
+                <Icon className="text-sky-400" path={mdiFlagVariant} size={0.7} />
               </button>
             </Tooltip>
             <Tooltip className="delay-500" text="Medium">
@@ -201,11 +190,7 @@ export default function TaskDropDown({
                 }}
                 className="btnIcon p-1.5"
               >
-                <Icon
-                  className="text-amber-400"
-                  path={mdiFlagVariant}
-                  size={0.7}
-                />
+                <Icon className="text-amber-400" path={mdiFlagVariant} size={0.7} />
               </button>
             </Tooltip>
             <Tooltip className="delay-500" text="High">
@@ -217,11 +202,7 @@ export default function TaskDropDown({
                 }}
                 className="btnIcon p-1.5"
               >
-                <Icon
-                  className="text-rose-400"
-                  path={mdiFlagVariant}
-                  size={0.7}
-                />
+                <Icon className="text-rose-400" path={mdiFlagVariant} size={0.7} />
               </button>
             </Tooltip>
           </div>
@@ -245,10 +226,7 @@ export default function TaskDropDown({
       invisible: expired || task.deleted || task.complete ? true : false,
     },
     {
-      title:
-        task.repeat && task.repeat.days.length > 0
-          ? "Edit habit"
-          : "Create habit",
+      title: task.repeat && task.repeat.days.length > 0 ? "Edit habit" : "Create habit",
       icon: <Icon path={mdiSync} size={0.7} />,
       action: () =>
         dispatch(
@@ -322,11 +300,7 @@ export default function TaskDropDown({
                 : "rounded-bl-lg"
             } hover:bg-neutral-600 rounded-tr-lg p-1 sm:p-2   duration-300`}
           >
-            <Icon
-              path={mdiDotsVertical}
-              size={1}
-              className="  scale-75 sm:scale-100 "
-            />
+            <Icon path={mdiDotsVertical} size={1} className="  scale-75 sm:scale-100 " />
           </div>
         </DropdownMenu>
       </div>

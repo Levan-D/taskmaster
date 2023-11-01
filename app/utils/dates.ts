@@ -2,8 +2,8 @@
 
 import { DateTime } from "luxon"
 
-export function getRelativeDateString(due_date: string) {
-  const dueDate = DateTime.fromISO(due_date).startOf("day")
+export function getRelativeDateString(due_date: Date) {
+  const dueDate = DateTime.fromJSDate(due_date).startOf("day")
   const now = DateTime.now().startOf("day")
   const diffInDays = dueDate.diff(now, "days").days
 

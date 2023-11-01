@@ -9,9 +9,10 @@ import { cookies } from "next/headers"
 import { Prisma } from "@prisma/client"
 
 const transformTasks = (tasks: ApiTaskReturn[]): Task[] => {
-  let transformedTaskArray: Task[] = []
+  let transformedTaskArray: Task[] = [...tasks]
 
-  tasks.map(task => {
+  transformedTaskArray.forEach(task => {
+    let transTask = { ...task }
     if (typeof task.repeat === "string") {
       const parsedRepeat = JSON.parse(task.repeat)
       if (
@@ -29,9 +30,22 @@ const transformTasks = (tasks: ApiTaskReturn[]): Task[] => {
                 day === "Sun"
             )))
       ) {
-        transformedTaskArray.push({ ...task, repeat: parsedRepeat })
+        transTask = {
+          ...task,
+          repeat: parsedRepeat,
+        }
       }
-    } else transformedTaskArray.push({ ...task, repeat: null })
+    } else transTask = { ...task, repeat: null }
+
+    for (const key in transTask) {
+      const dateProperty = transTask[key as keyof ApiTaskReturn]
+
+      if (dateProperty instanceof Date && dateProperty) {
+       transTask = {...transTask, [key as keyof ApiTaskReturn] : DateTime.fromJSDate(dateProperty as Date)}
+      }
+    }
+
+    return transTask
   })
 
   return transformedTaskArray
@@ -44,7 +58,7 @@ export const createTask = async ({
 }: {
   title: string
   priority: TaskPriority
-  dueDate: string
+  dueDate: DateTime
 }): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
 
@@ -55,7 +69,7 @@ export const createTask = async ({
           title: title,
           user_id: userData.id,
           priority: priority,
-          due_date: dueDate,
+          due_date: dueDate.toJSDate(),
         },
       })
       revalidatePath("/dashboard")
@@ -187,7 +201,7 @@ export const reviveTask = async ({
   dueDate,
 }: {
   taskId: string
-  dueDate: string
+  dueDate: DateTime
 }): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
   if (!userData.id) return handleApiError("user data unavailable")
@@ -199,7 +213,7 @@ export const reviveTask = async ({
         user_id: userData.id,
       },
       data: {
-        due_date: dueDate,
+        due_date: dueDate.toJSDate(),
         deleted: false,
       },
     })
@@ -234,9 +248,6 @@ export const getHabits = async (): Promise<ApiResponse<Task[]>> => {
         },
         orderBy: [
           {
-            due_date: "desc",
-          },
-          {
             creation_date: "desc",
           },
         ],
@@ -266,18 +277,18 @@ export const getTodaysTasks = async (): Promise<ApiResponse<Task[]>> => {
         where: {
           user_id: userData.id,
           deleted: false,
-          due_date: {
-            gte: yesterday,
-            lt: tomorrow,
-          },
           OR: [
             {
-              AND: [{ due_date: { lt: todayISO } }, { complete: false }],
+              AND: [{ due_date: { gte: yesterday, lt: todayISO } }, { complete: false }],
             },
-            { due_date: { gte: todayISO } },
+            {
+              due_date: { gte: todayISO, lt: tomorrow },
+            },
+            {
+              NOT: [{ repeat: { equals: Prisma.AnyNull } }],
+            },
           ],
         },
-
         include: {
           steps: {
             where: { deleted: false },
@@ -297,6 +308,7 @@ export const getTodaysTasks = async (): Promise<ApiResponse<Task[]>> => {
           },
         ],
       })
+
       const transformedTasks = transformTasks(tasks)
       return { success: true, data: transformedTasks }
     } else {
@@ -371,6 +383,7 @@ export const getFutureTasks = async (): Promise<ApiResponse<Task[]>> => {
           due_date: {
             gte: week,
           },
+          repeat: { equals: Prisma.AnyNull },
         },
 
         include: {
@@ -420,6 +433,8 @@ export const getMissedTasks = async ({
           user_id: userData.id,
           deleted: false,
           complete: false,
+          repeat: { equals: Prisma.AnyNull },
+
           due_date: {
             lt: todayISO,
           },
@@ -439,6 +454,8 @@ export const getMissedTasks = async ({
           user_id: userData.id,
           deleted: false,
           complete: false,
+          repeat: { equals: Prisma.AnyNull },
+
           due_date: {
             lt: todayISO,
           },
@@ -492,6 +509,7 @@ export const getCompletedTasks = async ({
           user_id: userData.id,
           deleted: false,
           complete: true,
+          repeat: { equals: Prisma.AnyNull },
         },
       })
 
@@ -508,6 +526,7 @@ export const getCompletedTasks = async ({
           user_id: userData.id,
           deleted: false,
           complete: true,
+          repeat: { equals: Prisma.AnyNull },
         },
         take: take,
         skip: skip,
@@ -674,7 +693,7 @@ export const reviveTasks = async ({
   dueDate,
 }: {
   taskIds: string[]
-  dueDate: string
+  dueDate: DateTime
 }): Promise<ApiResponse<void>> => {
   const userData = await checkAuth()
   if (!userData.id) return handleApiError("user data unavailable")
@@ -682,7 +701,7 @@ export const reviveTasks = async ({
   try {
     await prisma.tasks.updateMany({
       where: { id: { in: taskIds }, user_id: userData.id },
-      data: { due_date: dueDate },
+      data: { due_date: dueDate.toJSDate() },
     })
     revalidatePath("/dashboard")
     return { success: true }

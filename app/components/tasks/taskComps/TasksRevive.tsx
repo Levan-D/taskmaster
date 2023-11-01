@@ -14,8 +14,7 @@ type Props = {
 export default function TasksRevive({ className, tasks, addOptimisticTask }: Props) {
   const [isPending, startTransition] = useTransition()
   const expiredTaskIds = tasks.map(task => task.id)
-  const today = DateTime.now().toISO() ?? ""
-
+  const today = DateTime.now()
   const handleReviveTasks = async () => {
     if (expiredTaskIds.length === 0) return
 

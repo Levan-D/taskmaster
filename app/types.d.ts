@@ -50,10 +50,11 @@ type ApiTaskReturn = {
   title: string
   deleted: boolean
   complete: boolean
-  creation_date: Date
-  due_date: string
-  start_time: Date | null
-  end_time: Date | null
+  creation_date: DateTime
+  due_date: DateTime
+  completion_date: DateTime | null
+  start_time: DateTime | null
+  end_time: DateTime | null
   priority: TaskPriority
   repeat: JsonValue
   user_id: string
@@ -69,6 +70,7 @@ type TaskStringed = {
   complete: boolean
   creation_date: string
   due_date: string
+  completion_date: string | null
   start_time: string | null
   end_time: string | null
   priority: TaskPriority
@@ -84,10 +86,11 @@ type Task = {
   title: string
   deleted: boolean
   complete: boolean
-  creation_date: Date
-  due_date: string
-  start_time: Date | null
-  end_time: Date | null
+  creation_date: DateTime
+  due_date: DateTime
+  completion_date: DateTime | null
+  start_time: DateTime | null
+  end_time: DateTime | null
   priority: TaskPriority
   repeat: null | RepeatType
   user_id: string
