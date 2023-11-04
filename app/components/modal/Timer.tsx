@@ -46,19 +46,20 @@ export default function Timer() {
   }
 
   const handleSetTimer = () => {
-    startTransition(() => {
-      if (selectedTask)
-        setTimer({
-          taskId: selectedTask?.id,
-          end_time: endTime,
-          start_time: startTime,
-        })
-
+    startTransition(async () => {
+      try {
+        if (selectedTask)
+          await setTimer({
+            taskId: selectedTask?.id,
+            end_time: endTime,
+            start_time: startTime,
+          })
+        router.refresh()
+        handleCloseModal()
+      } catch (error) {}
     })
-    router.refresh()
-    handleCloseModal()
   }
-
+  console.log(isPending)
   const handleResetTimer = () => {
     startTransition(() => {
       if (selectedTask)
