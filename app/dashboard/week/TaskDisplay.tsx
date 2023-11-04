@@ -81,7 +81,9 @@ export default function TaskDisplay({ tasks }: Props) {
     (state: Task[], updatedTasks: Task[]) => {
       // set futures last operation
       if (typeof window !== "undefined") {
-        setWeeksOp()
+        setTimeout(() => {
+          setWeeksOp()
+        }, 0)
       }
 
       const oldTasks = [...state]
