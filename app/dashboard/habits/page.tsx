@@ -13,7 +13,7 @@ export default async function Habits() {
   const habits = await getHabits()
 
   if (!habits.success) return <span></span>
-
+  console.log(habits.data)
   return (
     <section className="  max-w-3xl mx-auto h-full   ">
       {habits.data !== undefined && <TaskDisplay tasks={habits.data} />}

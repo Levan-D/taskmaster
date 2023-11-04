@@ -75,9 +75,11 @@ export default function TaskDropDown({
   const stringifyDates = (task: Task): TaskStringed => {
     const stringifiedTask: TaskStringed = {
       ...task,
-      creation_date: task.creation_date.toISOString(),
-      start_time: task.start_time ? task.start_time.toISOString() : null,
-      end_time: task.end_time ? task.end_time.toISOString() : null,
+      creation_date: task.creation_date.toISO(),
+      due_date: task.due_date ? task.due_date.toISO() : null,
+      completion_date: task.completion_date ? task.completion_date.toISO() : null,
+      start_time: task.start_time ? task.start_time.toISO() : null,
+      end_time: task.end_time ? task.end_time.toISO() : null,
     }
 
     return stringifiedTask

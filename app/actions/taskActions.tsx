@@ -9,9 +9,7 @@ import { cookies } from "next/headers"
 import { Prisma } from "@prisma/client"
 
 const transformTasks = (tasks: ApiTaskReturn[]): Task[] => {
-  let transformedTaskArray: Task[] = [...tasks]
-
-  transformedTaskArray.forEach(task => {
+  let transformedTaskArray: Task[] = tasks.map(task => {
     let transTask = { ...task }
     if (typeof task.repeat === "string") {
       const parsedRepeat = JSON.parse(task.repeat)
@@ -37,17 +35,8 @@ const transformTasks = (tasks: ApiTaskReturn[]): Task[] => {
       }
     } else transTask = { ...task, repeat: null }
 
-    for (const key in transTask) {
-      const dateProperty = transTask[key as keyof ApiTaskReturn]
-
-      if (dateProperty instanceof Date && dateProperty) {
-       transTask = {...transTask, [key as keyof ApiTaskReturn] : DateTime.fromJSDate(dateProperty as Date)}
-      }
-    }
-
     return transTask
   })
-
   return transformedTaskArray
 }
 
