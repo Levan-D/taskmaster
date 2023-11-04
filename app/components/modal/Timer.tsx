@@ -15,8 +15,11 @@ import {
   mdiTimerOffOutline,
   mdiChevronDown,
 } from "@mdi/js"
+import { useRouter } from "next/navigation"
 
 export default function Timer() {
+  const router = useRouter()
+
   const {
     modal: { selectedTask },
   } = useAppSelector(state => state.global)
@@ -42,23 +45,31 @@ export default function Timer() {
     dispatch(setModal({ open: false, type: null, selectedTask: null }))
   }
 
-  const handleSetTimer = async () => {
-    if (selectedTask)
-      await setTimer({
-        taskId: selectedTask?.id,
-        end_time: endTime,
-        start_time: startTime,
-      })
+  const handleSetTimer = () => {
+    startTransition(() => {
+      if (selectedTask)
+        setTimer({
+          taskId: selectedTask?.id,
+          end_time: endTime,
+          start_time: startTime,
+        })
+
+    })
+    router.refresh()
     handleCloseModal()
   }
 
-  const handleResetTimer = async () => {
-    if (selectedTask)
-      await setTimer({
-        taskId: selectedTask?.id,
-        end_time: null,
-        start_time: null,
-      })
+  const handleResetTimer = () => {
+    startTransition(() => {
+      if (selectedTask)
+        try {
+          setTimer({
+            taskId: selectedTask?.id,
+            end_time: null,
+            start_time: null,
+          })
+        } catch (error) {}
+    })
     handleCloseModal()
   }
 
@@ -137,7 +148,7 @@ export default function Timer() {
       <div>
         <button
           disabled={isPending}
-          onClick={() => startTransition(handleResetTimer)}
+          onClick={handleResetTimer}
           className="btnSecondary w-full py-3"
         >
           <div
@@ -158,7 +169,7 @@ export default function Timer() {
       <div className="flex gap-4">
         <button
           disabled={isPending}
-          onClick={() => startTransition(handleSetTimer)}
+          onClick={handleSetTimer}
           className="btnPrimary block w-full py-3"
         >
           <div

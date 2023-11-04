@@ -3,10 +3,10 @@
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import Image from "next/image"
 
-export default function UserInfo() {
+export default async function UserInfo() {
   const { getUser } = getKindeServerSession()
-  const user = getUser()
-  
+  const user = await getUser()
+
   return (
     <div className="flex items-center gap-2 w-full  p-1 ">
       {user?.picture ? (

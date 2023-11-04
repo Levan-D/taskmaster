@@ -1,21 +1,11 @@
 /** @format */
 
-import {
-  RegisterLink,
-  LoginLink,
-  getKindeServerSession,
-} from "@kinde-oss/kinde-auth-nextjs/server"
-import { redirect } from "next/navigation"
+import { RegisterLink, LoginLink } from "@kinde-oss/kinde-auth-nextjs/server"
 import Icon from "@mdi/react"
 import { mdiGithub } from "@mdi/js"
 import Link from "next/link"
 
-export default function Home() {
-  const { getUser, isAuthenticated } = getKindeServerSession()
-
-  // redirecting to dashboard like this due to middleware bug on deployment
-  if (isAuthenticated()) redirect("/dashboard/today")
-
+export default async function Home() {
   return (
     <section className="flex sm:min-h-screen min-h-[calc(100dvh)] flex-col items-center justify-between w-screen">
       <p className="text-3xl sm:text-5xl  lg:text-7xl font-semibold text-center max-w-6xl mt-36 mx-4 sm:mx-8">

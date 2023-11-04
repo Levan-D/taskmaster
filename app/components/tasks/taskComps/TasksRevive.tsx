@@ -19,19 +19,20 @@ export default function TasksRevive({ className, tasks, addOptimisticTask }: Pro
     if (expiredTaskIds.length === 0) return
 
     const updatedTasks = tasks.map(task => {
-      return { ...task, due_date: today }
+      return { ...task, due_date: today.toJSDate() }
     })
-    addOptimisticTask(updatedTasks)
 
-    await reviveTasks({ taskIds: expiredTaskIds, dueDate: today.toJSDate() })
+    startTransition(() => {
+      addOptimisticTask(updatedTasks)
+
+      reviveTasks({ taskIds: expiredTaskIds, dueDate: today.toJSDate() })
+    })
   }
 
   return (
     <button
       disabled={isPending}
-      onClick={() => {
-        startTransition(handleReviveTasks)
-      }}
+      onClick={handleReviveTasks}
       className={`${className} btnSecondary bg-lime-600    px-4 hover:bg-lime-500`}
     >
       Revive All

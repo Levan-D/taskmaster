@@ -19,17 +19,16 @@ export default function DeleteAllTasks({
   const [isPending, startTransition] = useTransition()
 
   const handleDeleteTasks = async () => {
-    addOptimisticTask([])
-
-    await deleteAllTasks()
+    startTransition(() => {
+      addOptimisticTask([])
+      deleteAllTasks()
+    })
   }
 
   return (
     <button
       disabled={isPending}
-      onClick={() => {
-        startTransition(handleDeleteTasks)
-      }}
+      onClick={handleDeleteTasks}
       className={`${className} btnError flex gap-2 items-center  shrink-0 px-4`}
     >
       <Icon path={mdiSkullOutline} size={0.8} />

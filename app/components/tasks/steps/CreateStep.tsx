@@ -36,10 +36,6 @@ export default function CreateStep({
       })
     }
 
-    const handleCreateStep = async () => {
-      await createStep({ title: title, taskId: task.id })
-    }
-
     const newStep: Step = {
       id: "optimistic",
       title: title,
@@ -51,8 +47,11 @@ export default function CreateStep({
     const newSteps = [newStep, ...task.steps]
     const updatedTasks = { ...task, steps: newSteps }
 
-    addOptimisticTask([updatedTasks])
-    startTransition(handleCreateStep)
+    startTransition(() => {
+      addOptimisticTask([updatedTasks])
+      createStep({ title: title, taskId: task.id })
+    })
+
     setTitle("")
     setCharCount(0)
   }

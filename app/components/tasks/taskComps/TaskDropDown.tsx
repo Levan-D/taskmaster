@@ -66,17 +66,17 @@ export default function TaskDropDown({
   }
 
   const handleReviveTask = ({ date = today }: { date?: DateTime }) => {
-    startTransition(async () => {
-      addOptimisticTask([{ ...task, due_date: date, deleted: false }])
-
-      await reviveTask({ taskId: task.id, dueDate: date.toJSDate() })
+    startTransition(() => {
+      addOptimisticTask([{ ...task, due_date: date.toJSDate(), deleted: false }])
+      reviveTask({ taskId: task.id, dueDate: date.toJSDate() })
     })
   }
 
-  const handleChangeTaskPriority = async (priority: TaskPriority) => {
-    addOptimisticTask([{ ...task, priority: priority }])
-
-    await updateTask({ taskId: task.id, priority: priority, title: task.title })
+  const handleChangeTaskPriority = (priority: TaskPriority) => {
+    startTransition(() => {
+      addOptimisticTask([{ ...task, priority: priority }])
+      updateTask({ taskId: task.id, priority: priority, title: task.title })
+    })
   }
 
   const stringifyDates = (task: Task): TaskStringed => {

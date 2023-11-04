@@ -45,16 +45,13 @@ export default function TaskUpdate({
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const handleUpdateTask = async () => {
-      await updateTask({ title: inputValue, taskId: task.id, priority: task.priority })
-    }
-
     toggleEdit()
 
     if (inputValue !== task.title) {
-      addOptimisticTask([{ ...task, title: inputValue, priority: task.priority }])
-
-      startTransition(handleUpdateTask)
+      startTransition(() => {
+        addOptimisticTask([{ ...task, title: inputValue, priority: task.priority }])
+        updateTask({ title: inputValue, taskId: task.id, priority: task.priority })
+      })
     }
   }
 

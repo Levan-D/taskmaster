@@ -31,12 +31,14 @@ export default function ToggleStepComplete({ task, step, addOptimisticTask }: Pr
   const [isPending, startTransition] = useTransition()
   const [hovering, setHovering] = useState(false)
 
-  const handleToggleStepComplete = async () => {
+  const handleToggleStepComplete = () => {
     const updatedStep = { ...step, complete: !step.complete }
     const updatedTasks = updateStepInTask(task, updatedStep)
 
-    addOptimisticTask([updatedTasks])
-    await toggleStepComplete({ stepId: step.id, complete: !step.complete })
+    startTransition(() => {
+      addOptimisticTask([updatedTasks])
+      toggleStepComplete({ stepId: step.id, complete: !step.complete })
+    })
   }
 
   return (
@@ -49,9 +51,7 @@ export default function ToggleStepComplete({ task, step, addOptimisticTask }: Pr
           ? "bg-lime-600 md:hover:bg-lime-500"
           : "bg-neutral-900 md:hover:bg-neutral-800"
       } block  rounded-md   p-1 duration-300 transition-colors `}
-      onClick={() => {
-        startTransition(handleToggleStepComplete)
-      }}
+      onClick={handleToggleStepComplete}
     >
       <Icon
         path={step.complete || hovering ? mdiCheckBold : mdiCheckOutline}

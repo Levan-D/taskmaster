@@ -21,7 +21,6 @@ export default function ToggleTaskComplete({ task, addOptimisticTask, expired }:
       addOptimisticTask([
         {
           ...task,
-
           beingCompleted: task.complete ? "up" : "down",
         },
       ])

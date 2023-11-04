@@ -75,7 +75,6 @@ export default function TaskDisplay({ tasks }: Props) {
         }, 0)
       }
       const oldTasks = [...state]
-
       updatedTasks.forEach(updatedTask => {
         const taskIndex = oldTasks.findIndex(task => task.id === updatedTask.id)
 
@@ -89,6 +88,7 @@ export default function TaskDisplay({ tasks }: Props) {
       return oldTasks
     }
   )
+
 
   const optimisticTasksLength = optimisticTasks.filter(
     (task: Task) => !task.deleted

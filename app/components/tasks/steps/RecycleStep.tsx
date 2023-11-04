@@ -33,26 +33,24 @@ export default function RecycleStep({ task, step, addOptimisticTask }: Props) {
     const updatedStep = { ...step, beingDeleted: true }
     const updatedTasks = updateStepInTask(task, updatedStep)
 
-    addOptimisticTask([updatedTasks])
-
-    setTimeout(async () => {
-      const updatedStep = { ...step, deleted: true, beingDeleted: false }
-      const updatedTasks = updateStepInTask(task, updatedStep)
-
+    startTransition(async () => {
       addOptimisticTask([updatedTasks])
+      try {
+        await new Promise(resolve => setTimeout(resolve, 300))
+        const updatedStep = { ...step, deleted: true, beingDeleted: false }
+        const updatedTasks = updateStepInTask(task, updatedStep)
 
-      await recycleStep({ stepId: step.id })
-    }, 300)
+        addOptimisticTask([updatedTasks])
+
+        await recycleStep({ stepId: step.id })
+      } catch (error) {
+        console.error(error)
+      }
+    })
   }
 
   return (
-    <button
-      disabled={isPending}
-      className="btnSecondary"
-      onClick={() => {
-        startTransition(handleRecycleStep)
-      }}
-    >
+    <button disabled={isPending} className="btnSecondary" onClick={handleRecycleStep}>
       <Icon path={mdiTrashCanOutline} size={0.8} />
     </button>
   )

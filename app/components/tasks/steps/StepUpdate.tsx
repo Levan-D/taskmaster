@@ -62,18 +62,17 @@ export default function StepUpdate({
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const handleUpdateStep = async () => {
-      await updateStep({ title: inputValue, stepId: step.id })
-    }
-
     toggleEdit()
 
     if (inputValue !== step.title) {
       const updatedStep = { ...step, title: inputValue }
       const updatedTasks = updateStepInTask(task, updatedStep)
 
-      addOptimisticTask([updatedTasks])
-      startTransition(handleUpdateStep)
+      startTransition(() => {
+        addOptimisticTask([updatedTasks])
+
+        updateStep({ title: inputValue, stepId: step.id })
+      })
     }
   }
 
