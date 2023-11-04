@@ -17,19 +17,30 @@ export default function ToggleTaskComplete({ task, addOptimisticTask, expired }:
   const [hovering, setHovering] = useState(false)
 
   const handleToggleTaskComplete = () => {
-    startTransition(() => {
+    startTransition(async () => {
       addOptimisticTask([
         {
           ...task,
-          complete: !task.complete,
+
           beingCompleted: task.complete ? "up" : "down",
         },
       ])
 
-      setTimeout(() => {
-        toggleTaskComplete({ taskId: task.id, complete: !task.complete })
-      }, 4000)
+      try {
+        await new Promise(resolve => setTimeout(resolve, 300))
+        addOptimisticTask([
+          {
+            ...task,
+            complete: !task.complete,
+          },
+        ])
+        await toggleTaskComplete({ taskId: task.id, complete: !task.complete })
+      } catch (error) {
+        console.error("Failed to toggle task completion:", error)
+      }
     })
+
+    toggleTaskComplete({ taskId: task.id, complete: !task.complete })
   }
 
   const getColor = () => {

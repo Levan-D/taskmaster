@@ -49,23 +49,28 @@ export default function TaskDropDown({
 
   const dropdownRef = useRef<DropdownRefType | null>(null)
 
-  const handleRecycleTask = async () => {
-    startTransition(() => {
+  const handleRecycleTask = () => {
+    startTransition(async () => {
       addOptimisticTask([{ ...task, beingDeleted: true }])
 
-      setTimeout(async () => {
+      try {
+        await new Promise(resolve => setTimeout(resolve, 300))
         addOptimisticTask([
           { ...task, deleted: true, complete: false, beingDeleted: false },
         ])
         await recycleTask({ taskId: task.id })
-      }, 300)
+      } catch (error) {
+        console.error("Failed to toggle task completion:", error)
+      }
     })
   }
 
-  const handleReviveTask = async ({ date = today }: { date?: DateTime }) => {
-    addOptimisticTask([{ ...task, due_date: date, deleted: false }])
+  const handleReviveTask = ({ date = today }: { date?: DateTime }) => {
+    startTransition(async () => {
+      addOptimisticTask([{ ...task, due_date: date, deleted: false }])
 
-    await reviveTask({ taskId: task.id, dueDate: date.toJSDate() })
+      await reviveTask({ taskId: task.id, dueDate: date.toJSDate() })
+    })
   }
 
   const handleChangeTaskPriority = async (priority: TaskPriority) => {
@@ -262,9 +267,7 @@ export default function TaskDropDown({
           <Tooltip text="Revive for today" className="delay-500">
             <button
               disabled={isPending}
-              onClick={() => {
-                startTransition(() => handleReviveTask({}))
-              }}
+              onClick={() => handleReviveTask({})}
               className="p-1 sm:p-2 block bg-lime-600 shadow-sm hover:bg-lime-500 rounded-bl-lg duration-300"
             >
               <Icon
@@ -279,9 +282,7 @@ export default function TaskDropDown({
           <Tooltip text="Recycle" className="delay-500">
             <button
               disabled={isPending}
-              onClick={() => {
-                startTransition(handleRecycleTask)
-              }}
+              onClick={handleRecycleTask}
               className={`block bg-neutral-600 shadow-sm hover:bg-neutral-500 border-r-[2px]  border-neutral-700    rounded-bl-lg p-1 sm:p-2 duration-300 `}
             >
               <Icon
