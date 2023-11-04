@@ -73,16 +73,18 @@ export default function TaskDropDown({
   }
 
   const stringifyDates = (task: Task): TaskStringed => {
-    const stringifiedTask: TaskStringed = {
-      ...task,
-      creation_date: task.creation_date.toISO(),
-      due_date: task.due_date ? task.due_date.toISO() : null,
-      completion_date: task.completion_date ? task.completion_date.toISO() : null,
-      start_time: task.start_time ? task.start_time.toISO() : null,
-      end_time: task.end_time ? task.end_time.toISO() : null,
+    let newTask = { ...task, steps: [] }
+
+    for (const key in newTask) {
+      if (newTask[key as keyof Task] instanceof Date) {
+        newTask = {
+          ...newTask,
+          [key as keyof Task]: newTask[key as keyof Task].toISOString(),
+        }
+      }
     }
 
-    return stringifiedTask
+    return newTask
   }
 
   const items: DropDownItemType = [

@@ -53,7 +53,7 @@ export default function Modal() {
         return <Habit />
 
       default:
-        return null
+        return <></>
     }
   }
 
@@ -67,7 +67,7 @@ export default function Modal() {
         return "Habit"
 
       default:
-        return null
+        return ""
     }
   }
 
