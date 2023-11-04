@@ -50,14 +50,16 @@ export default function TaskDropDown({
   const dropdownRef = useRef<DropdownRefType | null>(null)
 
   const handleRecycleTask = async () => {
-    addOptimisticTask([{ ...task, beingDeleted: true }])
+    startTransition(() => {
+      addOptimisticTask([{ ...task, beingDeleted: true }])
 
-    setTimeout(async () => {
-      addOptimisticTask([
-        { ...task, deleted: true, complete: false, beingDeleted: false },
-      ])
-      await recycleTask({ taskId: task.id })
-    }, 300)
+      setTimeout(async () => {
+        addOptimisticTask([
+          { ...task, deleted: true, complete: false, beingDeleted: false },
+        ])
+        await recycleTask({ taskId: task.id })
+      }, 300)
+    })
   }
 
   const handleReviveTask = async ({ date = today }: { date?: DateTime }) => {
@@ -249,9 +251,7 @@ export default function TaskDropDown({
       title: "Recycle",
       invisible: task.deleted,
       icon: <Icon path={mdiTrashCanOutline} size={0.7} />,
-      action: () => {
-        startTransition(handleRecycleTask)
-      },
+      action: () => handleRecycleTask(),
     },
   ]
 

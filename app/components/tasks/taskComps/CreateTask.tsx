@@ -154,6 +154,24 @@ export default function CreateTask({
     }
 
     const handleCreateTask = async () => {
+      const newTask: Task = {
+        id: "optimistic",
+        title: title,
+        deleted: false,
+        complete: false,
+        start_time: null,
+        completion_date: null,
+        end_time: null,
+        repeat: null,
+        creation_date: DateTime.now().toJSDate(),
+        due_date: dueDate.toJSDate(),
+        priority: priority,
+        user_id: "optimistic",
+        steps: [],
+      }
+
+      addOptimisticTask([newTask])
+
       await createTask({ title: title, priority: priority, dueDate: dueDate.toJSDate() })
     }
 
@@ -167,23 +185,7 @@ export default function CreateTask({
         }
       )
     }
-    const newTask: Task = {
-      id: "optimistic",
-      title: title,
-      deleted: false,
-      complete: false,
-      start_time: null,
-      completion_date: null,
-      end_time: null,
-      repeat: null,
-      creation_date: DateTime.now().toJSDate(),
-      due_date: dueDate.toJSDate(),
-      priority: priority,
-      user_id: "optimistic",
-      steps: [],
-    }
 
-    addOptimisticTask([newTask])
     startTransition(handleCreateTask)
     setTitle("")
     setPriority(defaultPriority)

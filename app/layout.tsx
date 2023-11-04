@@ -8,8 +8,17 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { HooksWrapper } from "./HooksWrapper"
 import Modal from "./components/modal/Modal"
+import { Viewport } from "next"
 
 const inter = Inter({ subsets: ["latin"] })
+
+export const viewport: Viewport = {
+  themeColor: "#0a0a0a",
+  colorScheme: "dark",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+}
 
 export const metadata: Metadata = {
   title: {
@@ -22,7 +31,7 @@ export const metadata: Metadata = {
   applicationName: "Taskmaster",
   keywords: ["Taskmaster", "to do", "to-do", "routine", "organize"],
   authors: [{ name: "Lev" }],
-  colorScheme: "dark",
+
   creator: "Levan Dolidze",
   publisher: "Levan Dolidze",
 
@@ -48,10 +57,6 @@ export const metadata: Metadata = {
   icons: {
     icon: "./public/icon.png",
   },
-
-  themeColor: "#0a0a0a",
-
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

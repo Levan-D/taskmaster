@@ -3,7 +3,7 @@
 "use client"
 
 import Tasks from "@/app/components/tasks/taskComps/Tasks"
-import { experimental_useOptimistic as useOptimistic } from "react"
+import { useOptimistic } from "react"
 import Pagination from "@/app/components/Pagination"
 import TasksRecycle from "@/app/components/tasks/taskComps/TasksRecycle"
 import TasksRevive from "@/app/components/tasks/taskComps/TasksRevive"

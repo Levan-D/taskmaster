@@ -85,7 +85,7 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
       }, 0)
     }
   }, [])
-
+  console.log(isBeingCompleted)
   return (
     <div
       style={progressBarStyle}

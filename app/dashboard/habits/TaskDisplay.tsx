@@ -3,7 +3,7 @@
 "use client"
 
 import Tasks from "@/app/components/tasks/taskComps/Tasks"
-import { experimental_useOptimistic as useOptimistic } from "react"
+import { useOptimistic } from "react"
 
 type Props = {
   tasks: Task[]

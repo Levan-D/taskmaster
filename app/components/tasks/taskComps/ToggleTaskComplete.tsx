@@ -16,14 +16,20 @@ export default function ToggleTaskComplete({ task, addOptimisticTask, expired }:
   const [isPending, startTransition] = useTransition()
   const [hovering, setHovering] = useState(false)
 
-  const handleToggleTaskComplete = async () => {
-    if (!task.complete) addOptimisticTask([{ ...task, beingCompleted: "down" }])
-    if (task.complete) addOptimisticTask([{ ...task, beingCompleted: "up" }])
+  const handleToggleTaskComplete = () => {
+    startTransition(() => {
+      addOptimisticTask([
+        {
+          ...task,
+          complete: !task.complete,
+          beingCompleted: task.complete ? "up" : "down",
+        },
+      ])
 
-    setTimeout(async () => {
-      addOptimisticTask([{ ...task, complete: !task.complete, beingCompleted: false }])
-      await toggleTaskComplete({ taskId: task.id, complete: !task.complete })
-    }, 400)
+      setTimeout(() => {
+        toggleTaskComplete({ taskId: task.id, complete: !task.complete })
+      }, 4000)
+    })
   }
 
   const getColor = () => {
@@ -48,7 +54,7 @@ export default function ToggleTaskComplete({ task, addOptimisticTask, expired }:
           ? "bg-lime-600 md:hover:bg-lime-500"
           : "bg-neutral-950 md:hover:bg-neutral-900"
       } block  rounded-tl-lg rounded-br-lg p-1 sm:p-2 duration-300 transition-colors   `}
-      onClick={() => startTransition(handleToggleTaskComplete)}
+      onClick={handleToggleTaskComplete}
     >
       <Icon
         path={task.complete || hovering ? mdiCheckBold : mdiCheckOutline}
