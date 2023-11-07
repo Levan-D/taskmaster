@@ -8,7 +8,6 @@ interface initialStateType {
   modal: {
     open: boolean
     type: null | "timer" | "cookie clock" | "habit"
-    selectedTask: TaskStringed | null
   }
 
   cookieClockData: CookieClockType | undefined | null
@@ -23,7 +22,6 @@ const initialState: initialStateType = {
   modal: {
     open: false,
     type: null,
-    selectedTask: null,
   },
   cookieClockData: {
     start_time: DateTime.now().toISO() || "",
@@ -44,10 +42,7 @@ const globalSlice = createSlice({
   initialState,
   reducers: {
     resetGlobalState: () => initialState,
-    setTodaysOps: (
-      state,
-      action: PayloadAction<initialStateType["todaysOps"]>
-    ) => {
+    setTodaysOps: (state, action: PayloadAction<initialStateType["todaysOps"]>) => {
       state.todaysOps = action.payload
     },
 
@@ -63,16 +58,10 @@ const globalSlice = createSlice({
     setModal: (state, action: PayloadAction<initialStateType["modal"]>) => {
       state.modal = action.payload
     },
-    setWindowWidth: (
-      state,
-      action: PayloadAction<initialStateType["windowWidth"]>
-    ) => {
+    setWindowWidth: (state, action: PayloadAction<initialStateType["windowWidth"]>) => {
       state.windowWidth = action.payload
     },
-    setWeeksOps: (
-      state,
-      action: PayloadAction<initialStateType["weeksOps"]>
-    ) => {
+    setWeeksOps: (state, action: PayloadAction<initialStateType["weeksOps"]>) => {
       state.weeksOps = action.payload
     },
   },

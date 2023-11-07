@@ -82,7 +82,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 pauseOnHover
                 theme="colored"
               />
-              <Modal />
+          
+              <div id="modal-root"></div>
             </main>
           </HooksWrapper>
         </body>

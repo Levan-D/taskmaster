@@ -89,7 +89,6 @@ export default function TaskDisplay({ tasks }: Props) {
     }
   )
 
-
   const optimisticTasksLength = optimisticTasks.filter(
     (task: Task) => !task.deleted
   ).length

@@ -24,6 +24,7 @@ import "react-datepicker/dist/react-datepicker.css"
 import { useRef } from "react"
 import { useAppDispatch } from "@/lib/redux/hooks"
 import { setModal } from "@/lib/redux/slices/globalSlice"
+import Modal from "../../modal/Modal"
 
 type Props = {
   task: Task
@@ -77,21 +78,6 @@ export default function TaskDropDown({
       addOptimisticTask([{ ...task, priority: priority }])
       updateTask({ taskId: task.id, priority: priority, title: task.title })
     })
-  }
-
-  const stringifyDates = (task: Task): TaskStringed => {
-    let newTask = { ...task, steps: [] }
-
-    for (const key in newTask) {
-      if (newTask[key as keyof Task] instanceof Date) {
-        newTask = {
-          ...newTask,
-          [key as keyof Task]: newTask[key as keyof Task].toISOString(),
-        }
-      }
-    }
-
-    return newTask
   }
 
   const items: DropDownItemType = [
@@ -231,7 +217,6 @@ export default function TaskDropDown({
           setModal({
             open: true,
             type: "timer",
-            selectedTask: stringifyDates(task),
           })
         ),
       invisible: expired || task.deleted || task.complete ? true : false,
@@ -244,7 +229,6 @@ export default function TaskDropDown({
           setModal({
             open: true,
             type: "habit",
-            selectedTask: stringifyDates(task),
           })
         ),
       invisible: expired || task.deleted || task.complete ? true : false,
@@ -293,6 +277,9 @@ export default function TaskDropDown({
             </button>
           </Tooltip>
         )}
+
+        <Modal task={task} addOptimisticTask={addOptimisticTask} />
+
         <DropdownMenu
           ref={dropdownRef}
           menuClassName="-translate-x-[116px]  "

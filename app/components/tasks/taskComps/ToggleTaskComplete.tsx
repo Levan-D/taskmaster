@@ -39,8 +39,7 @@ export default function ToggleTaskComplete({ task, addOptimisticTask, expired }:
       }
     })
 
-    toggleTaskComplete({ taskId: task.id, complete: !task.complete })
-  }
+   }
 
   const getColor = () => {
     if (task.complete || task.beingCompleted) return "text-white"

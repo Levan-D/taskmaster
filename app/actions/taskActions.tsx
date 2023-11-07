@@ -145,7 +145,7 @@ export const deleteTaskHabit = async ({
         user_id: userData.id,
       },
       data: {
-        repeat: Prisma.JsonNull,
+        deleted: true,
       },
     })
     revalidatePath("/dashboard")
@@ -178,7 +178,7 @@ export const setTimer = async ({
         end_time: end_time,
       },
     })
-    revalidatePath("/dashboard")
+    revalidatePath("/")
     return { success: true }
   } catch (error) {
     return handleApiError(error)

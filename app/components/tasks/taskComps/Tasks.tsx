@@ -30,6 +30,7 @@ function Task({ task, expired, addOptimisticTask }: TaskProps) {
   const isBeingCompleted = task.beingCompleted
 
   useEffect(() => {
+  
     if (!task.start_time && !task.end_time) return
 
     const updateProgressBar = () => {

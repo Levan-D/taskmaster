@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { DateTime } from "luxon"
 import { setTimer } from "@/app/actions/taskActions"
-import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
+import { useAppDispatch } from "@/lib/redux/hooks"
 import { setModal } from "@/lib/redux/slices/globalSlice"
 import Icon from "@mdi/react"
 import {
@@ -15,14 +15,13 @@ import {
   mdiTimerOffOutline,
   mdiChevronDown,
 } from "@mdi/js"
-import { useRouter } from "next/navigation"
 
-export default function Timer() {
-  const router = useRouter()
+type Props = {
+  task: Task
+  addOptimisticTask: (action: Task[]) => void
+}
 
-  const {
-    modal: { selectedTask },
-  } = useAppSelector(state => state.global)
+export default function Timer({ task, addOptimisticTask }: Props) {
   const dispatch = useAppDispatch()
   const [isPending, startTransition] = useTransition()
 
@@ -31,45 +30,37 @@ export default function Timer() {
   }
 
   const [startTime, setStartTime] = useState<Date>(
-    selectedTask?.start_time
-      ? DateTime.fromISO(selectedTask.start_time).toJSDate()
-      : getRoundedTime()
+    task.start_time ? task.start_time : getRoundedTime()
   )
   const [endTime, setEndTime] = useState<Date>(
-    selectedTask?.end_time
-      ? DateTime.fromISO(selectedTask.end_time).toJSDate()
-      : new Date(startTime.getTime() + 5 * 60 * 1000)
+    task.end_time ? task.end_time : new Date(startTime.getTime() + 5 * 60 * 1000)
   )
 
   const handleCloseModal = () => {
-    dispatch(setModal({ open: false, type: null, selectedTask: null }))
+    dispatch(setModal({ open: false, type: null }))
   }
 
   const handleSetTimer = () => {
-    startTransition(async () => {
-      try {
-        if (selectedTask)
-          await setTimer({
-            taskId: selectedTask?.id,
-            end_time: endTime,
-            start_time: startTime,
-          })
-        router.refresh()
-        handleCloseModal()
-      } catch (error) {}
+    startTransition(() => {
+      addOptimisticTask([{ ...task, end_time: endTime, start_time: startTime }])
+      setTimer({
+        taskId: task.id,
+        end_time: endTime,
+        start_time: startTime,
+      })
+
+      handleCloseModal()
     })
   }
-  console.log(isPending)
+
   const handleResetTimer = () => {
     startTransition(() => {
-      if (selectedTask)
-        try {
-          setTimer({
-            taskId: selectedTask?.id,
-            end_time: null,
-            start_time: null,
-          })
-        } catch (error) {}
+      addOptimisticTask([{ ...task, end_time: null, start_time: null }])
+      setTimer({
+        taskId: task.id,
+        end_time: null,
+        start_time: null,
+      })
     })
     handleCloseModal()
   }

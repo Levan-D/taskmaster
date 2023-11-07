@@ -12,9 +12,14 @@ import {
   mdiTrashCanOutline,
   mdiWindowClose,
 } from "@mdi/js"
-import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
+import { useAppDispatch } from "@/lib/redux/hooks"
 import { setModal } from "@/lib/redux/slices/globalSlice"
 import { updateTaskHabit, deleteTaskHabit } from "@/app/actions/taskActions"
+
+type Props = {
+  task: Task
+  addOptimisticTask: (action: Task[]) => void
+}
 
 type Radio = {
   Monday: boolean
@@ -27,11 +32,8 @@ type Radio = {
 }
 type RadioKey = keyof Radio
 
-export default function Habit() {
+export default function Habit({ task, addOptimisticTask }: Props) {
   const dispatch = useAppDispatch()
-  const {
-    modal: { selectedTask },
-  } = useAppSelector(state => state.global)
 
   const defaultState = {
     Monday: false,
@@ -78,36 +80,40 @@ export default function Habit() {
   }
 
   const [isPending, startTransition] = useTransition()
-  const [radio, setRadio] = useState(
-    selectedTask ? updateDefaultState(selectedTask) : defaultState
-  )
+  const [radio, setRadio] = useState(task ? updateDefaultState(task) : defaultState)
 
   const onDayChange = (key: string) => {
     setRadio({ ...radio, [key as RadioKey]: !radio[key as RadioKey] })
   }
 
   const handleCloseModal = () => {
-    dispatch(setModal({ open: false, type: null, selectedTask: null }))
+    dispatch(setModal({ open: false, type: null }))
   }
 
-  const handleDeleteHabit = async () => {
-    if (selectedTask) await deleteTaskHabit({ taskId: selectedTask?.id })
-    handleCloseModal()
+  const handleDeleteHabit = () => {
+    startTransition(() => {
+      addOptimisticTask([{ ...task, repeat: null }])
+      deleteTaskHabit({
+        taskId: task.id,
+      })
+      handleCloseModal()
+    })
   }
 
-  const handleUpdateHabit = async () => {
-    if (!selectedTask) return
-
+  const handleUpdateHabit = () => {
     const selectedDays = Object.keys(radio)
       .filter(key => radio[key as RadioKey])
       .map(key => key.slice(0, 3)) as RepeatType["days"]
 
     if (selectedDays.length > 0) {
-      await updateTaskHabit({
-        taskId: selectedTask?.id,
-        repeat: { days: selectedDays },
+      startTransition(() => {
+        addOptimisticTask([{ ...task, repeat: { days: selectedDays } }])
+        updateTaskHabit({
+          taskId: task.id,
+          repeat: { days: selectedDays },
+        })
+        handleCloseModal()
       })
-      handleCloseModal()
     } else handleDeleteHabit()
   }
 
@@ -140,7 +146,7 @@ export default function Habit() {
 
       <button
         disabled={isPending}
-        onClick={() => startTransition(handleDeleteHabit)}
+        onClick={handleDeleteHabit}
         className="btnSecondary block w-full py-3 mb-4"
       >
         <div
@@ -160,7 +166,7 @@ export default function Habit() {
       <div className="flex gap-4">
         <button
           disabled={isPending}
-          onClick={() => startTransition(handleUpdateHabit)}
+          onClick={handleUpdateHabit}
           className="btnPrimary block w-full py-3"
         >
           <div
