@@ -78,7 +78,7 @@ export default function Habit({ task, addOptimisticTask }: Props) {
 
     return updatedState
   }
-
+  
   const [isPending, startTransition] = useTransition()
   const [radio, setRadio] = useState(task ? updateDefaultState(task) : defaultState)
 
@@ -92,10 +92,12 @@ export default function Habit({ task, addOptimisticTask }: Props) {
 
   const handleDeleteHabit = () => {
     startTransition(() => {
-      addOptimisticTask([{ ...task, repeat: null }])
-      deleteTaskHabit({
-        taskId: task.id,
-      })
+      if (task.repeat) {
+        addOptimisticTask([{ ...task, repeat: null }])
+        deleteTaskHabit({
+          taskId: task.id,
+        })
+      }
       handleCloseModal()
     })
   }

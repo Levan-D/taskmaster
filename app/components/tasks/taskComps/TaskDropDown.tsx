@@ -245,57 +245,63 @@ export default function TaskDropDown({
   ]
 
   return (
-    (windowWidth <= 640 || (windowWidth > 640 && visible)) && (
-      <div className="flex ">
-        {((expired && !task.complete) || task.deleted) && (
-          <Tooltip text="Revive for today" className="delay-500">
-            <button
-              disabled={isPending}
-              onClick={() => handleReviveTask({})}
-              className="p-1 sm:p-2 block bg-lime-600 shadow-sm hover:bg-lime-500 rounded-bl-lg duration-300"
-            >
-              <Icon
-                className="  scale-75 sm:scale-100 "
-                path={mdiHeartOutline}
-                size={1}
-              />
-            </button>
-          </Tooltip>
-        )}
-        {task.complete && !task.deleted && (
-          <Tooltip text="Recycle" className="delay-500">
-            <button
-              disabled={isPending}
-              onClick={handleRecycleTask}
-              className={`block bg-neutral-600 shadow-sm hover:bg-neutral-500 border-r-[2px]  border-neutral-700    rounded-bl-lg p-1 sm:p-2 duration-300 `}
-            >
-              <Icon
-                className="  scale-75 sm:scale-100 "
-                path={mdiTrashCanOutline}
-                size={1}
-              />
-            </button>
-          </Tooltip>
-        )}
+    <>
+      {(windowWidth <= 640 || (windowWidth > 640 && visible)) && (
+        <div className="flex ">
+          {((expired && !task.complete) || task.deleted) && (
+            <Tooltip text="Revive for today" className="delay-500">
+              <button
+                disabled={isPending}
+                onClick={() => handleReviveTask({})}
+                className="p-1 sm:p-2 block bg-lime-600 shadow-sm hover:bg-lime-500 rounded-bl-lg duration-300"
+              >
+                <Icon
+                  className="  scale-75 sm:scale-100 "
+                  path={mdiHeartOutline}
+                  size={1}
+                />
+              </button>
+            </Tooltip>
+          )}
+          {task.complete && !task.deleted && (
+            <Tooltip text="Recycle" className="delay-500">
+              <button
+                disabled={isPending}
+                onClick={handleRecycleTask}
+                className={`block bg-neutral-600 shadow-sm hover:bg-neutral-500 border-r-[2px]  border-neutral-700    rounded-bl-lg p-1 sm:p-2 duration-300 `}
+              >
+                <Icon
+                  className="  scale-75 sm:scale-100 "
+                  path={mdiTrashCanOutline}
+                  size={1}
+                />
+              </button>
+            </Tooltip>
+          )}
 
-        <Modal task={task} addOptimisticTask={addOptimisticTask} />
-
-        <DropdownMenu
-          ref={dropdownRef}
-          menuClassName="-translate-x-[116px]  "
-          items={items}
-        >
-          <div
-            className={`${
-              expired || (task.complete && !task.deleted) || task.deleted
-                ? `bg-neutral-600 shadow-sm hover:bg-neutral-500`
-                : "rounded-bl-lg"
-            } hover:bg-neutral-600 rounded-tr-lg p-1 sm:p-2   duration-300`}
+          <DropdownMenu
+            ref={dropdownRef}
+            menuClassName="-translate-x-[116px]  "
+            items={items}
           >
-            <Icon path={mdiDotsVertical} size={1} className="  scale-75 sm:scale-100 " />
-          </div>
-        </DropdownMenu>
-      </div>
-    )
+            <div
+              className={`${
+                expired || (task.complete && !task.deleted) || task.deleted
+                  ? `bg-neutral-600 shadow-sm hover:bg-neutral-500`
+                  : "rounded-bl-lg"
+              } hover:bg-neutral-600 rounded-tr-lg p-1 sm:p-2   duration-300`}
+            >
+              <Icon
+                path={mdiDotsVertical}
+                size={1}
+                className="  scale-75 sm:scale-100 "
+              />
+            </div>
+          </DropdownMenu>
+        </div>
+      )}
+
+      <Modal task={task} addOptimisticTask={addOptimisticTask} />
+    </>
   )
 }

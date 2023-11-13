@@ -7,7 +7,6 @@ import { Providers } from "@/lib/providers"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { HooksWrapper } from "./HooksWrapper"
-import Modal from "./components/modal/Modal"
 import { Viewport } from "next"
 
 const inter = Inter({ subsets: ["latin"] })

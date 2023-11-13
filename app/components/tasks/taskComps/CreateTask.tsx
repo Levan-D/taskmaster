@@ -153,7 +153,7 @@ export default function CreateTask({
       dueDate = customDate
     }
 
-    const handleCreateTask = async () => {
+    const handleCreateTask = () => {
       const newTask: Task = {
         id: "optimistic",
         title: title,
@@ -172,7 +172,7 @@ export default function CreateTask({
 
       addOptimisticTask([newTask])
 
-      await createTask({ title: title, priority: priority, dueDate: dueDate.toJSDate() })
+      createTask({ title: title, priority: priority, dueDate: dueDate.toJSDate() })
     }
 
     if (taskLimit > 19) {

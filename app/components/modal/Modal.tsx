@@ -1,6 +1,6 @@
 /** @format */
 "use client"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import Icon from "@mdi/react"
 import {
@@ -22,12 +22,16 @@ type Props = {
 }
 
 export default function Modal({ task, addOptimisticTask }: Props) {
+  const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null)
+
   const dispatch = useAppDispatch()
   const {
     modal: { open, type },
   } = useAppSelector(state => state.global)
-
+  console.log(type)
   useEffect(() => {
+    setModalRoot(document.getElementById("modal-root"))
+
     if (open) {
       document.body.style.overflow = "hidden"
     } else {
@@ -93,45 +97,41 @@ export default function Modal({ task, addOptimisticTask }: Props) {
     }
   }
 
-  const modalRoot = document.getElementById("modal-root")
-  if (!modalRoot) {
-    console.error("Modal root element not found")
-    return null
-  }
-
   return (
     <>
-      {createPortal(
-        <div
-          onClick={handleCloseModal}
-          className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ${
-            open ? "visible opacity-100" : "collapse opacity-0"
-          }`}
-        >
-          <div className="z-50  flex min-h-[360px] w-full max-w-[540px]  flex-col   mainContainer     md:min-h-[600px] ">
-            <div className=" flex grow flex-col rounded-xl      px-6 py-4 ">
-              <div className="flex  items-center justify-between">
-                <div className="flex gap-1  items-center">
-                  <Icon path={renderIcon()} size={0.98} />
-                  <h3 className="text-xl font-semibold select-none">{renderTitle()}</h3>
+      {modalRoot &&
+        createPortal(
+          <div
+            onClick={handleCloseModal}
+            className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ${
+              open ? "visible opacity-100" : "collapse opacity-0"
+            }`}
+          >
+            <div className="z-50  flex min-h-[360px] w-full max-w-[540px]  flex-col   mainContainer     md:min-h-[600px] ">
+              <div className=" flex grow flex-col rounded-xl      px-6 py-4 ">
+                <div className="flex  items-center justify-between">
+                  <div className="flex gap-1  items-center">
+                    <Icon path={renderIcon()} size={0.98} />
+                    <h3 className="text-xl font-semibold select-none">{renderTitle()}</h3>
+                  </div>
+                  <button
+                    aria-label="close"
+                    onClick={handleCloseButtonClick}
+                    className=" p-0.5 btnIcon"
+                  >
+                    <Icon path={mdiClose} size={1} />
+                  </button>
                 </div>
-                <button
-                  aria-label="close"
-                  onClick={handleCloseButtonClick}
-                  className=" p-0.5 btnIcon"
-                >
-                  <Icon path={mdiClose} size={1} />
-                </button>
+
+                <hr className="my-4 h-0.5 border-none bg-neutral-600 opacity-50" />
+
+                <div className="flex flex-col grow">{renderContenet()}</div>
               </div>
-
-              <hr className="my-4 h-0.5 border-none bg-neutral-600 opacity-50" />
-
-              <div className="flex flex-col grow">{renderContenet()}</div>
             </div>
-          </div>
-        </div>,
-        modalRoot
-      )}
+          </div>,
+          modalRoot,
+          "type"
+        )}
     </>
   )
 }

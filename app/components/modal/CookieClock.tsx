@@ -27,22 +27,18 @@ export default function CookieClock() {
         }
   )
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    startTransition(async () => {
-      try {
-        await createOrUpdateCookieClock({
-          ...formValues,
-          start_time: DateTime.now().toISO() || "",
-        })
-        dispatch(
-          setCookieClockData({ ...formValues, start_time: DateTime.now().toISO() || "" })
-        )
-        handleCloseModal()
-      } catch (error) {
-        console.error("Error updating cookie clock data:", error)
-      }
+    startTransition(() => {
+      createOrUpdateCookieClock({
+        ...formValues,
+        start_time: DateTime.now().toISO() || "",
+      })
+      dispatch(
+        setCookieClockData({ ...formValues, start_time: DateTime.now().toISO() || "" })
+      )
+      handleCloseModal()
     })
   }
 
