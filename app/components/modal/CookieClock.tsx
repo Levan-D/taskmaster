@@ -30,15 +30,21 @@ export default function CookieClock() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    startTransition(() => {
-      createOrUpdateCookieClock({
-        ...formValues,
-        start_time: DateTime.now().toISO() || "",
-      })
-      dispatch(
-        setCookieClockData({ ...formValues, start_time: DateTime.now().toISO() || "" })
-      )
-      handleCloseModal()
+    startTransition(async () => {
+      try {
+        dispatch(
+          setCookieClockData({ ...formValues, start_time: DateTime.now().toISO() || "" })
+        )
+        await createOrUpdateCookieClock({
+          ...formValues,
+          start_time: DateTime.now().toISO() || "",
+        })
+
+        handleCloseModal()
+      } catch (error) {
+        console.error("Failed to set/update cookie clock:", error)
+        handleCloseModal()
+      }
     })
   }
 

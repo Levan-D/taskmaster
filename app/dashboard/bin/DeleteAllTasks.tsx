@@ -18,10 +18,14 @@ export default function DeleteAllTasks({
 }: Props) {
   const [isPending, startTransition] = useTransition()
 
-  const handleDeleteTasks = async () => {
-    startTransition(() => {
-      addOptimisticTask([])
-      deleteAllTasks()
+  const handleDeleteTasks = () => {
+    startTransition(async () => {
+      try {
+        addOptimisticTask([])
+        await deleteAllTasks()
+      } catch (error) {
+        console.error("Failed to delete  all tasks:", error)
+      }
     })
   }
 

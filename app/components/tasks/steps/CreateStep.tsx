@@ -47,9 +47,13 @@ export default function CreateStep({
     const newSteps = [newStep, ...task.steps]
     const updatedTasks = { ...task, steps: newSteps }
 
-    startTransition(() => {
-      addOptimisticTask([updatedTasks])
-      createStep({ title: title, taskId: task.id })
+    startTransition(async () => {
+      try {
+        addOptimisticTask([updatedTasks])
+        await createStep({ title: title, taskId: task.id })
+      } catch (error) {
+        console.error("Failed to create step:", error)
+      }
     })
 
     setTitle("")

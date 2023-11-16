@@ -68,10 +68,13 @@ export default function StepUpdate({
       const updatedStep = { ...step, title: inputValue }
       const updatedTasks = updateStepInTask(task, updatedStep)
 
-      startTransition(() => {
-        addOptimisticTask([updatedTasks])
-
-        updateStep({ title: inputValue, stepId: step.id })
+      startTransition(async () => {
+        try {
+          addOptimisticTask([updatedTasks])
+          await updateStep({ title: inputValue, stepId: step.id })
+        } catch (error) {
+          console.error("Failed to update step:", error)
+        }
       })
     }
   }

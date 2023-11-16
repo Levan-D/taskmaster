@@ -153,7 +153,18 @@ export default function CreateTask({
       dueDate = customDate
     }
 
-    const handleCreateTask = () => {
+    if (taskLimit > 19) {
+      return toast.warning(
+        <div className="text-neutral-950">
+          Complete some of your current tasks before adding new ones
+        </div>,
+        {
+          toastId: "taskLimit",
+        }
+      )
+    }
+
+    startTransition(async () => {
       const newTask: Task = {
         id: "optimistic",
         title: title,
@@ -170,23 +181,17 @@ export default function CreateTask({
         steps: [],
       }
 
-      addOptimisticTask([newTask])
-
-      createTask({ title: title, priority: priority, dueDate: dueDate.toJSDate() })
-    }
-
-    if (taskLimit > 19) {
-      return toast.warning(
-        <div className="text-neutral-950">
-          Complete some of your current tasks before adding new ones
-        </div>,
-        {
-          toastId: "taskLimit",
-        }
-      )
-    }
-
-    startTransition(handleCreateTask)
+      try {
+        addOptimisticTask([newTask])
+        await createTask({
+          title: title,
+          priority: priority,
+          dueDate: dueDate.toJSDate(),
+        })
+      } catch (error) {
+        console.error("Failed to create task:", error)
+      }
+    })
     setTitle("")
     setPriority(defaultPriority)
     setCalendar(defaultDate)

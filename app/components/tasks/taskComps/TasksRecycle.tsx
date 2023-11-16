@@ -27,9 +27,13 @@ export default function TasksRecycle({
       return { ...task, deleted: true }
     })
 
-    startTransition(() => {
-      addOptimisticTask(updatedTasks)
-      recycleTasks({ taskIds: expiredTaskIds })
+    startTransition(async () => {
+      try {
+        addOptimisticTask(updatedTasks)
+        await recycleTasks({ taskIds: expiredTaskIds })
+      } catch (error) {
+        console.error("Failed to recycle tasks:", error)
+      }
     })
   }
 

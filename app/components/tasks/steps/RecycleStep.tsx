@@ -44,7 +44,7 @@ export default function RecycleStep({ task, step, addOptimisticTask }: Props) {
 
         await recycleStep({ stepId: step.id })
       } catch (error) {
-        console.error(error)
+        console.error("Failed to recycle step:", error)
       }
     })
   }

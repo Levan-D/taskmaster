@@ -35,9 +35,13 @@ export default function ToggleStepComplete({ task, step, addOptimisticTask }: Pr
     const updatedStep = { ...step, complete: !step.complete }
     const updatedTasks = updateStepInTask(task, updatedStep)
 
-    startTransition(() => {
-      addOptimisticTask([updatedTasks])
-      toggleStepComplete({ stepId: step.id, complete: !step.complete })
+    startTransition(async () => {
+      try {
+        addOptimisticTask([updatedTasks])
+        await toggleStepComplete({ stepId: step.id, complete: !step.complete })
+      } catch (error) {
+        console.error("Failed to toggle step complete:", error)
+      }
     })
   }
 

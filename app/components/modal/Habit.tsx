@@ -78,7 +78,7 @@ export default function Habit({ task, addOptimisticTask }: Props) {
 
     return updatedState
   }
-  
+
   const [isPending, startTransition] = useTransition()
   const [radio, setRadio] = useState(task ? updateDefaultState(task) : defaultState)
 
@@ -91,14 +91,19 @@ export default function Habit({ task, addOptimisticTask }: Props) {
   }
 
   const handleDeleteHabit = () => {
-    startTransition(() => {
-      if (task.repeat) {
-        addOptimisticTask([{ ...task, repeat: null }])
-        deleteTaskHabit({
-          taskId: task.id,
-        })
+    startTransition(async () => {
+      try {
+        if (task.repeat) {
+          addOptimisticTask([{ ...task, repeat: null }])
+          await deleteTaskHabit({
+            taskId: task.id,
+          })
+        }
+        handleCloseModal()
+      } catch (error) {
+        console.error("Failed to delete habit:", error)
+        handleCloseModal()
       }
-      handleCloseModal()
     })
   }
 
@@ -108,13 +113,18 @@ export default function Habit({ task, addOptimisticTask }: Props) {
       .map(key => key.slice(0, 3)) as RepeatType["days"]
 
     if (selectedDays.length > 0) {
-      startTransition(() => {
-        addOptimisticTask([{ ...task, repeat: { days: selectedDays } }])
-        updateTaskHabit({
-          taskId: task.id,
-          repeat: { days: selectedDays },
-        })
-        handleCloseModal()
+      startTransition(async () => {
+        try {
+          addOptimisticTask([{ ...task, repeat: { days: selectedDays } }])
+          await updateTaskHabit({
+            taskId: task.id,
+            repeat: { days: selectedDays },
+          })
+          handleCloseModal()
+        } catch (error) {
+          console.error("Failed to update habit:", error)
+          handleCloseModal()
+        }
       })
     } else handleDeleteHabit()
   }

@@ -48,9 +48,17 @@ export default function TaskUpdate({
     toggleEdit()
 
     if (inputValue !== task.title) {
-      startTransition(() => {
-        addOptimisticTask([{ ...task, title: inputValue, priority: task.priority }])
-        updateTask({ title: inputValue, taskId: task.id, priority: task.priority })
+      startTransition(async () => {
+        try {
+          addOptimisticTask([{ ...task, title: inputValue, priority: task.priority }])
+          await updateTask({
+            title: inputValue,
+            taskId: task.id,
+            priority: task.priority,
+          })
+        } catch (error) {
+          console.error("Failed to update tasks:", error)
+        }
       })
     }
   }

@@ -67,16 +67,24 @@ export default function TaskDropDown({
   }
 
   const handleReviveTask = ({ date = today }: { date?: DateTime }) => {
-    startTransition(() => {
-      addOptimisticTask([{ ...task, due_date: date.toJSDate(), deleted: false }])
-      reviveTask({ taskId: task.id, dueDate: date.toJSDate() })
+    startTransition(async () => {
+      try {
+        addOptimisticTask([{ ...task, due_date: date.toJSDate(), deleted: false }])
+        await reviveTask({ taskId: task.id, dueDate: date.toJSDate() })
+      } catch (error) {
+        console.error("Failed to revive task:", error)
+      }
     })
   }
 
   const handleChangeTaskPriority = (priority: TaskPriority) => {
-    startTransition(() => {
-      addOptimisticTask([{ ...task, priority: priority }])
-      updateTask({ taskId: task.id, priority: priority, title: task.title })
+    startTransition(async () => {
+      try {
+        addOptimisticTask([{ ...task, priority: priority }])
+        await updateTask({ taskId: task.id, priority: priority, title: task.title })
+      } catch (error) {
+        console.error("Failed to change task priority:", error)
+      }
     })
   }
 

@@ -15,6 +15,7 @@ export default function TasksRevive({ className, tasks, addOptimisticTask }: Pro
   const [isPending, startTransition] = useTransition()
   const expiredTaskIds = tasks.map(task => task.id)
   const today = DateTime.now()
+
   const handleReviveTasks = async () => {
     if (expiredTaskIds.length === 0) return
 
@@ -22,10 +23,13 @@ export default function TasksRevive({ className, tasks, addOptimisticTask }: Pro
       return { ...task, due_date: today.toJSDate() }
     })
 
-    startTransition(() => {
-      addOptimisticTask(updatedTasks)
-
-      reviveTasks({ taskIds: expiredTaskIds, dueDate: today.toJSDate() })
+    startTransition(async () => {
+      try {
+        addOptimisticTask(updatedTasks)
+        await reviveTasks({ taskIds: expiredTaskIds, dueDate: today.toJSDate() })
+      } catch (error) {
+        console.error("Failed to revive tasks:", error)
+      }
     })
   }
 

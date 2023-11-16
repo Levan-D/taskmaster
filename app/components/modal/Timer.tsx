@@ -41,28 +41,40 @@ export default function Timer({ task, addOptimisticTask }: Props) {
   }
 
   const handleSetTimer = () => {
-    startTransition(() => {
-      addOptimisticTask([{ ...task, end_time: endTime, start_time: startTime }])
-      setTimer({
-        taskId: task.id,
-        end_time: endTime,
-        start_time: startTime,
-      })
+    startTransition(async () => {
+      try {
+        addOptimisticTask([{ ...task, end_time: endTime, start_time: startTime }])
+        await setTimer({
+          taskId: task.id,
+          end_time: endTime,
+          start_time: startTime,
+        })
 
-      handleCloseModal()
+        handleCloseModal()
+      } catch (error) {
+        handleCloseModal()
+
+        console.error("Failed to set timer:", error)
+      }
     })
   }
 
   const handleResetTimer = () => {
-    startTransition(() => {
-      addOptimisticTask([{ ...task, end_time: null, start_time: null }])
-      setTimer({
-        taskId: task.id,
-        end_time: null,
-        start_time: null,
-      })
+    startTransition(async () => {
+      try {
+        addOptimisticTask([{ ...task, end_time: null, start_time: null }])
+        await setTimer({
+          taskId: task.id,
+          end_time: null,
+          start_time: null,
+        })
+
+        handleCloseModal()
+      } catch (error) {
+        handleCloseModal()
+        console.error("Failed to reset timer:", error)
+      }
     })
-    handleCloseModal()
   }
 
   useEffect(() => {
