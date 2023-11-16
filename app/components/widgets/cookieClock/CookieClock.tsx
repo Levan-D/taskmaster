@@ -16,14 +16,7 @@ export default function CookieClock() {
   const [isCookieClockOpen, setIsCookieClockOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [isPending, startTransition] = useTransition()
-  const [cookieClockData, setCookieClockData] = useState<CookieClockType>({
-    start_time: DateTime.now().toISO() || "",
-    work_duration: 25,
-    rest_duration: 5,
-    big_break_frequency: 3,
-    big_break_duration: 30,
-    total_cycles: 3,
-  })
+  const [cookieClockData, setCookieClockData] = useState<CookieClockType | null>(null)
 
   const handleCloseCookieClockModal = () => {
     setIsCookieClockOpen(() => false)

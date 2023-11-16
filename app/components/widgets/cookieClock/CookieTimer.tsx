@@ -9,7 +9,7 @@ import { mdiPencilOutline, mdiRestart } from "@mdi/js"
 type Props = {
   handleSetNewCookieClock: () => void
   cookieClockData: CookieClockType
-  setCookieClockData: React.Dispatch<React.SetStateAction<CookieClockType>>
+  setCookieClockData: React.Dispatch<React.SetStateAction<CookieClockType | null>>
 }
 
 export default function CookieTimer({

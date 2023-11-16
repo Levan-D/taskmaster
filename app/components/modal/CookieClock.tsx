@@ -10,7 +10,7 @@ import Tooltip from "../Tooltip"
 type Props = {
   handleClose: () => void
   cookieClockData: CookieClockType
-  setCookieClockData: React.Dispatch<React.SetStateAction<CookieClockType>>
+  setCookieClockData: React.Dispatch<React.SetStateAction<CookieClockType | null>>
 }
 
 export default function CookieClock({
@@ -42,6 +42,11 @@ export default function CookieClock({
         handleClose()
       }
     })
+  }
+
+  const handleCancelModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    handleClose()
   }
 
   const resetCookieClockData = (e: React.FormEvent) => {
@@ -195,7 +200,7 @@ export default function CookieClock({
           <button
             className="btnSecondary block w-full py-3"
             disabled={isPending}
-            onClick={handleClose}
+            onClick={handleCancelModal}
           >
             <div
               className={` ${
