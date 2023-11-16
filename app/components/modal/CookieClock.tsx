@@ -60,15 +60,6 @@ export default function CookieClock({
       big_break_duration: 30,
       total_cycles: 3,
     })
-
-    setCookieClockData({
-      start_time: DateTime.now().toISO() || "",
-      work_duration: 25,
-      rest_duration: 5,
-      big_break_frequency: 4,
-      big_break_duration: 30,
-      total_cycles: 3,
-    })
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
