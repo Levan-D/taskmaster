@@ -27,8 +27,7 @@ import { useRef } from "react"
 import Modal from "../../modal/Modal"
 import Habit from "../../modal/Habit"
 import Timer from "../../modal/Timer"
-import { habitModalNode } from "../../modal/modalPortal"
-import { timerModalNode } from "../../modal/modalPortal"
+  
 
 type Props = {
   task: Task
@@ -314,7 +313,7 @@ export default function TaskDropDown({
         handleClose={handleCloseHabitModal}
         icon={mdiSync}
         title="Habit"
-        node={habitModalNode}
+        domNodeId="habit-modal"
       >
         {
           <Habit
@@ -330,7 +329,7 @@ export default function TaskDropDown({
         handleClose={handleCloseTimerModal}
         icon={mdiTimerOutline}
         title="Set timer"
-        node={timerModalNode}
+        domNodeId="timer-modal"
       >
         {
           <Timer

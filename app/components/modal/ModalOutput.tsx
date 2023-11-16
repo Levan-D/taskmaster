@@ -1,15 +1,14 @@
+/** @format */
+
 // ModalOutput.js
 "use client"
-
-import { OutPortal } from "react-reverse-portal";
-import { habitModalNode, timerModalNode,cookieClockModalNode } from "./modalPortal";
 
 export default function ModalOutput() {
   return (
     <>
-      <OutPortal node={habitModalNode} />
-      <OutPortal node={timerModalNode} />
-      <OutPortal node={cookieClockModalNode} />
+      <div id="habit-modal"></div>
+      <div id="timer-modal"></div>
+      <div id="cookieClock-modal"></div>
     </>
-  );
+  )
 }

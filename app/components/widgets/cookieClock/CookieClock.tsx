@@ -9,7 +9,6 @@ import Loader from "../../Loader"
 import CookieTimer from "./CookieTimer"
 import Modal from "../../modal/Modal"
 import CookieClockModal from "../../modal/CookieClock"
-import { cookieClockModalNode } from "../../modal/modalPortal"
 import { DateTime } from "luxon"
 
 export default function CookieClock() {
@@ -90,7 +89,7 @@ export default function CookieClock() {
           icon={mdiCookieOutline}
           isOpen={isCookieClockOpen}
           title="Cookie Clock"
-          node={cookieClockModalNode}
+          domNodeId="cookieClock-modal"
         >
           {
             <CookieClockModal

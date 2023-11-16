@@ -1,17 +1,13 @@
 /** @format */
 "use client"
-import { useEffect, type ReactNode } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 import Icon from "@mdi/react"
 import { mdiClose } from "@mdi/js"
-import { InPortal } from "react-reverse-portal"
-import { createHtmlPortalNode } from "react-reverse-portal"
-
-type PortalNodeType = ReturnType<typeof createHtmlPortalNode>
-
+import { createPortal } from "react-dom"
 type Props = {
   title: string
   icon?: string
-  node: PortalNodeType
+  domNodeId: "habit-modal" | "timer-modal" | "cookieClock-modal"
   children: ReactNode
   isOpen: boolean
   handleClose: () => void
@@ -20,12 +16,16 @@ type Props = {
 export default function Modal({
   title,
   icon,
-  node,
+  domNodeId,
   children,
   isOpen,
   handleClose,
 }: Props) {
+  const [domNode, setDomNode] = useState<HTMLElement | null>(null)
+
   useEffect(() => {
+    setDomNode(document.getElementById(domNodeId))
+
     if (isOpen) {
       document.body.style.overflow = "hidden"
     } else {
@@ -44,7 +44,8 @@ export default function Modal({
   }
 
   return (
-    <InPortal node={node}>
+    domNode &&
+    createPortal(
       <div
         onClick={handleClickOutside}
         className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ${
@@ -68,8 +69,9 @@ export default function Modal({
             <div className="flex flex-col grow">{children}</div>
           </div>
         </div>
-      </div>
-      ,
-    </InPortal>
+      </div>,
+      domNode,
+      domNodeId
+    )
   )
 }
