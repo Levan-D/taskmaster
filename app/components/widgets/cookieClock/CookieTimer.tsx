@@ -2,20 +2,21 @@
 
 import React, { useState, useEffect } from "react"
 import { DateTime } from "luxon"
-import { useAppSelector } from "@/lib/redux/hooks"
 import CookieProgress from "./CookieProgress"
-import { useAppDispatch } from "@/lib/redux/hooks"
-import { setCookieClockData } from "@/lib/redux/slices/globalSlice"
 import Icon from "@mdi/react"
 import { mdiPencilOutline, mdiRestart } from "@mdi/js"
 
 type Props = {
   handleSetNewCookieClock: () => void
+  cookieClockData: CookieClockType
+  setCookieClockData: React.Dispatch<React.SetStateAction<CookieClockType>>
 }
 
-export default function CookieTimer({ handleSetNewCookieClock }: Props) {
-  const dispatch = useAppDispatch()
-  const { cookieClockData } = useAppSelector(state => state.global)
+export default function CookieTimer({
+  cookieClockData,
+  setCookieClockData,
+  handleSetNewCookieClock,
+}: Props) {
   const [secondsLeft, setSecondsLeft] = useState(0)
   const [currentCycle, setCurrentCycle] = useState(1)
   const [currentPhase, setCurrentPhase] = useState("Focus")
@@ -67,12 +68,10 @@ export default function CookieTimer({ handleSetNewCookieClock }: Props) {
 
   const resetClock = () => {
     if (cookieClockData)
-      dispatch(
-        setCookieClockData({
-          ...cookieClockData,
-          start_time: DateTime.now().toISO() || "",
-        })
-      )
+      setCookieClockData({
+        ...cookieClockData,
+        start_time: DateTime.now().toISO() || "",
+      })
   }
 
   const updatePhaseAndCycle = () => {
@@ -149,6 +148,7 @@ export default function CookieTimer({ handleSetNewCookieClock }: Props) {
               : `${currentCycle}/${cookieClockData.total_cycles}`}
           </p>
           <CookieProgress
+            cookieClockData={cookieClockData}
             calculateElapsedTime={calculateElapsedTime}
             calculateTotalDuration={calculateTotalDuration}
             calculateCycleDurations={calculateCycleDurations}
@@ -178,7 +178,7 @@ export default function CookieTimer({ handleSetNewCookieClock }: Props) {
             >
               <div className="flex items-center gap-1 w-fit mx-auto">
                 <Icon path={mdiRestart} size={0.7} />
-                <p  className=" hidden md:block text-sm " > Reset</p>
+                <p className=" hidden md:block text-sm "> Reset</p>
               </div>
             </button>
           )}
@@ -190,7 +190,7 @@ export default function CookieTimer({ handleSetNewCookieClock }: Props) {
           >
             <div className="flex items-center gap-1 w-fit mx-auto">
               <Icon path={mdiPencilOutline} size={0.7} />
-              <p  className=" hidden md:block text-sm " > Edit</p>
+              <p className=" hidden md:block text-sm "> Edit</p>
             </div>
           </button>
         </div>

@@ -5,13 +5,6 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 import { DateTime } from "luxon"
 
 interface initialStateType {
-  modal: {
-    open: boolean
-    type: null | "timer" | "cookie clock" | "habit"
-  }
-
-  cookieClockData: CookieClockType | undefined | null
-
   widget: "cookie clock" | null
   todaysOps: undefined | boolean
   weeksOps: undefined | boolean
@@ -19,18 +12,6 @@ interface initialStateType {
 }
 
 const initialState: initialStateType = {
-  modal: {
-    open: false,
-    type: null,
-  },
-  cookieClockData: {
-    start_time: DateTime.now().toISO() || "",
-    work_duration: 25,
-    rest_duration: 5,
-    big_break_frequency: 3,
-    big_break_duration: 30,
-    total_cycles: 3,
-  },
   widget: null,
   todaysOps: undefined,
   weeksOps: undefined,
@@ -46,18 +27,10 @@ const globalSlice = createSlice({
       state.todaysOps = action.payload
     },
 
-    setCookieClockData: (
-      state,
-      action: PayloadAction<initialStateType["cookieClockData"]>
-    ) => {
-      state.cookieClockData = action.payload
-    },
     setWidget: (state, action: PayloadAction<initialStateType["widget"]>) => {
       state.widget = action.payload
     },
-    setModal: (state, action: PayloadAction<initialStateType["modal"]>) => {
-      state.modal = action.payload
-    },
+
     setWindowWidth: (state, action: PayloadAction<initialStateType["windowWidth"]>) => {
       state.windowWidth = action.payload
     },
@@ -67,12 +40,6 @@ const globalSlice = createSlice({
   },
 })
 
-export const {
-  setTodaysOps,
-  setWeeksOps,
-  setWindowWidth,
-  setModal,
-  setWidget,
-  setCookieClockData,
-} = globalSlice.actions
+export const { setTodaysOps, setWeeksOps, setWindowWidth, setWidget } =
+  globalSlice.actions
 export default globalSlice.reducer

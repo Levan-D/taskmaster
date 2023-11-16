@@ -1,49 +1,45 @@
 /** @format */
 
 import React, { useTransition, useState } from "react"
-import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
-import { setModal, setCookieClockData } from "@/lib/redux/slices/globalSlice"
 import { createOrUpdateCookieClock } from "@/app/actions/cookieClockActions"
 import Icon from "@mdi/react"
 import { mdiContentSaveOutline, mdiLoading, mdiWindowClose, mdiRestart } from "@mdi/js"
 import { DateTime } from "luxon"
 import Tooltip from "../Tooltip"
 
-export default function CookieClock() {
-  const dispatch = useAppDispatch()
-  const [isPending, startTransition] = useTransition()
-  const { cookieClockData } = useAppSelector(state => state.global)
+type Props = {
+  handleClose: () => void
+  cookieClockData: CookieClockType
+  setCookieClockData: React.Dispatch<React.SetStateAction<CookieClockType>>
+}
 
-  const [formValues, setFormValues] = useState(
-    cookieClockData
-      ? cookieClockData
-      : {
-          start_time: DateTime.now().toISO() || "",
-          work_duration: 25,
-          rest_duration: 5,
-          big_break_frequency: 3,
-          big_break_duration: 30,
-          total_cycles: 3,
-        }
-  )
+export default function CookieClock({
+  setCookieClockData,
+  cookieClockData,
+  handleClose,
+}: Props) {
+  const [isPending, startTransition] = useTransition()
+  const [formData, setFormData] = useState(cookieClockData)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
     startTransition(async () => {
       try {
-        dispatch(
-          setCookieClockData({ ...formValues, start_time: DateTime.now().toISO() || "" })
-        )
-        await createOrUpdateCookieClock({
-          ...formValues,
+        setCookieClockData({
+          ...formData,
           start_time: DateTime.now().toISO() || "",
         })
 
-        handleCloseModal()
+        await createOrUpdateCookieClock({
+          ...formData,
+          start_time: DateTime.now().toISO() || "",
+        })
+
+        handleClose()
       } catch (error) {
         console.error("Failed to set/update cookie clock:", error)
-        handleCloseModal()
+        handleClose()
       }
     })
   }
@@ -51,18 +47,16 @@ export default function CookieClock() {
   const resetCookieClockData = (e: React.FormEvent) => {
     e.preventDefault()
 
-    dispatch(
-      setCookieClockData({
-        start_time: DateTime.now().toISO() || "",
-        work_duration: 25,
-        rest_duration: 5,
-        big_break_frequency: 4,
-        big_break_duration: 30,
-        total_cycles: 3,
-      })
-    )
+    setFormData({
+      start_time: DateTime.now().toISO() || "",
+      work_duration: 25,
+      rest_duration: 5,
+      big_break_frequency: 4,
+      big_break_duration: 30,
+      total_cycles: 3,
+    })
 
-    setFormValues({
+    setCookieClockData({
       start_time: DateTime.now().toISO() || "",
       work_duration: 25,
       rest_duration: 5,
@@ -72,12 +66,8 @@ export default function CookieClock() {
     })
   }
 
-  const handleCloseModal = () => {
-    dispatch(setModal({ open: false, type: null }))
-  }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValues({ ...formValues, [e.target.name]: Number(e.target.value) })
+    setFormData({ ...formData, [e.target.name]: Number(e.target.value) })
   }
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -87,7 +77,7 @@ export default function CookieClock() {
     if (value < 1) value = 1
     if (value > 99) value = 99
 
-    setFormValues({ ...formValues, [name]: value })
+    setFormData({ ...formData, [name]: value })
   }
 
   return (
@@ -125,7 +115,7 @@ export default function CookieClock() {
               className="input w-20 text-center"
               type="number"
               name="work_duration"
-              value={formValues.work_duration}
+              value={formData.work_duration}
               onChange={handleChange}
             />
           </div>
@@ -138,7 +128,7 @@ export default function CookieClock() {
               className="input w-20 text-center"
               type="number"
               name="rest_duration"
-              value={formValues.rest_duration}
+              value={formData.rest_duration}
               onChange={handleChange}
             />
           </div>
@@ -151,7 +141,7 @@ export default function CookieClock() {
               className="input w-20 text-center"
               type="number"
               name="big_break_frequency"
-              value={formValues.big_break_frequency}
+              value={formData.big_break_frequency}
               onChange={handleChange}
             />
           </div>
@@ -164,7 +154,7 @@ export default function CookieClock() {
               className="input w-20 text-center"
               type="number"
               name="big_break_duration"
-              value={formValues.big_break_duration}
+              value={formData.big_break_duration}
               onChange={handleChange}
             />
           </div>
@@ -177,7 +167,7 @@ export default function CookieClock() {
               className="input w-20 text-center"
               type="number"
               name="total_cycles"
-              value={formValues.total_cycles}
+              value={formData.total_cycles}
               onChange={handleChange}
             />
           </div>
@@ -205,7 +195,7 @@ export default function CookieClock() {
           <button
             className="btnSecondary block w-full py-3"
             disabled={isPending}
-            onClick={handleCloseModal}
+            onClick={handleClose}
           >
             <div
               className={` ${

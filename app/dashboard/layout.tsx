@@ -6,6 +6,8 @@ import LogoutBtn from "../components/LogoutBtn"
 import WidgetDisplay from "../components/widgets/WidgetDisplay"
 import TaskHeader from "../components/tasks/TaskHeader"
 
+export const dynamic = "force-dynamic"
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-[calc(100dvh)]   ">

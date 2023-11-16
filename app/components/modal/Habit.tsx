@@ -12,11 +12,10 @@ import {
   mdiTrashCanOutline,
   mdiWindowClose,
 } from "@mdi/js"
-import { useAppDispatch } from "@/lib/redux/hooks"
-import { setModal } from "@/lib/redux/slices/globalSlice"
 import { updateTaskHabit, deleteTaskHabit } from "@/app/actions/taskActions"
 
 type Props = {
+  handleClose: () => void
   task: Task
   addOptimisticTask: (action: Task[]) => void
 }
@@ -32,9 +31,7 @@ type Radio = {
 }
 type RadioKey = keyof Radio
 
-export default function Habit({ task, addOptimisticTask }: Props) {
-  const dispatch = useAppDispatch()
-
+export default function Habit({ handleClose, task, addOptimisticTask }: Props) {
   const defaultState = {
     Monday: false,
     Tuesday: false,
@@ -87,7 +84,7 @@ export default function Habit({ task, addOptimisticTask }: Props) {
   }
 
   const handleCloseModal = () => {
-    dispatch(setModal({ open: false, type: null }))
+    handleClose()
   }
 
   const handleDeleteHabit = () => {

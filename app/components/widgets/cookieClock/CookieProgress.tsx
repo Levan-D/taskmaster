@@ -10,7 +10,7 @@ type Props = {
   calculateTotalDuration: () => number
   calculateCycleDurations: () => number[]
   currentCycle: number
-   
+  cookieClockData: CookieClockType
 }
 
 export default function CookieProgress({
@@ -18,10 +18,8 @@ export default function CookieProgress({
   calculateTotalDuration,
   calculateCycleDurations,
   currentCycle,
- 
+  cookieClockData,
 }: Props) {
-  const { cookieClockData } = useAppSelector(state => state.global)
-
   const calculateProgress = () => {
     if (!cookieClockData) return ""
     const totalDurationSecs = calculateTotalDuration() * 60

@@ -34,7 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "app/components/widgets/cookieClock"  ],
   "exclude": [
     "node_modules"
   ]

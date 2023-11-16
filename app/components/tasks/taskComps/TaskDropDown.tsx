@@ -1,4 +1,5 @@
 /** @format */
+"use client"
 
 import Icon from "@mdi/react"
 import {
@@ -15,16 +16,19 @@ import {
 } from "@mdi/js"
 import DropdownMenu from "../../DropdownMenu"
 import { recycleTask, reviveTask, updateTask } from "../../../actions/taskActions"
-import { useTransition } from "react"
+import { useState, useTransition } from "react"
 import { DateTime } from "luxon"
 import Tooltip from "../../Tooltip"
 import { useAppSelector } from "@/lib/redux/hooks"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { useRef } from "react"
-import { useAppDispatch } from "@/lib/redux/hooks"
-import { setModal } from "@/lib/redux/slices/globalSlice"
+
 import Modal from "../../modal/Modal"
+import Habit from "../../modal/Habit"
+import Timer from "../../modal/Timer"
+import { habitModalNode } from "../../modal/modalPortal"
+import { timerModalNode } from "../../modal/modalPortal"
 
 type Props = {
   task: Task
@@ -39,9 +43,10 @@ export default function TaskDropDown({
   visible,
   addOptimisticTask,
 }: Props) {
-  const dispatch = useAppDispatch()
   const { windowWidth } = useAppSelector(state => state.global)
   const [isPending, startTransition] = useTransition()
+  const [isHabitOpen, setIsHabitOpen] = useState(false)
+  const [isTimerOpen, setIsTimerOpen] = useState(false)
 
   const today = DateTime.now().minus({ day: 0 })
 
@@ -49,6 +54,13 @@ export default function TaskDropDown({
   const nextWeek = DateTime.now().plus({ day: 7 })
 
   const dropdownRef = useRef<DropdownRefType | null>(null)
+
+  const handleCloseHabitModal = () => {
+    setIsHabitOpen(false)
+  }
+  const handleCloseTimerModal = () => {
+    setIsTimerOpen(false)
+  }
 
   const handleRecycleTask = () => {
     startTransition(async () => {
@@ -220,25 +232,13 @@ export default function TaskDropDown({
     {
       title: !task.start_time ? "Enable timer" : "Edit timer",
       icon: <Icon path={mdiTimerOutline} size={0.7} />,
-      action: () =>
-        dispatch(
-          setModal({
-            open: true,
-            type: "timer",
-          })
-        ),
+      action: () => setIsTimerOpen(() => true),
       invisible: expired || task.deleted || task.complete ? true : false,
     },
     {
       title: task.repeat && task.repeat.days.length > 0 ? "Edit habit" : "Create habit",
       icon: <Icon path={mdiSync} size={0.7} />,
-      action: () =>
-        dispatch(
-          setModal({
-            open: true,
-            type: "habit",
-          })
-        ),
+      action: () => setIsHabitOpen(() => true),
       invisible: expired || task.deleted || task.complete ? true : false,
     },
     {
@@ -309,7 +309,37 @@ export default function TaskDropDown({
         </div>
       )}
 
-      <Modal task={task} addOptimisticTask={addOptimisticTask} />
+      <Modal
+        isOpen={isHabitOpen}
+        handleClose={handleCloseHabitModal}
+        icon={mdiSync}
+        title="Habit"
+        node={habitModalNode}
+      >
+        {
+          <Habit
+            handleClose={handleCloseHabitModal}
+            task={task}
+            addOptimisticTask={addOptimisticTask}
+          />
+        }
+      </Modal>
+
+      <Modal
+        isOpen={isTimerOpen}
+        handleClose={handleCloseTimerModal}
+        icon={mdiTimerOutline}
+        title="Set timer"
+        node={timerModalNode}
+      >
+        {
+          <Timer
+            handleClose={handleCloseTimerModal}
+            task={task}
+            addOptimisticTask={addOptimisticTask}
+          />
+        }
+      </Modal>
     </>
   )
 }

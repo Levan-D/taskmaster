@@ -1,12 +1,11 @@
 /** @format */
+"use client"
 
 import React, { useState, useEffect, useTransition } from "react"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { DateTime } from "luxon"
 import { setTimer } from "@/app/actions/taskActions"
-import { useAppDispatch } from "@/lib/redux/hooks"
-import { setModal } from "@/lib/redux/slices/globalSlice"
 import Icon from "@mdi/react"
 import {
   mdiContentSaveOutline,
@@ -17,12 +16,12 @@ import {
 } from "@mdi/js"
 
 type Props = {
+  handleClose: () => void
   task: Task
   addOptimisticTask: (action: Task[]) => void
 }
 
-export default function Timer({ task, addOptimisticTask }: Props) {
-  const dispatch = useAppDispatch()
+export default function Timer({ handleClose, task, addOptimisticTask }: Props) {
   const [isPending, startTransition] = useTransition()
 
   const getRoundedTime = () => {
@@ -37,7 +36,7 @@ export default function Timer({ task, addOptimisticTask }: Props) {
   )
 
   const handleCloseModal = () => {
-    dispatch(setModal({ open: false, type: null }))
+    handleClose()
   }
 
   const handleSetTimer = () => {

@@ -8,6 +8,11 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { HooksWrapper } from "./HooksWrapper"
 import { Viewport } from "next"
+import dynamic from "next/dynamic"
+
+const ClientSideModal = dynamic(() => import("./components/modal/ModalOutput"), {
+  ssr: false,
+})
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -81,10 +86,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 pauseOnHover
                 theme="colored"
               />
-          
-              <div id="modal-root"></div>
             </main>
           </HooksWrapper>
+          <ClientSideModal />
         </body>
       </html>
     </Providers>

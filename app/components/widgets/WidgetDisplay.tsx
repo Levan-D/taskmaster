@@ -4,10 +4,10 @@
 import React from "react"
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import { setWidget } from "@/lib/redux/slices/globalSlice"
-import CookieClock from "./cookieClock.tsx/CookieClock"
+import CookieClock from "./cookieClock/CookieClock"
+
 import Icon from "@mdi/react"
 import { mdiWindowClose, mdiCookieOutline } from "@mdi/js"
-import Modal from "../modal/Modal"
 
 type Props = {
   className?: string
@@ -59,7 +59,6 @@ export default function WidgetDisplay({ className }: Props) {
           <div className="  overflow-clip grow lg:pr-0  pr-2">{renderWidget(widget)}</div>
         </div>
       </div>
-      <Modal />
     </>
   )
 }
