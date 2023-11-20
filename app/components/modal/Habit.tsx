@@ -140,6 +140,8 @@ export default function Habit({ handleClose, task, addOptimisticTask }: Props) {
             <p> {btn}</p>
             <button
               aria-label={`Toggle ${btn.toLocaleLowerCase()}s habit`}
+              aria-checked={radio[btn as RadioKey]}
+              role="checkbox"
               onClick={() => onDayChange(btn)}
             >
               <Icon

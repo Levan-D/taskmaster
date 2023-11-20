@@ -119,6 +119,7 @@ export default function CreateTask({
     {
       JSX: (
         <DatePicker
+          tabIndex={0}
           onInputClick={() => setCalendar("Custom date")}
           wrapperClassName="datePicker"
           customInput={

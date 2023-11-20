@@ -38,6 +38,12 @@ const DropdownMenu = forwardRef(
       if (!isDropdownMenuOpen) setIsDropdownMenuOpen(true) // toggle the dropdown
     }
 
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+      if (event.key === "Enter") {
+        handleDropdownClick()
+      }
+    }
+
     useImperativeHandle(ref, () => ({
       closeDropdown: () => {
         setIsDropdownMenuOpen(false)
@@ -47,6 +53,7 @@ const DropdownMenu = forwardRef(
     return (
       <div>
         <button
+          onKeyDown={handleKeyDown}
           aria-label="Open dropdown label"
           type="button"
           disabled={disabled}
@@ -57,6 +64,7 @@ const DropdownMenu = forwardRef(
         </button>
         {isDropdownMenuOpen && (
           <div
+            aria-expanded={isDropdownMenuOpen}
             ref={dropdownRef}
             className={` ${menuClassName} absolute   shadow-md shadow-neutral-950 shad bg-neutral-800 border-[1px] border-neutral-700 mt-1 z-40 rounded-md text-left`}
           >

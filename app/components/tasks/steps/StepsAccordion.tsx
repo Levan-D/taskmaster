@@ -39,9 +39,8 @@ export default function StepsAccordion({
 
   return (
     <button
-      aria-label={`Toggle step accordion for task "${task.title}" (${
-        open ? "expanded" : "collapsed"
-      })`}
+      aria-label={`Toggle step accordion for task "${task.title}"`}
+      aria-expanded={open}
       disabled={
         ((expired || task.deleted) && task.steps.length === 0) ||
         (!expired && task.deleted && task.steps.length === 0)

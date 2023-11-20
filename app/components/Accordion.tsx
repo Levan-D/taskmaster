@@ -23,6 +23,7 @@ export default function Accordion({ children, title, className, isOpen = true }:
     <div className={`${className}`}>
       <button
         aria-label="Toggle accordion"
+        aria-expanded={open}
         onClick={toggleOpen}
         className="btnText  flex gap-1 items-center"
       >
