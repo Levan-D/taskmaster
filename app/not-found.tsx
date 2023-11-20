@@ -8,7 +8,7 @@ export default function NotFound() {
       <div className="w-fit mx-auto mainContainer p-4 px-8 text-center pb-6">
         <h1 className=" text-xl mb-4">Error 404: Page not found</h1>
         <p className="text-neutral-300 mb-4">Could not find requested resource</p>
-        <Link className="btnPrimary  " href="/">
+        <Link aria-label="Return to homepage"  className="btnPrimary  " href="/">
           Return Home
         </Link>
       </div>

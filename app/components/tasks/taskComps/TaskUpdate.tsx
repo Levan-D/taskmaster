@@ -95,7 +95,7 @@ export default function TaskUpdate({
     </div>
   ) : (
     <button
-      aria-label="Toggle edit task"
+      aria-label={`Edit task: ${task.title}`}
       disabled={isPending || expired || task.deleted}
       onDoubleClick={toggleEdit}
       className="block text-left mx-2 w-full"

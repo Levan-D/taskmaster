@@ -115,6 +115,7 @@ function Links({
             (width > 640 || isOpen) && // Only render if width > 640 or isOpen is true
             (isOpen ? (
               <Link
+                aria-label={`Link to ${page.title}`}
                 key={i}
                 onClick={width <= 640 ? toggleNav : undefined}
                 href={page.path}
@@ -137,6 +138,7 @@ function Links({
                 position="right"
               >
                 <Link
+                  aria-label={`Link to ${page.title}`}
                   href={page.path}
                   className={`${!isOpen && "justify-center w-10"}  ${
                     pathname.includes(
