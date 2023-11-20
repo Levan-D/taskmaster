@@ -95,6 +95,7 @@ export default function CookieClock({
           <div className="flex justify-end">
             <Tooltip text="Reset to default" position="left">
               <button
+                aria-label="reset cookie clock data"
                 onClick={resetCookieClockData}
                 className="btnIcon p-1  text-neutral-300 hover:text-white"
               >
@@ -171,6 +172,7 @@ export default function CookieClock({
 
         <div className="flex gap-4">
           <button
+            aria-label="Submit form"
             disabled={isPending}
             type="submit"
             className="btnPrimary block w-full py-3"
@@ -189,6 +191,7 @@ export default function CookieClock({
             </div>
           </button>
           <button
+            aria-label="Cancel and close modal"
             className="btnSecondary block w-full py-3"
             disabled={isPending}
             onClick={handleCancelModal}

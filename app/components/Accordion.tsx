@@ -21,7 +21,11 @@ export default function Accordion({ children, title, className, isOpen = true }:
 
   return (
     <div className={`${className}`}>
-      <button onClick={toggleOpen} className="btnText  flex gap-1 items-center">
+      <button
+        aria-label="Toggle accordion"
+        onClick={toggleOpen}
+        className="btnText  flex gap-1 items-center"
+      >
         <Icon
           className={`${open && "-rotate-180"} transition-transform duration-300`}
           path={mdiChevronDown}

@@ -49,6 +49,7 @@ export default function WidgetDisplay({ className }: Props) {
           <div className="flex border-l-[1px] lg:border-none lg:pl-0  pl-2 border-neutral-700 lg:flex-row  flex-col-reverse  shrink-0 justify-between items-center select-none">
             <h3>{widgetTitle(widget)}</h3>
             <button
+              aria-label="Close widget window"
               className="btnIcon p-0.5 text-neutral-300 hover:text-white"
               onClick={() => dispatch(setWidget(null))}
             >

@@ -47,6 +47,7 @@ const DropdownMenu = forwardRef(
     return (
       <div>
         <button
+          aria-label="Open dropdown label"
           type="button"
           disabled={disabled}
           className={`${className} block relative`}
@@ -87,6 +88,7 @@ const DropdownMenu = forwardRef(
                   return (
                     <li key={i}>
                       <button
+                        aria-label={item.title + " options"}
                         disabled={item.disabled}
                         onClick={() => setDropdownMenu(item.action)}
                         className={`${item.disabled && "opacity-60"} ${

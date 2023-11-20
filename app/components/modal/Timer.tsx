@@ -150,6 +150,7 @@ export default function Timer({ handleClose, task, addOptimisticTask }: Props) {
 
       <div>
         <button
+          aria-label="Delete timer"
           disabled={isPending}
           onClick={handleResetTimer}
           className="btnSecondary w-full py-3"
@@ -171,6 +172,7 @@ export default function Timer({ handleClose, task, addOptimisticTask }: Props) {
 
       <div className="flex gap-4">
         <button
+          aria-label="Submit form"
           disabled={isPending}
           onClick={handleSetTimer}
           className="btnPrimary block w-full py-3"
@@ -189,6 +191,7 @@ export default function Timer({ handleClose, task, addOptimisticTask }: Props) {
           </div>
         </button>
         <button
+          aria-label="Cancel and close modal"
           disabled={isPending}
           onClick={handleCloseModal}
           className="btnSecondary block w-full py-3"

@@ -13,10 +13,10 @@ export default async function Home() {
       </p>
 
       <div className="flex flex-col sm:flex-row gap-4 items-center w-full px-8 sm:w-fit mx-auto">
-        <LoginLink className="btnPrimary py-3 px-16 lg:text-lg w-full text-center">
+        <LoginLink className="btnPrimary font-semibold py-3 px-16 lg:text-lg w-full text-center">
           Sign in
         </LoginLink>
-        <RegisterLink className="btnSecondary py-3 px-16 lg:text-lg w-full text-center">
+        <RegisterLink className="btnSecondary font-semibold py-3 px-16 lg:text-lg w-full text-center">
           Register
         </RegisterLink>
       </div>
@@ -47,8 +47,12 @@ export default async function Home() {
         </div>
         <div className="flex   flex-col-reverse sm:flex-row gap-4 justify-center items-center text-neutral-950 bg-white text-center py-8 sm:py-12">
           <div className="">© 2023 Levan Dolidze. All Rights Reserved.</div>
-          <Link href={"https://github.com/Levan-D/taskmaster"} target="_blank">
-            <Icon className="hover:text-sky-600 duration-300" path={mdiGithub} size={1} />
+          <Link aria-label="github link to this websites repository" href={"https://github.com/Levan-D/taskmaster"} target="_blank">
+            <Icon
+              className="hover:text-indigo-600 duration-300"
+              path={mdiGithub}
+              size={1}
+            />
           </Link>
         </div>
       </footer>

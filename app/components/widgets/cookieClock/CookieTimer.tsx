@@ -173,6 +173,7 @@ export default function CookieTimer({
         <div className="flex flex-col sm:flex-row gap-2  lg:gap-4 sm:basis-1/5">
           {currentPhase === "Done" && (
             <button
+              aria-label="Reset cookie timer"
               className="btnSecondary px-2 basis-1/2 max-w-[444px] mx-auto w-full py-2"
               onClick={resetClock}
             >
@@ -183,6 +184,7 @@ export default function CookieTimer({
             </button>
           )}
           <button
+            aria-label="Edit cookie timer"
             className={`${
               currentPhase === "Done" && "basis-1/2"
             }  btnSecondary px-2 max-w-[444px] mx-auto w-full py-2`}

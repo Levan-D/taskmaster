@@ -27,7 +27,6 @@ import { useRef } from "react"
 import Modal from "../../modal/Modal"
 import Habit from "../../modal/Habit"
 import Timer from "../../modal/Timer"
-  
 
 type Props = {
   task: Task
@@ -107,6 +106,7 @@ export default function TaskDropDown({
           <div className="flex  ">
             <Tooltip className="delay-500" text="Today">
               <button
+                aria-label="Move tasks due date to today"
                 onClick={() => {
                   handleReviveTask({})
                   if (dropdownRef.current) dropdownRef.current.closeDropdown()
@@ -122,6 +122,7 @@ export default function TaskDropDown({
             </Tooltip>
             <Tooltip className="delay-500" text="Tomorrow">
               <button
+                aria-label="Move tasks due date to tomorrow"
                 onClick={() => {
                   handleReviveTask({ date: tomorrow })
                   if (dropdownRef.current) dropdownRef.current.closeDropdown()
@@ -137,6 +138,7 @@ export default function TaskDropDown({
             </Tooltip>
             <Tooltip className="delay-500" text="Week">
               <button
+                aria-label="Move tasks due date to the end of the week"
                 onClick={() => {
                   handleReviveTask({ date: nextWeek })
                   if (dropdownRef.current) dropdownRef.current.closeDropdown()
@@ -187,6 +189,7 @@ export default function TaskDropDown({
           <div className="flex  ">
             <Tooltip className="delay-500" text="Low">
               <button
+                aria-label="Change priority to low"
                 onClick={() => {
                   handleChangeTaskPriority("LOW")
 
@@ -194,11 +197,12 @@ export default function TaskDropDown({
                 }}
                 className="btnIcon p-1.5"
               >
-                <Icon className="text-sky-400" path={mdiFlagVariant} size={0.7} />
+                <Icon className="text-indigo-400" path={mdiFlagVariant} size={0.7} />
               </button>
             </Tooltip>
             <Tooltip className="delay-500" text="Medium">
               <button
+                aria-label="Change priority to medium"
                 onClick={() => {
                   handleChangeTaskPriority("MEDIUM")
 
@@ -211,6 +215,7 @@ export default function TaskDropDown({
             </Tooltip>
             <Tooltip className="delay-500" text="High">
               <button
+                aria-label="Change priority to high"
                 onClick={() => {
                   handleChangeTaskPriority("HIGH")
 
@@ -258,6 +263,7 @@ export default function TaskDropDown({
           {((expired && !task.complete) || task.deleted) && (
             <Tooltip text="Revive for today" className="delay-500">
               <button
+                aria-label="Revive task and add it to today"
                 disabled={isPending}
                 onClick={() => handleReviveTask({})}
                 className="p-1 sm:p-2 block bg-lime-600 shadow-sm hover:bg-lime-500 rounded-bl-lg duration-300"
@@ -273,6 +279,7 @@ export default function TaskDropDown({
           {task.complete && !task.deleted && (
             <Tooltip text="Recycle" className="delay-500">
               <button
+                aria-label="Recycle task"
                 disabled={isPending}
                 onClick={handleRecycleTask}
                 className={`block bg-neutral-600 shadow-sm hover:bg-neutral-500 border-r-[2px]  border-neutral-700    rounded-bl-lg p-1 sm:p-2 duration-300 `}

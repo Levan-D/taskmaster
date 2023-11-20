@@ -58,7 +58,7 @@ export default function CreateTask({
 
   let priorityClassName = ""
   if (priority === "LOW") {
-    priorityClassName = "text-sky-400"
+    priorityClassName = "text-indigo-400"
   } else if (priority === "MEDIUM") {
     priorityClassName = "text-amber-400"
   } else {
@@ -81,7 +81,7 @@ export default function CreateTask({
   const priorityItems: DropDownItemType = [
     {
       title: "Low",
-      icon: <Icon className="text-sky-400" path={mdiFlagVariant} size={0.7} />,
+      icon: <Icon className="text-indigo-400" path={mdiFlagVariant} size={0.7} />,
       action: () => setPriority("LOW"),
     },
     {
@@ -253,6 +253,7 @@ export default function CreateTask({
 
             <div className="grow ">
               <button
+                aria-label="Submit task"
                 disabled={isPending}
                 className={`${isPending && "opacity-75"} btnPrimary px-6 h-full w-full  ${
                   charCount === 0 && "cursor-not-allowed"

@@ -138,11 +138,14 @@ export default function Habit({ handleClose, task, addOptimisticTask }: Props) {
         {Object.keys(radio).map((btn, i) => (
           <div key={i} className="flex justify-between items-center">
             <p> {btn}</p>
-            <button onClick={() => onDayChange(btn)}>
+            <button
+              aria-label={`Toggle ${btn.toLocaleLowerCase()}s habit`}
+              onClick={() => onDayChange(btn)}
+            >
               <Icon
                 className={`${
-                  radio[btn as RadioKey] && "!text-sky-400"
-                } text-neutral-500  hover:text-sky-300 transition-colors duration-300`}
+                  radio[btn as RadioKey] && "!text-indigo-400"
+                } text-neutral-500  hover:text-indigo-300 transition-colors duration-300`}
                 path={
                   radio[btn as RadioKey] ? mdiCheckboxOutline : mdiCheckboxBlankOutline
                 }
@@ -154,6 +157,7 @@ export default function Habit({ handleClose, task, addOptimisticTask }: Props) {
       </div>
 
       <button
+        aria-label="Delete habit"
         disabled={isPending}
         onClick={handleDeleteHabit}
         className="btnSecondary block w-full py-3 mb-4"
@@ -174,6 +178,7 @@ export default function Habit({ handleClose, task, addOptimisticTask }: Props) {
 
       <div className="flex gap-4">
         <button
+          aria-label="Submit form"
           disabled={isPending}
           onClick={handleUpdateHabit}
           className="btnPrimary block w-full py-3"
@@ -192,6 +197,7 @@ export default function Habit({ handleClose, task, addOptimisticTask }: Props) {
           </div>
         </button>
         <button
+          aria-label="Cancel and close modal"
           disabled={isPending}
           onClick={handleCloseModal}
           className="btnSecondary block w-full py-3"

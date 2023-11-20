@@ -35,6 +35,7 @@ export default function TasksRevive({ className, tasks, addOptimisticTask }: Pro
 
   return (
     <button
+      aria-label="Revive all tasks"
       disabled={isPending}
       onClick={handleReviveTasks}
       className={`${className} btnSecondary bg-lime-600    px-4 hover:bg-lime-500`}

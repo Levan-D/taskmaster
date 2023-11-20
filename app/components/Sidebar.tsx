@@ -207,7 +207,11 @@ export default function Sidebar({ UserInfo, LogoutBtn }: Props) {
               </DropdownMenu>
             )}
           </div>
-          <button onClick={toggleNav} className=" bg-neutral-950 w-10 h-10 m-2 btnIcon ">
+          <button
+            aria-label="Toggle side nav"
+            onClick={toggleNav}
+            className=" bg-neutral-950 w-10 h-10 m-2 btnIcon "
+          >
             <Icon
               path={mdiChevronRight}
               className={`  ${isOpen && "rotate-180 "} duration-300 mx-auto`}

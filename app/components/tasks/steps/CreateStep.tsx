@@ -88,6 +88,7 @@ export default function CreateStep({
           </p>
 
           <button
+            aria-label="Create step"
             disabled={isPending}
             className={`${isPending && "opacity-75"} btnSecondary px-2.5 ${
               charCount === 0 && "cursor-not-allowed"

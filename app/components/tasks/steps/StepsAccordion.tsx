@@ -39,6 +39,7 @@ export default function StepsAccordion({
 
   return (
     <button
+      aria-label="Toggle step accordion"
       disabled={
         ((expired || task.deleted) && task.steps.length === 0) ||
         (!expired && task.deleted && task.steps.length === 0)

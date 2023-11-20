@@ -39,6 +39,7 @@ export default function TasksRecycle({
 
   return (
     <button
+      aria-label="Recycle all tasks"
       disabled={isPending}
       onClick={handleRecycleTasks}
       className={`${className} btnSecondary   px-4  `}

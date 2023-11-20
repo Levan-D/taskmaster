@@ -63,6 +63,7 @@ export default function CookieClock() {
     return (
       <div className=" flex flex-col justify-center h-full   ">
         <button
+          aria-label="Create new cookie clock"
           className="btnPrimary  max-w-[444px] mx-auto w-2/3 py-2"
           onClick={handleOpenCookieClockModal}
         >

@@ -26,6 +26,7 @@ export default function Pagination({ pageCount, currentPage, className }: Props)
   if (startPage > 1) {
     buttons.push(
       <button
+        aria-label={`Go to first page`}
         key="1"
         className={` ${
           currentPage <= 1 && "!bg-neutral-500"
@@ -41,6 +42,7 @@ export default function Pagination({ pageCount, currentPage, className }: Props)
   for (let i = startPage; i <= endPage; i++) {
     buttons.push(
       <button
+        aria-label={`Go to page ${i}`}
         key={i}
         className={`     ${
           currentPage === i || (i === 1 && currentPage === 0) ? "!bg-neutral-500" : ""
@@ -57,6 +59,7 @@ export default function Pagination({ pageCount, currentPage, className }: Props)
     buttons.push(
       <span key="end-ellipsis">...</span>,
       <button
+        aria-label={`Go to last page`}
         key={pageCount}
         className={` ${
           currentPage >= pageCount && "!bg-neutral-500"
@@ -73,6 +76,7 @@ export default function Pagination({ pageCount, currentPage, className }: Props)
   return (
     <div className={`${className} flex gap-2 select-none`}>
       <button
+        aria-label="Go to previous page"
         className={` ${
           currentPage <= 1 ? "opacity-50" : "hover:bg-neutral-700"
         } mainContainer  duration-300 px-2`}
@@ -84,6 +88,7 @@ export default function Pagination({ pageCount, currentPage, className }: Props)
 
       {buttons}
       <button
+        aria-label="Go to next page"
         className={` ${
           currentPage >= pageCount ? "opacity-50" : "hover:bg-neutral-700"
         } mainContainer    duration-300 px-2`}

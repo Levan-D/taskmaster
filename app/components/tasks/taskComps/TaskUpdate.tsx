@@ -84,6 +84,7 @@ export default function TaskUpdate({
           />
 
           <button
+            aria-label="Submit edited task"
             disabled={isPending || expired}
             className="btnSecondary px-2.5 shrink-0 "
           >
@@ -94,6 +95,7 @@ export default function TaskUpdate({
     </div>
   ) : (
     <button
+      aria-label="Toggle edit task"
       disabled={isPending || expired || task.deleted}
       onDoubleClick={toggleEdit}
       className="block text-left mx-2 w-full"

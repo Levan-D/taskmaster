@@ -50,7 +50,12 @@ export default function RecycleStep({ task, step, addOptimisticTask }: Props) {
   }
 
   return (
-    <button disabled={isPending} className="btnSecondary" onClick={handleRecycleStep}>
+    <button
+      aria-label="Recycle step"
+      disabled={isPending}
+      className="btnSecondary"
+      onClick={handleRecycleStep}
+    >
       <Icon path={mdiTrashCanOutline} size={0.8} />
     </button>
   )

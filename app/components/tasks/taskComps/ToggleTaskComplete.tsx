@@ -38,14 +38,13 @@ export default function ToggleTaskComplete({ task, addOptimisticTask, expired }:
         console.error("Failed to toggle task completion:", error)
       }
     })
-
-   }
+  }
 
   const getColor = () => {
     if (task.complete || task.beingCompleted) return "text-white"
     switch (task.priority) {
       case "LOW":
-        return "text-sky-400"
+        return "text-indigo-400"
       case "MEDIUM":
         return "text-amber-400"
       default:
@@ -55,6 +54,7 @@ export default function ToggleTaskComplete({ task, addOptimisticTask, expired }:
 
   return (
     <button
+      aria-label="Toggle task complete"
       disabled={isPending || task.deleted || expired}
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}

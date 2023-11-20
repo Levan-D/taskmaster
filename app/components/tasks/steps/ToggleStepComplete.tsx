@@ -47,6 +47,7 @@ export default function ToggleStepComplete({ task, step, addOptimisticTask }: Pr
 
   return (
     <button
+      aria-label="Toggle step complete"
       disabled={isPending || task.deleted}
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}

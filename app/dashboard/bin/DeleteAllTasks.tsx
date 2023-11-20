@@ -31,6 +31,7 @@ export default function DeleteAllTasks({
 
   return (
     <button
+      aria-label="Delete all tasks"
       disabled={isPending}
       onClick={handleDeleteTasks}
       className={`${className} btnError flex gap-2 items-center  shrink-0 px-4`}

@@ -21,7 +21,11 @@ export default function Error({
         <h2 className="text-lg  ">Something went wrong!</h2>
         <p className=""> {`${error?.name}: ${error?.message}`}</p>
 
-        <button className="btnSecondary  w-full  mt-4" onClick={() => reset()}>
+        <button
+          aria-label="Refresh page"
+          className="btnSecondary  w-full  mt-4"
+          onClick={() => reset()}
+        >
           Refresh Page
         </button>
       </div>

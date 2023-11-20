@@ -94,7 +94,11 @@ export default function StepUpdate({
             onChange={e => setInputValue(e.target.value)}
             required
           />
-          <button disabled={isPending || expired} className="btnSecondary px-2.5 ">
+          <button
+            aria-label="Submit edited step"
+            disabled={isPending || expired}
+            className="btnSecondary px-2.5 "
+          >
             <Icon path={mdiNoteEditOutline} size={0.8} />
           </button>
         </div>
@@ -102,6 +106,7 @@ export default function StepUpdate({
     </div>
   ) : (
     <button
+      aria-label="Show edit step input"
       disabled={isPending || expired || task.deleted}
       onDoubleClick={toggleEdit}
       className={`${step.complete && "text-neutral-300 "}  block text-left w-full mx-2 `}
